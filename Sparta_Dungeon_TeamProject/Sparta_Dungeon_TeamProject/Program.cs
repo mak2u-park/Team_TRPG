@@ -181,6 +181,7 @@ class Program
 
         Console.WriteLine();
         Console.WriteLine("1. 아이템 구매");
+        Console.WriteLine("2. 아이템 판매");
         Console.WriteLine("0. 나가기");
         Console.WriteLine();
         Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -192,7 +193,6 @@ class Program
             case 0:
                 DisplayMainUI();
                 break;
-
             case 1:
                 DisplayBuyUI();
                 break;
