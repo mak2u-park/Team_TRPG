@@ -182,7 +182,7 @@ class Program
         Console.WriteLine();
         Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-        int result = CheckInput(0, 1);
+        int result = CheckInput(0, 2);
 
         switch (result)
         {
