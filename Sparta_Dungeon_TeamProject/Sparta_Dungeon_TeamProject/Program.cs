@@ -38,21 +38,21 @@ class Program
         Console.WriteLine("1. 상태 보기");
         Console.WriteLine("2. 인벤토리");
         Console.WriteLine("3. 상점");
+        Console.WriteLine("4. 던전입장");
+        Console.WriteLine("5. 휴식하기");
         Console.WriteLine();
         Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-        int result = CheckInput(1, 3);
+        int result = CheckInput(1, 5);
 
         switch (result)
         {
             case 1:
                 DisplayStatUI();
                 break;
-
             case 2:
                 DisplayInventoryUI();
                 break;
-
             case 3:
                 DisplayShopUI();
                 break;
@@ -74,10 +74,6 @@ class Program
 
         player.DisplayCharacterInfo();
 
-        Console.WriteLine();
-        Console.WriteLine("0. 나가기");
-        Console.WriteLine();
-        Console.WriteLine("원하시는 행동을 입력해주세요.");
         Console.WriteLine();
         Console.WriteLine("0. 나가기");
         Console.WriteLine();
