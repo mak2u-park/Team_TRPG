@@ -141,7 +141,6 @@ namespace Sparta_Dungeon_TeamProject
             switch (result)
             {
                 case 0:
-                    DisplayMainUI();
                     break;
             }
         }

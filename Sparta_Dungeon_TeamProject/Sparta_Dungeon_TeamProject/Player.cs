@@ -72,47 +72,33 @@ namespace Sparta_Dungeon_TeamProject
             성직자,
         }
 
-
-        public void Damage(int amount)
-        {
-            Hp -= amount;
-
-            if (Hp < 0)
-            {
-                Hp = 0;
-            }
-
-            Console.WriteLine($"{amount}의 데미지를 받았습니다!");
-        }
-
         public class JobData
         {
             public int BaseAtk { get; }
             public int BaseDef { get; }
             public int BaseMaxHp { get; }
             public int BaseMaxMp { get; }
-            public string[] Skills { get; }
 
-            public JobData(int atk, int def, int maxHp, int maxMp, string[] skills)
+            public JobData(int atk, int def, int maxHp, int maxMp)
             {
                 BaseAtk = atk;
                 BaseDef = def;
                 BaseMaxHp = maxHp;
                 BaseMaxMp = maxMp;
-                Skills = skills;
             }
         }
         public static class JobDB
         {
             public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
-            {   // 직업명 / 공격력 / 방어력 / 스킬
-                { JobType.전사, new JobData(7, 8, 150, 50, new[] { "스킬1-1", "스킬1-2" }) },
-                { JobType.마법사, new JobData(13, 2, 50, 150, new[] { "스킬2-1", "스킬2-2" }) },
-                { JobType.궁수, new JobData(8, 7, 100, 100, new[] { "스킬3-1", "스킬3-2" }) },
-                { JobType.도적, new JobData(10, 5, 80, 120,  new[] { "스킬2-1", "스킬2-2" }) },
-                { JobType.성직자, new JobData(5, 4, 125, 75, new[] { "스킬2-1", "스킬2-2" }) }
+            {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
+                { JobType.전사, new JobData(7, 8, 150, 50) },
+                { JobType.마법사, new JobData(13, 2, 50, 150) },
+                { JobType.궁수, new JobData(8, 7, 100, 100) },
+                { JobType.도적, new JobData(10, 5, 80, 120) },
+                { JobType.성직자, new JobData(5, 4, 125, 75) }
             };
         }
+
 
         // 경험치 획득
         public void GainExp()
@@ -122,16 +108,22 @@ namespace Sparta_Dungeon_TeamProject
                 Exp -= MaxExp;
                 MaxExp += 10;
                 Level++;
-                Atk += 1;
-                Def += 1;
 
                 if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
                 {
+                    Atk += 1;
                     MaxHp += 10;
+                    MaxMp += 5;
+                    Hp += MaxHp;
+                    Mp += MaxMp;
                 }
                 else
                 {
+                    Atk += 1;
+                    MaxHp += 5;
                     MaxMp += 10;
+                    Hp += MaxHp;
+                    Mp += MaxMp;
                 }
             }
         }
@@ -238,6 +230,26 @@ namespace Sparta_Dungeon_TeamProject
                 return true;
             }
             return false;
+        }
+
+        //피격 피해량 계산
+        public void Damage(int amount)
+        {
+            int damage = amount - Def;
+
+            damage = damage < 0 ? 0 : damage;
+
+            Hp -= damage;
+
+            Console.WriteLine($"{damage}의 데미지를 받았습니다!");
+
+            if (Hp < 0)
+            {
+                Hp = 0;
+                Console.WriteLine("게임을 종료합니다.");
+                Thread.Sleep(1000);
+                Environment.Exit(0);
+            }
         }
     }
 }
