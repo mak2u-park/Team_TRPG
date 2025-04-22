@@ -151,10 +151,6 @@ namespace Sparta_Dungeon_TeamProject
                     BettleLoop = false;
                     break;
                 }
-                if (!player.PlayerAlive)
-                {
-                    break;
-                }
             }
         }
         static void PlayerAttack()
