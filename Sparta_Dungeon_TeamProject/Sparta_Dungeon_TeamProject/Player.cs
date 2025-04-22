@@ -232,7 +232,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             int damage = amount - Def;
 
-            damage = damage < 0 ? 0 : damage;
+            damage = damage < 0 ? 1 : damage;
 
             Hp -= damage;
 
