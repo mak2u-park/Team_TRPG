@@ -16,12 +16,13 @@ namespace Sparta_Dungeon_TeamProject
             };
         }
     }
+
     // 아이템 클래스
     public class Item
     {
         public string Name { get; }
         public int Type { get; }
-        public int Value { get; }
+        public int Value { get; set; }
         public string Desc { get; }
         public int Price { get; }
 
