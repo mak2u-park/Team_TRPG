@@ -6,7 +6,7 @@ namespace Sparta_Dungeon_TeamProject
     public partial class Program
     {
         private static Player player;
-        private static Item[] itemDb;
+        private static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
 
         // ** 실제 구동되는 메인함수 **
         static void Main(string[] args)
@@ -23,30 +23,44 @@ namespace Sparta_Dungeon_TeamProject
             DisplayMainUI();
         }
 
-        // 기본 세팅
+        // A. 기본 세팅
         static void SetData()
         {
-            // 플레이어 이름, 직업 세팅 - 직업 구체화 필요.
+            // 이름, 직업 세팅
+            string name;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("캐릭터를 생성합니다.");
+                Console.WriteLine("캐릭터 이름을 입력해주세요.");
+                Console.Write("이름: ");
+                name = Console.ReadLine()!;
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    break;
+                }
+                Console.Write("이름: ");
+            }
+
             Console.Clear();
-            Console.WriteLine("캐릭터를 생성합니다.");
-            Console.WriteLine("캐릭터 이름을 입력해주세요.");
-            string name = Console.ReadLine();
             Console.WriteLine("캐릭터 직업을 선택해주세요.");
-            string job = Console.ReadLine();
+
+            // foreach 반복문으로 직업 개수 무관하게 모두 출력됨.
+            // # 맨 아래 직업 DB에서 수정하는대로 자동 반영.
+            foreach (JobType job in Enum.GetValues(typeof(JobType)))
+            {
+                Console.WriteLine($"{(int)job}. {job}");
+            }
+            Console.WriteLine();
+            Console.Write("번호입력: ");
+            int result = CheckInput(1, 3);
+
+            JobType jobType = (JobType)result;
 
             // 플레이어 기본 지급 - 레벨, 이름, 직업, 공격력, 방어력, 체력, 골드
-            player = new Player(1, name, job, 10, 5, 100, 10000);
+            player = new Player(1, name, jobType, 10, 5, 100, 10000);
 
-            // 아이템 DB
-            itemDb = new Item[]
-            {
-            new Item("수련자의 갑옷", 1, 5,"수련에 도움을 주는 갑옷입니다. ",1000),
-            new Item("무쇠갑옷", 1, 9,"무쇠로 만들어져 튼튼한 갑옷입니다. ",2000),
-            new Item("스파르타의 갑옷", 1, 15,"스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",3500),
-            new Item("낣은 검", 0, 2,"쉽게 볼 수 있는 낡은 검 입니다. ",600),
-            new Item("청동 도끼", 0, 5,"어디선가 사용됐던거 같은 도끼입니다. ",1500),
-            new Item("스파르타의 창", 0, 7,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500)
-            };
+            InitItemDb(); // 아이템 세팅 호출
         }
 
         // 0. 메인메뉴
@@ -61,10 +75,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("3. 상점");
             Console.WriteLine("4. 던전입장");
             Console.WriteLine("5. 휴식하기");
+            Console.WriteLine("0. 게임종료");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(1, 5);
+            int result = CheckInput(0, 5);
 
             switch (result)
             {
@@ -83,17 +98,23 @@ namespace Sparta_Dungeon_TeamProject
                 case 5:
                     DisplayRestUI();
                     break;
+                case 0:
+                    Console.WriteLine("게임을 종료합니다.");
+                    Thread.Sleep(1000);
+                    Environment.Exit(0);
+                    break;
             }
         }
 
-        // 1. 상태보기
+        // 1. 상태보기 # Player.cs
         static void DisplayStatUI()
         {
             Console.Clear();
             Console.WriteLine("상태 보기");
             Console.WriteLine("캐릭터의 정보가 표시됩니다.");
+            Console.WriteLine();
 
-            player.DisplayPlayerInfo();
+            player.DisplayPlayerInfo(); // # Player.cs
 
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
@@ -141,5 +162,54 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
+
+        // B. 입력값 체크
+        static int CheckInput(int min, int max)
+        {
+            int result;
+            while (true)
+            {
+                string input = Console.ReadLine()!;
+                bool isNumber = int.TryParse(input, out result);
+                if (isNumber)
+                {
+                    if (result >= min && result <= max)
+                        return result;
+                }
+                Console.WriteLine("잘못된 입력입니다.");
+            }
+        }
+    }
+
+    // 직업 DB # SetData()
+    public enum JobType
+    {
+        직업1 = 1,
+        직업2,
+        직업3
+    }
+
+    public class JobData
+    {
+        public int BaseAtk { get; }
+        public int BaseDef { get; }
+        public string[] Skills { get; }
+
+        public JobData(int atk, int def, string[] skills)
+        {
+            BaseAtk = atk;
+            BaseDef = def;
+            Skills = skills;
+        }
+    }
+
+    public static class JobDB
+    {
+        public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
+            {   // 직업명 / 공격력 / 방어력 / 스킬
+                { JobType.직업1, new JobData(10, 5, new[] { "스킬1-1", "스킬1-2" }) },
+                { JobType.직업2, new JobData(8, 4, new[] { "스킬2-1", "스킬2-2" }) },
+                { JobType.직업3, new JobData(6, 3, new[] { "스킬3-1", "스킬3-2" }) }
+            };
     }
 }

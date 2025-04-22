@@ -1,8 +1,8 @@
 ﻿namespace Sparta_Dungeon_TeamProject
 {
-    // 던전
     public partial class Program
     {
+        // 4. 던전
         static void DisplayDungeonUI()
         {
             Console.Clear();

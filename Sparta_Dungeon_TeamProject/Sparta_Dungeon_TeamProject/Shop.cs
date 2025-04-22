@@ -68,7 +68,8 @@
             Console.WriteLine();
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine("구매하실 아이템 번호를 입력하세요.");
+            Console.Write(">>");
 
             int result = CheckInput(0, itemDb.Length);
 
@@ -136,7 +137,8 @@
             }
 
             Console.WriteLine("\n0. 나가기");
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine("판매하실 아이템 번호를 입력하세요");
+            Console.Write(">>");
             int result = CheckInput(0, owned.Count);
 
             if (result == 0)
@@ -155,22 +157,6 @@
             Console.WriteLine($"{targetItem.Name}을(를) 판매하여 {goldReceived} G를 획득했습니다. [Enter]");
             Console.ReadLine();
             DisplaySellUI();
-        }
-
-        static int CheckInput(int min, int max)
-        {
-            int result;
-            while (true)
-            {
-                string input = Console.ReadLine();
-                bool isNumber = int.TryParse(input, out result);
-                if (isNumber)
-                {
-                    if (result >= min && result <= max)
-                        return result;
-                }
-                Console.WriteLine("잘못된 입력입니다!!!!");
-            }
         }
     }
 }

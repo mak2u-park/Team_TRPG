@@ -1,10 +1,11 @@
 namespace Sparta_Dungeon_TeamProject
 {
+    // 플레이어 클래스
     public class Player
     {
         public int Level { get; }
         public string Name { get; }
-        public string Job { get; }
+        public JobType Job { get; }
         public int Atk { get; }
         public int Def { get; }
         public int Hp { get; private set; }
@@ -24,7 +25,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, string name, string job, int atk, int def, int hp, int gold)
+        public Player(int level, string name, JobType job, int atk, int def, int hp, int gold)
         {
             Level = level;
             Name = name;
@@ -35,6 +36,7 @@ namespace Sparta_Dungeon_TeamProject
             Gold = gold;
         }
 
+        // 1. 상태보기 # Program.cs
         public void DisplayPlayerInfo()
         {
             Console.WriteLine($"Lv. {Level:D2}");
@@ -45,6 +47,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"Gold : {Gold} G");
         }
 
+        // 인벤토리 # Inventory.cs
         public void DisplayInventory(bool showIdx)
         {
             for (int i = 0; i < Inventory.Count; i++)
@@ -57,6 +60,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        // 장비 착용여부 # Inventory.cs
         public void EquipItem(Item item)
         {
             if (IsEquipped(item))
@@ -82,6 +86,13 @@ namespace Sparta_Dungeon_TeamProject
             return EquipList.Contains(item);
         }
 
+        // 인벤토리 아이템 목록 반환(조회) # Inventory.cs
+        public List<Item> GetInventoryItems()
+        {
+            return Inventory;
+        }
+
+        // 구매 및 판매 아이템 관련 # Shop.cs
         public void BuyItem(Item item)
         {
             Gold -= item.Price;
@@ -93,11 +104,6 @@ namespace Sparta_Dungeon_TeamProject
             return Inventory.Contains(item);
         }
 
-        public List<Item> GetInventoryItems()
-        {
-            return Inventory;
-        }
-
         public void SellItem(Item item)
         {
             Gold += (int)(item.Price * 0.85);
@@ -107,6 +113,7 @@ namespace Sparta_Dungeon_TeamProject
             else ExtraDef -= item.Value;
         }
 
+        // 휴식기능 관련 # Program.cs
         public void Rest()
         {
             Gold -= 500;

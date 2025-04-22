@@ -1,8 +1,8 @@
 ﻿namespace Sparta_Dungeon_TeamProject
 {
-    // 인벤토리
     public partial class Program
     {
+        // 인벤토리
         static void DisplayInventoryUI()
         {
             Console.Clear();
@@ -60,7 +60,9 @@
                 default:
 
                     int itemIdx = result - 1;
-                    Item targetItem = itemDb[itemIdx];
+
+                    List<Item> inventory = player.GetInventoryItems();
+                    Item targetItem = inventory[itemIdx];
                     player.EquipItem(targetItem);
 
                     DisplayEquipUI();
