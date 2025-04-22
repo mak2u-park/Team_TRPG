@@ -67,11 +67,6 @@ namespace Sparta_Dungeon_TeamProject
 
     class Goblin : Monster
     {
-        public float finalAtk { get; }
-        public float finalDef { get; }
-        public float finalHp { get; }
-
-
         public Goblin() : base(
             minLevel: 1, maxLevel: 5,
             minAtk: 3, maxAtk: 5,
