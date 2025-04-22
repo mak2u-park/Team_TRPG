@@ -91,7 +91,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
             {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
-                { JobType.전사, new JobData(7, 8, 150, 50) },
+                { JobType.전사, new JobData(7, 8, 150, 50 ) },
                 { JobType.마법사, new JobData(13, 2, 50, 150) },
                 { JobType.궁수, new JobData(8, 7, 100, 100) },
                 { JobType.도적, new JobData(10, 5, 80, 120) },
@@ -103,7 +103,7 @@ namespace Sparta_Dungeon_TeamProject
         // 경험치 획득
         public void GainExp()
         {
-            while (Exp >= MaxExp)
+            while (Exp >= MaxExp) // 레벨업
             {
                 Exp -= MaxExp;
                 MaxExp += 10;
@@ -111,7 +111,6 @@ namespace Sparta_Dungeon_TeamProject
 
                 if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
                 {
-                    Atk += 1;
                     MaxHp += 10;
                     MaxMp += 5;
                     Hp += MaxHp;
@@ -119,7 +118,6 @@ namespace Sparta_Dungeon_TeamProject
                 }
                 else
                 {
-                    Atk += 1;
                     MaxHp += 5;
                     MaxMp += 10;
                     Hp += MaxHp;
