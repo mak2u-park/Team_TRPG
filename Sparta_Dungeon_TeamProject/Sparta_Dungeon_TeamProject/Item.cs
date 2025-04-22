@@ -23,7 +23,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Name { get; }
         public int Type { get; }
         public int Value { get; set; } // 강화시 set 필요
-        public int MaxValue { get; set; } = 10; // 강화 최대치 - 임시 Test용 10
+        public int MaxValue { get; set; } = 50; // 강화 최대치 - 임시 Test용
         public string Desc { get; }
         public int Price { get; }
 
@@ -46,6 +46,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public string ItemInfoText()
         {
+            string enhanceText = Value == MaxValue ? " (최대치)" : "";
             return $"{Name}  |  {DisplayTypeText} +{Value}  |  {Desc}";
         }
     }
