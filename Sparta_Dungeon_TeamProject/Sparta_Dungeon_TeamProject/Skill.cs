@@ -24,7 +24,6 @@ namespace Sparta_Dungeon_TeamProject
             Desc = desc;
         }
 
-
-
     }
+
 }
