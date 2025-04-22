@@ -1,4 +1,6 @@
-﻿namespace Sparta_Dungeon_TeamProject
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
@@ -72,8 +74,8 @@
                     break;
             }
         }
-.
-        static void UpgradeItemUI(Item item)
+
+        static void UpgradeItemUI()
         {
             Console.Clear();
             Console.WriteLine("아이템 강화");
@@ -100,18 +102,31 @@
                     List<Item> inventory = player.GetInventoryItems();
                     Item targetItem = inventory[itemIdx];
 
-                    if ()
+                    bool isSuccess = player.UpgradeItem(targetItem);
+
+                    if (isSuccess)
                     {
-                        Console.WriteLine($"{targetItem.Name} 아이템이 강화되었습니다.");
-                        Console.WriteLine("Enter 를 눌러주세요.");
-                        Console.ReadLine();
+                        Console.WriteLine($"[{targetItem.Name}] 아이템이 강화되었습니다.");
+                        Console.WriteLine($"현재 능력치 : {targetItem.Value}");
+                        Console.WriteLine($"현재 골드 : {player.Gold} G");
+
+                        UpgradeItemUI();
+
+                    }
+                    else if (targetItem.Price > player.Gold)
+                    {
+                        Console.WriteLine($"현재 골드: {player.Gold} G");
+                        Console.WriteLine("골드가 부족합니다.");
                     }
                     else
                     {
-                        Console.WriteLine("골드가 부족합니다.");
-                        Console.WriteLine("Enter 를 눌러주세요.");
-                        Console.ReadLine();
+                        Console.WriteLine(($"강화에 실패했습니다."));
                     }
+
+                    Console.WriteLine("Enter 를 눌러주세요.");
+                    Console.ReadLine();
+
+                    DisplayInventoryUI();
                     break;
             }
         }
