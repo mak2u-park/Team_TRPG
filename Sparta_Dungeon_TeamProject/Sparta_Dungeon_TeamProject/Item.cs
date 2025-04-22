@@ -16,12 +16,14 @@ namespace Sparta_Dungeon_TeamProject
             };
         }
     }
+
     // 아이템 클래스
     public class Item
     {
         public string Name { get; }
         public int Type { get; }
-        public int Value { get; }
+        public int Value { get; set; } // 강화시 set 필요
+        public int MaxValue { get; set; } = 10; // 강화 최대치 - 임시 Test용 10
         public string Desc { get; }
         public int Price { get; }
 

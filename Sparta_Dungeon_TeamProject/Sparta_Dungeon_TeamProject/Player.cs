@@ -119,5 +119,36 @@ namespace Sparta_Dungeon_TeamProject
             Gold -= 500;
             Hp = 100;
         }
+
+        // 아이템 강화 - 오류 발생 bool값으로 변경 시도 # Inventory.cs
+        public bool UpgradeItem(Item item)
+        {
+            if (item.Value >= item.MaxValue) // 최대치 이상
+            {
+                return false;
+            }
+
+            if (item.Value < 10)
+            {
+                if (Gold < 100) return false;
+                Gold -= 100;
+                item.Value += 2;
+
+                if (item.Type == 0) ExtraAtk += 2;
+                else ExtraDef += 2;
+                return true;
+            }
+            else if (item.Value >= 10) // 해당 값 이상
+            {
+                if (Gold < 200) return false;
+                Gold -= 200;
+                item.Value += 5;
+
+                if (item.Type == 0) ExtraAtk += 5;
+                else ExtraDef += 5;
+                return true;
+            }
+            return false;
+        }
     }
 }
