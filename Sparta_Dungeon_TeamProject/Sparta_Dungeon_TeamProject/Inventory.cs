@@ -75,6 +75,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        // 강화하기
         static void UpgradeItemUI()
         {
             Console.Clear();
@@ -104,25 +105,34 @@ namespace Sparta_Dungeon_TeamProject
 
                     bool isSuccess = player.UpgradeItem(targetItem);
 
-                    if (isSuccess)
+                    if (targetItem.Value >= targetItem.MaxValue)
                     {
-                        Console.WriteLine($"[{targetItem.Name}] 아이템이 강화되었습니다.");
+                        Console.WriteLine($"[{targetItem.Name}] 아이템은 최대 능력치에 도달했습니다.");
                         Console.WriteLine($"현재 능력치 : {targetItem.Value}");
                         Console.WriteLine($"현재 골드 : {player.Gold} G");
-
-                        UpgradeItemUI();
-
                     }
                     else if (targetItem.Price > player.Gold)
                     {
                         Console.WriteLine($"현재 골드: {player.Gold} G");
                         Console.WriteLine("골드가 부족합니다.");
                     }
+                    else if (isSuccess) // 강화 성공!
+                    {
+                        Console.WriteLine($"[{targetItem.Name}] 아이템이 강화되었습니다.");
+                        Console.WriteLine($"현재 능력치 : {targetItem.Value}");
+                        Console.WriteLine($"현재 골드 : {player.Gold} G");
+                        Console.WriteLine();
+                        Console.WriteLine("Enter 를 눌러주세요.");
+                        Console.ReadLine();
+
+                        UpgradeItemUI();
+                    }
                     else
                     {
-                        Console.WriteLine(($"강화에 실패했습니다."));
+                        Console.WriteLine("강화 실패!");
                     }
 
+                    Console.WriteLine();
                     Console.WriteLine("Enter 를 눌러주세요.");
                     Console.ReadLine();
 
