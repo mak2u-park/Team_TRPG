@@ -57,8 +57,8 @@ namespace Sparta_Dungeon_TeamProject
 
             JobType jobType = (JobType)result;
 
-            // 플레이어 기본 지급 - 레벨, 이름, 직업, 공격력, 방어력, 체력, 골드
-            player = new Player(1, name, jobType, 10, 5, 100, 10000);
+            // 플레이어 기본 지급 - 레벨, 경험치, 이름, 직업, 공격력, 방어력, 체력, 골드
+            player = new Player(1, 0, 100, name, jobType, 10, 5, 100, 10000);
 
             InitItemDb(); // 아이템 세팅 호출
         }

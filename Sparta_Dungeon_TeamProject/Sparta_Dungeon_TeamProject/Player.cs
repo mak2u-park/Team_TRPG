@@ -1,14 +1,20 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace Sparta_Dungeon_TeamProject
 {
     // 플레이어 클래스
     public class Player
     {
-        public int Level { get; }
-        public string Name { get; }
-        public JobType Job { get; }
-        public int Atk { get; }
-        public int Def { get; }
+        public int Level { get; private set; }
+        public int Exp { get; set; }
+        public int MaxExp { get; private set; }
+        public string Name { get; private set; }
+        public JobType Job { get; private set; }
+        public int Atk { get; private set; }
+        public int Def { get; private set; }
         public int Hp { get; private set; }
+        public int Mp { get; set; }
         public int Gold { get; private set; }
 
         public int ExtraAtk { get; private set; }
@@ -25,26 +31,43 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, string name, JobType job, int atk, int def, int hp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int def, int hp, int gold)
         {
             Level = level;
+            Exp = exp;
+            MaxExp = maxExp;
             Name = name;
             Job = job;
             Atk = atk;
             Def = def;
             Hp = hp;
             Gold = gold;
+
         }
 
         // 1. 상태보기 # Program.cs
         public void DisplayPlayerInfo()
         {
-            Console.WriteLine($"Lv. {Level:D2}");
+            Console.WriteLine($"Lv. {Level:D2} {{ {Exp}/{MaxExp} }}");
             Console.WriteLine($"{Name} {{ {Job} }}");
             Console.WriteLine(ExtraAtk == 0 ? $"공격력 : {Atk}" : $"공격력 : {Atk + ExtraAtk} (+{ExtraAtk})");
             Console.WriteLine(ExtraDef == 0 ? $"방어력 : {Def}" : $"방어력 : {Def + ExtraDef} (+{ExtraDef})");
             Console.WriteLine($"체력 : {Hp}");
             Console.WriteLine($"Gold : {Gold} G");
+        }
+
+        // 경험치 획득
+        public void GainExp()
+        {
+            while (Exp >= MaxExp)
+            {
+                Exp -= MaxExp;
+                MaxExp += 10;
+                Level++;
+                Atk += 1;
+                Def += 1;
+                Hp += 10;
+            }
         }
 
         // 인벤토리 # Inventory.cs
