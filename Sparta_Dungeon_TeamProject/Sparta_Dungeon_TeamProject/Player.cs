@@ -123,32 +123,29 @@ namespace Sparta_Dungeon_TeamProject
         // 아이템 강화 - 오류 발생 bool값으로 변경 시도 # Inventory.cs
         public bool UpgradeItem(Item item)
         {
+            int cost = item.Value < 20 ? 100 : 200; // 20미만이 true => 100 G / 20미만이 false => 200 G 차감
+            int valueUp = item.Value < 20 ? 5 : 10; // 20미만 5 증가, 20이상 10 증가
+
             if (item.Value >= item.MaxValue) // 최대치 이상
             {
                 return false;
             }
 
-            if (item.Value < 10)
+            if (Gold < cost) // 골드 부족
             {
-                if (Gold < 100) return false;
-                Gold -= 100;
-                item.Value += 2;
-
-                if (item.Type == 0) ExtraAtk += 2;
-                else ExtraDef += 2;
-                return true;
+                return false;
             }
-            else if (item.Value >= 10) // 해당 값 이상
+
+            Gold -= cost; // 골드 차감
+            item.Value += valueUp; // 아이템 능력치 증가
+
+            //장착 스탯 반영
+            if (IsEquipped(item))
             {
-                if (Gold < 200) return false;
-                Gold -= 200;
-                item.Value += 5;
-
-                if (item.Type == 0) ExtraAtk += 5;
-                else ExtraDef += 5;
-                return true;
+                if (item.Type == 0) ExtraAtk += valueUp;
+                else ExtraDef += valueUp;
             }
-            return false;
+            return true;
         }
     }
 }
