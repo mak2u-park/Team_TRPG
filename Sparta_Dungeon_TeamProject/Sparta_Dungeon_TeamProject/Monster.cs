@@ -62,7 +62,7 @@ namespace Sparta_Dungeon_TeamProject
 
         }
 
-        
+
     }
 
     class Goblin : Monster
