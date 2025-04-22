@@ -14,7 +14,9 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
+        public int MaxHp { get; private set; }  
         public int Mp { get; set; }
+        public int MaxMp { get; private set; }
         public int Gold { get; private set; }
 
         public int ExtraAtk { get; private set; }
@@ -31,7 +33,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int def, int hp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job,int atk,int def, int hp, int maxHp, int mp, int maxMp, int gold)
         {
             Level = level;
             Exp = exp;
@@ -41,6 +43,9 @@ namespace Sparta_Dungeon_TeamProject
             Atk = atk;
             Def = def;
             Hp = hp;
+            MaxHp = maxHp;
+            Mp = mp;
+            MaxMp = maxMp;
             Gold = gold;
 
         }
@@ -52,8 +57,61 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{Name} {{ {Job} }}");
             Console.WriteLine(ExtraAtk == 0 ? $"공격력 : {Atk}" : $"공격력 : {Atk + ExtraAtk} (+{ExtraAtk})");
             Console.WriteLine(ExtraDef == 0 ? $"방어력 : {Def}" : $"방어력 : {Def + ExtraDef} (+{ExtraDef})");
-            Console.WriteLine($"체력 : {Hp}");
+            Console.WriteLine($"체력 : {Hp}/{MaxHp}");
+            Console.WriteLine($"마나 : {Mp}/{MaxMp}");
             Console.WriteLine($"Gold : {Gold} G");
+        }
+
+        // 직업 DB # SetData()
+        public enum JobType
+        {
+            전사 = 1,
+            마법사,
+            궁수,
+            도적,
+            성직자,
+        }
+
+
+        public void Damage(int amount)
+        {
+            Hp -= amount;
+
+            if (Hp < 0)
+            {
+                Hp = 0;
+            }
+
+            Console.WriteLine($"{amount}의 데미지를 받았습니다!");
+        }
+
+        public class JobData
+        {
+            public int BaseAtk { get; }
+            public int BaseDef { get; }
+            public int BaseMaxHp { get; }
+            public int BaseMaxMp { get; }
+            public string[] Skills { get; }
+
+            public JobData(int atk, int def, int maxHp, int maxMp, string[] skills)
+            {
+                BaseAtk = atk;
+                BaseDef = def;
+                BaseMaxHp = maxHp;
+                BaseMaxMp = maxMp;
+                Skills = skills;
+            }
+        }
+        public static class JobDB
+        {
+            public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
+            {   // 직업명 / 공격력 / 방어력 / 스킬
+                { JobType.전사, new JobData(7, 8, 150, 50, new[] { "스킬1-1", "스킬1-2" }) },
+                { JobType.마법사, new JobData(13, 2, 50, 150, new[] { "스킬2-1", "스킬2-2" }) },
+                { JobType.궁수, new JobData(8, 7, 100, 100, new[] { "스킬3-1", "스킬3-2" }) },
+                { JobType.도적, new JobData(10, 5, 80, 120,  new[] { "스킬2-1", "스킬2-2" }) },
+                { JobType.성직자, new JobData(5, 4, 125, 75, new[] { "스킬2-1", "스킬2-2" }) }
+            };
         }
 
         // 경험치 획득
@@ -66,7 +124,15 @@ namespace Sparta_Dungeon_TeamProject
                 Level++;
                 Atk += 1;
                 Def += 1;
-                Hp += 10;
+
+                if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
+                {
+                    MaxHp += 10;
+                }
+                else
+                {
+                    MaxMp += 10;
+                }
             }
         }
 
@@ -140,7 +206,7 @@ namespace Sparta_Dungeon_TeamProject
         public void Rest()
         {
             Gold -= 500;
-            Hp = 100;
+            MaxHp += Hp;
         }
 
         // 아이템 강화 - 오류 발생 bool값으로 변경 시도 # Inventory.cs

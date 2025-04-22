@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
+using static Sparta_Dungeon_TeamProject.Player;
 
 namespace Sparta_Dungeon_TeamProject
 {
@@ -46,19 +47,33 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("캐릭터 직업을 선택해주세요.");
 
             // foreach 반복문으로 직업 개수 무관하게 모두 출력됨.
-            // # 맨 아래 직업 DB에서 수정하는대로 자동 반영.
-            foreach (JobType job in Enum.GetValues(typeof(JobType)))
+            foreach (Player.JobType job in Enum.GetValues(typeof(Player.JobType)))
             {
                 Console.WriteLine($"{(int)job}. {job}");
             }
             Console.WriteLine();
             Console.Write("번호입력: ");
-            int result = CheckInput(1, 3);
+            int result = CheckInput(1, 5);
 
-            JobType jobType = (JobType)result;
+            Player.JobType jobType = (Player.JobType)result;
+            JobData jobData = JobDB.Jobs[jobType];
 
-            // 플레이어 기본 지급 - 레벨, 경험치, 이름, 직업, 공격력, 방어력, 체력, 골드
-            player = new Player(1, 0, 100, name, jobType, 10, 5, 100, 10000);
+            // 플레이어 이름, 직업 기본 능력치 지급
+            player = new Player
+            (
+            level: 1,
+            exp: 0,
+            maxExp: 100,
+            name: name,
+            job: jobType,
+            atk: jobData.BaseAtk,
+            def: jobData.BaseDef,
+            hp: jobData.BaseMaxHp,
+            maxHp: jobData.BaseMaxHp,
+            mp: jobData.BaseMaxMp,
+            maxMp: jobData.BaseMaxMp,
+            gold: 10000
+            );
 
             InitItemDb(); // 아이템 세팅 호출
         }
@@ -179,37 +194,5 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("잘못된 입력입니다.");
             }
         }
-    }
-
-    // 직업 DB # SetData()
-    public enum JobType
-    {
-        직업1 = 1,
-        직업2,
-        직업3
-    }
-
-    public class JobData
-    {
-        public int BaseAtk { get; }
-        public int BaseDef { get; }
-        public string[] Skills { get; }
-
-        public JobData(int atk, int def, string[] skills)
-        {
-            BaseAtk = atk;
-            BaseDef = def;
-            Skills = skills;
-        }
-    }
-
-    public static class JobDB
-    {
-        public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
-            {   // 직업명 / 공격력 / 방어력 / 스킬
-                { JobType.직업1, new JobData(10, 5, new[] { "스킬1-1", "스킬1-2" }) },
-                { JobType.직업2, new JobData(8, 4, new[] { "스킬2-1", "스킬2-2" }) },
-                { JobType.직업3, new JobData(6, 3, new[] { "스킬3-1", "스킬3-2" }) }
-            };
     }
 }
