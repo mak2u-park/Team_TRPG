@@ -153,10 +153,22 @@ namespace Sparta_Dungeon_TeamProject
             if (target.Hp <= 0)
             {
                 target.IsAlive = false;
+                player.Gold += target.DropGold;
+                player.Exp += target.DropExp;
                 Console.WriteLine();
                 Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
                 Thread.Sleep(700);
-                KillMon++;
+                Console.WriteLine();
+                Console.WriteLine($"{target.DropGold} G 를 획득했다.");
+                Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
+                Console.WriteLine();
+                Console.WriteLine($"보유 골드 {player.Gold}");
+                Console.WriteLine($"현재 경험치 {player.Exp}");
+                Console.WriteLine();
+                Console.WriteLine("0. 턴 넘기기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                CheckInput(0, 0);
 
                 if (battleMonsters.All(m => !m.IsAlive))
                 {
