@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Sparta_Dungeon_TeamProject
@@ -109,23 +110,39 @@ namespace Sparta_Dungeon_TeamProject
                 Exp -= MaxExp;
                 MaxExp += 10;
                 Level++;
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine();
+                string levelUpMessage = "쌓여온 경험이 당신을 한층 더 성장시켰습니다.";
+                Console.ForegroundColor = ConsoleColor.Yellow;
 
-                if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
+                foreach (char c in levelUpMessage)
                 {
-                    MaxHp += 10;
-                    MaxMp += 5;
-                    Hp += MaxHp;
-                    Mp += MaxMp;
+                    Console.Write(c);
+                    Thread.Sleep(80);
                 }
-                else
-                {
-                    MaxHp += 5;
-                    MaxMp += 10;
-                    Hp += MaxHp;
-                    Mp += MaxMp;
-                }
+
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
+            if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
+            {
+                MaxHp += 10;
+                MaxMp += 5;
+                Hp = MaxHp;
+                Mp = MaxMp;
+            }
+            else
+            {
+                MaxHp += 5;
+                MaxMp += 10;
+                Hp = MaxHp;
+                Mp = MaxMp;
             }
         }
+
         public void AddGold(int amount) // 골드를 추가해주는 매서드
         {
             Gold += amount;
