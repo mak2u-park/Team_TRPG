@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace Sparta_Dungeon_TeamProject
@@ -114,15 +115,15 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     MaxHp += 10;
                     MaxMp += 5;
-                    Hp += MaxHp;
-                    Mp += MaxMp;
+                    Hp = MaxHp;
+                    Mp = MaxMp;
                 }
                 else
                 {
                     MaxHp += 5;
                     MaxMp += 10;
-                    Hp += MaxHp;
-                    Mp += MaxMp;
+                    Hp = MaxHp;
+                    Mp = MaxMp;
                 }
             }
         }
