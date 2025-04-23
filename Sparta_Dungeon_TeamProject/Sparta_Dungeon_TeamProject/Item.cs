@@ -22,8 +22,9 @@ namespace Sparta_Dungeon_TeamProject
     {
         public string Name { get; }
         public int Type { get; }
-        public int Value { get; set; } // 강화시 set 필요
-        public int MaxValue { get; set; } = 50; // 강화 최대치 - 임시 Test용
+        public int BaseValue { get; } // 기본 능력치
+        public int Value { get; set; } // 총 능력치 / 강화시 set 필요
+        public int MaxValue { get; set; } = 50; // 강화 최대치 - 테스트용. 조정 가능.
         public string Desc { get; }
         public int Price { get; }
 
@@ -35,19 +36,31 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Item(string name, int type, int value, string desc, int price)
+        public Item(string name, int type, int baseValue, string desc, int price)
         {
             Name = name;
             Type = type;
-            Value = value;
+            BaseValue = baseValue;
+            Value = baseValue;
             Desc = desc;
             Price = price;
         }
 
-        public string ItemInfoText()
+        public string ItemInfoText() // 장착여부 무관 / shop 아이템
         {
             string enhanceText = Value == MaxValue ? " (최대치)" : "";
-            return $"{Name}  |  {DisplayTypeText} +{Value}  |  {Desc}";
+
+            return $"{Name}  |  {DisplayTypeText} +{BaseValue}  |  {Desc}";
+        }
+
+        public string ItemEnhanceText() // 장착여부 포함 / 강화 O 아이템
+        {
+            int enhanceValue = Value - BaseValue;
+            string enhanceText = Value >= MaxValue ? " (최대치)" : "";
+            string valueText = enhanceValue > 0 ? $"+({enhanceValue})" : "";
+            string typeText = Type == 0 ? "공격력" : "방어력";
+
+            return $"{Name}  |  {typeText} {BaseValue} {valueText}{enhanceText}  |  {Desc}";
         }
     }
 }

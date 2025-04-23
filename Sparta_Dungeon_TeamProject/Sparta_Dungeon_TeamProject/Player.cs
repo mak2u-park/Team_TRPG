@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace Sparta_Dungeon_TeamProject
@@ -14,7 +15,7 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
-        public int MaxHp { get; private set; }  
+        public int MaxHp { get; private set; }
         public int Mp { get; set; }
         public int MaxMp { get; private set; }
         public int Gold { get; private set; }
@@ -33,7 +34,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, int exp, int maxExp, string name, JobType job,int atk,int def, int hp, int maxHp, int mp, int maxMp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int def, int hp, int maxHp, int mp, int maxMp, int gold)
         {
             Level = level;
             Exp = exp;
@@ -126,16 +127,24 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 인벤토리 # Inventory.cs
-        public void DisplayInventory(bool showIdx)
+        // 인벤토리 아이템목록 # Inventory.cs
+        public void InventoryItemList(bool showIdx)
         {
             for (int i = 0; i < Inventory.Count; i++)
             {
                 Item targetItem = Inventory[i];
 
+                // 인벤토리 아이템 출력
                 string displayIdx = showIdx ? $"{i + 1} " : "";
                 string displayEquipped = IsEquipped(targetItem) ? "[E]" : "";
-                Console.WriteLine($"- {displayIdx}{displayEquipped} {targetItem.ItemInfoText()}");
+
+                // 아이템 강화 여부에 따른 출력
+                string enhanceText = targetItem.Value == targetItem.MaxValue ? " (최대치)" : "";
+                string statText = $"+({targetItem.Value})"; // 강화 수치
+                string typeText = targetItem.Type == 0 ? "공격력" : "방어력";
+
+                // 아이템 정보 출력: 이름, 타입,
+                Console.WriteLine($"- {displayIdx}{displayEquipped}{targetItem.ItemEnhanceText()}");
             }
         }
 
@@ -145,18 +154,14 @@ namespace Sparta_Dungeon_TeamProject
             if (IsEquipped(item))
             {
                 EquipList.Remove(item);
-                if (item.Type == 0)
-                    ExtraAtk -= item.Value;
-                else
-                    ExtraDef -= item.Value;
+                if (item.Type == 0) ExtraAtk -= item.Value;
+                else ExtraDef -= item.Value;
             }
             else
             {
                 EquipList.Add(item);
-                if (item.Type == 0)
-                    ExtraAtk += item.Value;
-                else
-                    ExtraDef += item.Value;
+                if (item.Type == 0) ExtraAtk += item.Value;
+                else ExtraDef += item.Value;
             }
         }
 
@@ -199,11 +204,11 @@ namespace Sparta_Dungeon_TeamProject
             MaxHp += Hp;
         }
 
-        // 아이템 강화 - 오류 발생 bool값으로 변경 시도 # Inventory.cs
+        // 아이템 강화 # Inventory.cs
         public bool UpgradeItem(Item item)
         {
-            int cost = item.Value < 20 ? 100 : 200; // 20미만이 true => 100 G / 20미만이 false => 200 G 차감
-            int valueUp = item.Value < 20 ? 5 : 10; // 20미만 5 증가, 20이상 10 증가
+            int cost = item.Value < 20 ? 100 : 200; // 조건에 따라 가격 차등
+            int valueUp = item.Value < 20 ? 5 : 10; // 조건에 따라 추가 능력치 차등
 
             if (item.Value >= item.MaxValue) // 최대치 이상
             {
@@ -232,7 +237,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             int damage = amount - Def;
 
-            damage = damage < 0 ? 0 : damage;
+            damage = damage < 0 ? 1 : damage;
 
             Hp -= damage;
 
