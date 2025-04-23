@@ -41,6 +41,7 @@ namespace Sparta_Dungeon_TeamProject
         private static Random random = new Random();
 
         public Monster(
+            string name,
             int minLevel, int maxLevel,
             int minAtk, int maxAtk,
             int minDef, int maxDef,
@@ -50,6 +51,7 @@ namespace Sparta_Dungeon_TeamProject
             bool isAlive,
             float orgin)
         {
+            Name = name;
             Level = random.Next(minLevel, maxLevel + 1);
             Atk = random.Next(minAtk, maxAtk + 1);
             Def = random.Next(minDef, maxDef + 1);
@@ -69,6 +71,7 @@ namespace Sparta_Dungeon_TeamProject
             */
 
         }
+
         public static class MonsterFactory
         {
             private static Random rand = new Random();
@@ -94,6 +97,7 @@ namespace Sparta_Dungeon_TeamProject
             class Goblin : Monster
             {
                 public Goblin() : base(
+                    name: "고블린",
                     minLevel: 1, maxLevel: 5,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
@@ -102,8 +106,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     orgin: 0.1f)
-                {
-                    Name = "고블린";                    
+                {           
                 }
 
             }
@@ -112,6 +115,7 @@ namespace Sparta_Dungeon_TeamProject
             class Orc : Monster
             {
                 public Orc() : base(
+                    name: "오크",
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
@@ -121,11 +125,25 @@ namespace Sparta_Dungeon_TeamProject
                     isAlive: true,
                     orgin: 0.15f)
                 {
-                    Name = "오거";
                 }
 
             }
 
+            class Capybara : Monster
+            {
+                public Capybara() : base(
+                    name: "카피바라", mobType: 1,
+                    minLevel: 10, maxLevel: 10,
+                    minAtk: 15, maxAtk: 15,
+                    minDef: 20, maxDef: 20,
+                    minHp: 40, maxHp: 40,
+                    minDropGold: 10000, maxDropGold: 10000,
+                    minDropExp: 0, maxDropExp: 0,
+                    isAlive: true,
+                    orgin: 0.0f)
+                { 
+                }
+            }
         }
     }
 }
