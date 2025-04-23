@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Numerics;
+using System.Threading;
 using System.Xml.Linq;
 using static Sparta_Dungeon_TeamProject.Monster;
 using static Sparta_Dungeon_TeamProject.Monster.MonsterFactory;
@@ -7,17 +8,12 @@ namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
-        public static string GetMonsterStatus(Monster mon)
-        {
-            return mon.IsAlive ? $"[HP:{mon.Hp}]" : "[사망]";
-        }
+        public static string GetMonsterStatus(Monster mon) => mon.IsAlive ? $"[HP:{mon.Hp}]" : "[사망]";
 
-
-        public static int KillMon = 0; // 임시로 만든 몬스터 처치 횟수 값
-
+        public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static bool Playerturn = true; // 플레이어의 턴 여부
-
         public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
+        public static int BattleTurn = 1; // 전투 턴 변수
 
 
         // 4. 던전
@@ -31,91 +27,101 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 1);
-            switch (result)
+            switch (CheckInput(0, 1))
             {
                 case 0:
-                    DisplayMainUI();
-                    break;
+                    DisplayMainUI(); break;
                 case 1:
-                    Battle();
-                    break;
+                    Battle(); break;
             }
         }
         static void Battle()
         {
-            bool BettleLoop = true; // 전투 진행 루프를 켜줌
+            KillMon = 0; // 몬스터 킬 수 초기화
+            BattleTurn = 1; // 전투 턴 수 초기화
             battleMonsters = MonsterSpawner.SpawnMonsters("easy"); // ("난이도") 를 조절해서 몬스터 마릿 수와 종류 조절 가능
             Playerturn = true;
 
-            while (BettleLoop) // 전투 진행 루프가 켜져 있다면
+            while (true)
             {
-                if (Playerturn) // 만약 플레이어의 턴이 맞다면
+                if (Playerturn) // 만약 플레이어의 턴이라면
                 {
-                    Console.Clear();
-                    Console.WriteLine("당신의 턴입니다.");
-                    Console.WriteLine();
-                    Console.WriteLine("**현재 전투 중 입니다.**");
-                    Console.WriteLine();
-
-                    PrintMonsters(); // 몬스터 출력
-
-                    Console.WriteLine();
-                    Console.WriteLine("1. 일반 공격");
-                    Console.WriteLine("2. 스킬 선택");
-                    Console.WriteLine();
-                    Console.WriteLine("원하시는 행동을 입력해주세요.");
-                    Console.WriteLine();
-
-                    int result = CheckInput(1, 2);
-                    switch (result)
-                    {
-                        case 1:
-                            PlayerAttack(); // 플레이어 공격 불러오기
-                            break;
-                        case 2:
-                            //Player.SkillUI ->     스킬창 불러오기
-                            break;
-                    }
+                    PlayerTurn();
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
                 {
-                    Console.Clear();
-                    Console.WriteLine();
-                    Console.WriteLine("상대의 턴입니다.");
-                    Console.WriteLine();
-                    Console.WriteLine("**현재 전투 중 입니다.**");
-                    Console.WriteLine();
-                    Thread.Sleep(500);
-                    foreach (var m in battleMonsters)
-                    {
-
-                        if (m.IsAlive)
-                        {
-                            Console.WriteLine($"[Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
-                            Console.WriteLine();
-                            player.Damage(m.Atk);
-                            Console.WriteLine();
-                            Thread.Sleep(300);
-                        }
-                    }
-
-                    Console.WriteLine();
-                    Console.WriteLine("0. 다음");
-                    Console.WriteLine();
-
-                    CheckInput(0, 0);
-
-                    Playerturn = true; // 턴 넘기기
+                    MonsterTurn();
                 }
             }
+        }
+        static void PlayerTurn()
+        {
+            Console.Clear();
+            Console.WriteLine("당신의 턴입니다.");
+            Console.WriteLine();
+            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
+            Console.WriteLine();
+            Console.WriteLine("**현재 전투 중 입니다.**");
+            Console.WriteLine();
+
+            PrintMonsters(); // 몬스터 출력
+
+            Console.WriteLine();
+            Console.WriteLine("1. 일반 공격");
+            Console.WriteLine("2. 스킬 선택");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            switch (CheckInput(1, 2))
+            {
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+            }
+        }
+        static void MonsterTurn()
+        {
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine("상대의 턴입니다.");
+            Console.WriteLine();
+            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
+            Console.WriteLine();
+            Console.WriteLine("**현재 전투 중 입니다.**");
+            Console.WriteLine();
+            Thread.Sleep(500);
+            foreach (var m in battleMonsters)
+            {
+
+                if (m.IsAlive)
+                {
+                    Console.WriteLine($"[Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
+                    Console.WriteLine();
+                    player.Damage(m.Atk);
+                    Console.WriteLine();
+                    Thread.Sleep(300);
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("0. 다음");
+            Console.WriteLine();
+
+            CheckInput(0, 0);
+
+            Playerturn = true; // 플레이어 턴으로 변경
+            BattleTurn++; // 전체적인 한 턴이 끝났으니 턴 수 증가
         }
         static void PlayerAttack()
         {
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine("**현재 일반 공격을 시도하는 중 입니다.**");
+            Console.WriteLine();
+            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
 
             PrintMonsters(); // 몬스터 출력
@@ -127,10 +133,7 @@ namespace Sparta_Dungeon_TeamProject
 
             int result = CheckInput(0, battleMonsters.Count);
 
-            if (result == 0)
-            {
-                return;
-            }
+            if (result == 0) return;
 
             Monster target = battleMonsters[result - 1];
 
@@ -152,23 +155,10 @@ namespace Sparta_Dungeon_TeamProject
 
             if (target.Hp <= 0)
             {
+                KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
-                player.Gold += target.DropGold;
-                player.Exp += target.DropExp;
-                Console.WriteLine();
-                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
-                Thread.Sleep(700);
-                Console.WriteLine();
-                Console.WriteLine($"{target.DropGold} G 를 획득했다.");
-                Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
-                Console.WriteLine();
-                Console.WriteLine($"보유 골드 {player.Gold}");
-                Console.WriteLine($"현재 경험치 {player.Exp}");
-                Console.WriteLine();
-                Console.WriteLine("0. 턴 넘기기");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                CheckInput(0, 0);
+                player.GainReward(target.DropGold, target.DropExp);
+                DisplayKillMessage(target);
 
                 if (battleMonsters.All(m => !m.IsAlive))
                 {
@@ -176,7 +166,25 @@ namespace Sparta_Dungeon_TeamProject
                     return;
                 }
             }
-            Playerturn = false;
+
+            Playerturn = false; // 몬스터의 턴으로 변경
+        }
+        static void DisplayKillMessage(Monster target)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
+            Thread.Sleep(700);
+            Console.WriteLine();
+            Console.WriteLine($"{target.DropGold} G 를 획득했다.");
+            Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
+            Console.WriteLine();
+            Console.WriteLine($"보유 골드 {player.Gold}");
+            Console.WriteLine($"현재 경험치 {player.Exp}");
+            Console.WriteLine();
+            Console.WriteLine("0. 턴 넘기기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            CheckInput(0, 0);
         }
 
         public static void BattleSuccessUI()
@@ -190,19 +198,20 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"Lv.{player.Level} [{player.Name}]");
             Console.WriteLine();
             Console.WriteLine("0. 다음 층으로 이동하기");
+            Console.WriteLine("1. 복귀하기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
-            KillMon = 0;
 
-            int result = CheckInput(0, 0);
-            switch (result)
+            switch (CheckInput(0, 1))
             {
                 case 0:
-                    //다음 층으로 이동하는 코드
+                    break;
+                case 1:
+                    DisplayMainUI();
                     break;
             }
-
         }
+
         public static void BattleFailureUI()
         {
             Console.Clear();
@@ -215,12 +224,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 0);
-            switch (result)
+            if (CheckInput(0, 0) == 0)
             {
-                case 0:
-                    Program.DisplayMainUI();
-                    break;
+                DisplayMainUI();
             }
         }
         static void PrintMonsters()
@@ -232,6 +238,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
     }
+
     public static class MonsterSpawner
     {
         public static List<Monster> SpawnMonsters(string difficulty)
@@ -261,15 +268,10 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
 
-            List<Monster> monsters = new List<Monster>();
-            for (int i = 0; i < monsterCount; i++)
-            {
-                var type = allowedTypes[rand.Next(allowedTypes.Count)]; // 난이도에 맞는 몬스터 타입 선택
-                monsters.Add(MonsterFactory.CreateMonster(type)); // 해당 타입의 몬스터 생성
-            }
-
-            return monsters;
+            return Enumerable.Range(0, monsterCount)
+                .Select(_ => MonsterFactory.CreateMonster(allowedTypes[rand.Next(allowedTypes.Count)]))
+                .ToList();
         }
-
     }
+
 }
