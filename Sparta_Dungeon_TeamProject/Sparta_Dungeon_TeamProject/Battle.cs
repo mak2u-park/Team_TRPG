@@ -65,7 +65,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
-            Console.WriteLine($"현재 HP : {player.Hp}");
+            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
             Console.WriteLine();
             Console.WriteLine("**현재 전투 중 입니다.**");
             Console.WriteLine();
@@ -112,7 +113,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
-            Console.WriteLine($"현재 HP : {player.Hp}");
+            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
             Console.WriteLine();
             Console.WriteLine("**현재 전투 중 입니다.**");
             Console.WriteLine();
@@ -126,7 +128,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     player.Damage(m.Atk);
                     Console.WriteLine();
-                    Console.WriteLine($"현재 HP : {player.Hp}");
+                    Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
                     Console.WriteLine();
                     Thread.Sleep(300);
                 }
@@ -181,8 +183,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
-                player.GainReward(target.DropGold, target.DropExp);
                 DisplayKillMessage(target);
+                player.GainReward(target.DropGold, target.DropExp);
+                Console.WriteLine();
+                Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
+                Console.ReadKey();
 
                 if (battleMonsters.All(m => !m.IsAlive))
                 {
@@ -203,10 +208,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
             Console.WriteLine();
             Console.WriteLine($"보유 골드 {player.Gold}");
-            Console.WriteLine($"현재 경험치 {player.Exp}");
-            Console.WriteLine();
-            Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
-            Console.ReadKey();
+            Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
         }
 
         public static void BattleSuccessUI()
@@ -218,7 +220,10 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"현재 층에서 몬스터를 {KillMon} 마리 만큼 처치 하셨습니다.");
             Console.WriteLine();
             Console.WriteLine($"Lv.{player.Level} [{player.Name}]");
-            Console.WriteLine($"현재 HP : {player.Hp}");
+            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.WriteLine();
+            Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
             Console.WriteLine();
             Console.WriteLine("1. 다음 층으로 이동하기");
             Console.WriteLine("0. 복귀하기");
