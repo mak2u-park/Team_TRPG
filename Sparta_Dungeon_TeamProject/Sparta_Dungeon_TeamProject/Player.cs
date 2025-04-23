@@ -204,11 +204,20 @@ namespace Sparta_Dungeon_TeamProject
             MaxHp += Hp;
         }
 
-        // 아이템 강화 # Inventory.cs
+        // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
+        public int GetUpgradeCost(Item item)
+        {
+            return item.Value < 20 ? 100 : 200;
+        }
+        public int GetUpgradeValue(Item item)
+        {
+            return item.Value < 20 ? 5 : 10;
+        }
+
         public bool UpgradeItem(Item item)
         {
-            int cost = item.Value < 20 ? 100 : 200; // 조건에 따라 가격 차등
-            int valueUp = item.Value < 20 ? 5 : 10; // 조건에 따라 추가 능력치 차등
+            int cost = GetUpgradeCost(item);
+            int valueUp = GetUpgradeValue(item);
 
             if (item.Value >= item.MaxValue) // 최대치 이상
             {
