@@ -23,6 +23,7 @@ namespace Sparta_Dungeon_TeamProject
         static void DisplayDungeonUI()
         {
             Console.Clear();
+            Console.WriteLine();
             Console.WriteLine($"**던전입장 - 현재 스테이지 {Stage} **");
             Console.WriteLine();
             Console.WriteLine("1. 입장");
@@ -175,6 +176,7 @@ namespace Sparta_Dungeon_TeamProject
 
             target.Hp -= player.Atk; // 몬스터를 때리는 플레이어 데미지 계산식
 
+            Console.Clear();
             Console.WriteLine();
             Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {player.Atk} 만큼 피해를 입혔다!");
             Thread.Sleep(700);
@@ -258,6 +260,7 @@ namespace Sparta_Dungeon_TeamProject
 
             if (CheckInput(0, 0) == 0)
             {
+                Stage = 1; // 사망하고 돌아가면서 스테이지 값 초기화
                 DisplayMainUI();
             }
         }
@@ -266,7 +269,18 @@ namespace Sparta_Dungeon_TeamProject
             for (int i = 0; i < battleMonsters.Count; i++)
             {
                 var m = battleMonsters[i];
-                Console.WriteLine($"[{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                if (m.IsAlive)
+                {
+                    Console.WriteLine($"[{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                    Console.WriteLine();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"[{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
             }
         }
     }
