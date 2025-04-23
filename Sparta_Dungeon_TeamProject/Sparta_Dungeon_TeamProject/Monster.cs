@@ -81,6 +81,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return type switch
                 {
+                    MonsterType.wolf => new Wolf(),
                     MonsterType.Goblin => new Goblin(),
                     MonsterType.Orc => new Orc(),
                     _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
@@ -90,9 +91,28 @@ namespace Sparta_Dungeon_TeamProject
 
             public enum MonsterType
             {
+                wolf,
                 Goblin,
                 Orc
             }
+            
+            class Wolf : Monster
+            {
+                public Wolf() :base(
+                    name: "늑대",                    
+                    minLevel: 1, maxLevel: 3,
+                    minAtk: 2, maxAtk: 5,
+                    minDef: 5, maxDef: 7,
+                    minHp: 7, maxHp: 10,
+                    minDropGold: 500, maxDropGold: 1000,
+                    minDropExp: 30, maxDropExp: 50,
+                    isAlive: true,
+                    orgin: 0.1f
+                    )
+                { 
+                }
+            }
+
 
             class Goblin : Monster
             {
