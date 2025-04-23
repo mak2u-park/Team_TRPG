@@ -42,6 +42,7 @@ namespace Sparta_Dungeon_TeamProject
         static void DisplayEquipUI()
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("인벤토리 - 장착관리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
@@ -77,14 +78,16 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 강화 제련소
-        static void UpgradeItemUI()
+        static void UpgradeItemUI(bool showTitle = false)
         {
+            // 고정 UI
             Console.Clear();
-            Console.WriteLine("속죄의 제련소");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("[속죄의 제련소]");
 
             if (!firstVisitFlags["강화"]) // 첫 방문
             {
-                Thread.Sleep(500);
+                Thread.Sleep(1000);
                 Console.WriteLine("대장장이: 오, 반갑네! 이 동네에선 처음 보는 얼굴인데?"); // 아재 대장장이
                 Console.WriteLine("         나는 아이템을 강화시키는 걸 도와주고 있다네~!");
                 Thread.Sleep(1000);
@@ -96,8 +99,9 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Console.WriteLine("대장장이: 이번엔 어떤걸 강화해줄까?");
             }
+            showTitle = true; //UI 고정/ 아래는 변경 값으로 재반영
 
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             Console.WriteLine();
             Console.WriteLine("[보유 골드]");
             Console.WriteLine($"{player.Gold} G");
@@ -106,7 +110,7 @@ namespace Sparta_Dungeon_TeamProject
 
             player.InventoryItemList(true);
 
-            Console.WriteLine();
+            Console.WriteLine("\n\n");
             int guideLine = Console.CursorTop; // 하단 지우기용, 위치 저장
 
             Console.WriteLine("0. 다음에 다시 올게요.");
@@ -117,8 +121,8 @@ namespace Sparta_Dungeon_TeamProject
             int result = CheckInput(0, player.InventoryCount);
             if (result == 0)
             {
-                Console.WriteLine("대장장이: 그래, 다음에 또 봐!");
-                Thread.Sleep(500);
+                Console.WriteLine("대장장이: 그래 다음에 또 봅세!");
+                Thread.Sleep(2000);
                 DisplayInventoryUI();
                 return;
             }
@@ -134,25 +138,25 @@ namespace Sparta_Dungeon_TeamProject
         // 강화 결과 출력
         static void DisplayUpgradeResult(Item targetItem, int cost, int valueUp, int guidLine)
         {
-            ClearBottom(guidLine, 4);
+            ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"[{targetItem.Name}] 이걸 강화하겠다고?");
             Console.WriteLine($"비용은 {cost} G 면, 충분하네");
-            Console.WriteLine($"잘 되면 {targetItem.DisplayTypeText}이 {valueUp}만큼 올라가고, 망하면… 뭐, 나도 먹고 살아야하지 않겠나.");
+            Console.WriteLine($"잘 되면 {targetItem.DisplayTypeText}이 {valueUp}만큼 올라가고, \n망하면… 뭐, 나도 먹고 살아야하지 않겠나.");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("1. 강화해주세요!");
-            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("2. 음... 이거 말고, 다른 거 고를게요.");
             Console.WriteLine("0. 다음에 다시 올게요.");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력하세요.");
-            Console.WriteLine(">>");
+            Console.Write(">>");
 
             int input = CheckInput(0, 2);
 
-            ClearBottom(guidLine, 4);
+            ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
 
             if (input == 1) // 강화 성공
@@ -175,19 +179,22 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine($"현재 골드: {player.Gold} G");
                     Console.WriteLine("아이고, 골드가 부족한데? 준비 좀 더 하고 오게.");
                 }
-                Thread.Sleep(3000);
+                Console.WriteLine("Loding...");
+                Thread.Sleep(4000);
                 UpgradeItemUI();
             }
             else if (input == 2) // 뒤로가기 
             {
                 Console.WriteLine("대장장이: 고민이 많구만~! 그럼 이건 돌려주겠네");
-                Thread.Sleep(1000);
+                Console.WriteLine("Loding...");
+                Thread.Sleep(4000);
                 UpgradeItemUI();
             }
             else if (input == 0) // 나가기
             {
                 Console.WriteLine("대장장이: 그래, 다음에 또 봅세!");
-                Thread.Sleep(1000);
+                Console.WriteLine("Loding...");
+                Thread.Sleep(2000);
                 DisplayInventoryUI();
             }
         }
