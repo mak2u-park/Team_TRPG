@@ -132,7 +132,7 @@ namespace Sparta_Dungeon_TeamProject
             class Capybara : Monster
             {
                 public Capybara() : base(
-                    name: "카피바라", mobType: 1,
+                    name: "카피바라",
                     minLevel: 10, maxLevel: 10,
                     minAtk: 15, maxAtk: 15,
                     minDef: 20, maxDef: 20,
