@@ -103,7 +103,7 @@ namespace Sparta_Dungeon_TeamProject
                     isAlive: true,
                     orgin: 0.1f)
                 {
-                    Name = "고블린";
+                    Name = "고블린";                    
                 }
 
             }
