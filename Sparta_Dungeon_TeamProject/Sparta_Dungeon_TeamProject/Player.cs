@@ -18,7 +18,7 @@ namespace Sparta_Dungeon_TeamProject
         public int MaxHp { get; private set; }
         public int Mp { get; set; }
         public int MaxMp { get; private set; }
-        public int Gold { get; private set; }
+        public int Gold { get; set; }
 
         public int ExtraAtk { get; private set; }
         public int ExtraDef { get; private set; }
