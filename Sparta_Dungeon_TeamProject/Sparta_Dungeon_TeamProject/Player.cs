@@ -126,6 +126,17 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
+        public void AddGold(int amount) // 골드를 추가해주는 매서드
+        {
+            Gold += amount;
+        }
+
+        public void GainReward(int gold, int exp) // 최종적인 보상
+        {
+            AddGold(gold);
+            Exp += exp;
+            GainExp();
+        }
 
         // 인벤토리 아이템목록 # Inventory.cs
         public void InventoryItemList(bool showIdx)
