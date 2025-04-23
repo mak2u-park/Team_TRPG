@@ -88,22 +88,7 @@
                         Console.WriteLine("석상을 지나쳤습니다.");
                         break;
                 }
-                //public void Heal(int amount)
-                //     {
-                //         if (Hp + amount <= 0) //계산된 체력이 0이하면 Hp10남기도록설정
-                //         {
-                //             Hp = 10;
-                //         }
-                //         else if (Hp + amount > MaxHp)//계산결과가 최대체력보다크면 최대체력으로 설정
-                //         {
-                //             Hp = MaxHp;
-                //         }
-                //         else
-                //         {
-                //             Hp += amount;
-                //         }
-
-                //     }
+                
 
 
             }
@@ -307,17 +292,7 @@
                         if (eventNum <= 3)
                         {
                             Console.WriteLine("검이 복구되었습니다.");
-                            //public void SelectRemove(string name) Player에 추가(아이템을 찾아서 삭제하는 메서드)
-                            //{
-                            //    foreach (var item in Inventory)
-                            //    {
-                            //        if (item.Name == name)
-                            //        {
-                            //            Inventory.Remove(item);
-                            //            break;
-                            //        }
-                            //    }
-                            //}
+                            
 
                             //player.SelectRemove(eventitemlist[0].Name);
                             player.BuyItem(eventitemlist[1]);
