@@ -9,14 +9,14 @@ namespace Sparta_Dungeon_TeamProject
 
     public class GameSkill
     {
-        public static List<GameSkill> allSkills = new List<GameSkill>();
+        public static List<GameSkill> AllSkills = new List<GameSkill>();
 
         private Player player;
 
         // 전체 스킬 데이터
         public static void InitSkills()
         {
-            allSkills = new List<GameSkill> 
+            AllSkills = new List<GameSkill> 
             {
                 new GameSkill("전사 공용 1", 50, 50, 2, "전사 공용 스킬 1"),
                 new GameSkill("전사 공용 2", 50, 50, 2, "전사 공용 스킬 2"),
@@ -46,12 +46,18 @@ namespace Sparta_Dungeon_TeamProject
             CoolTime = coolTime;
             Desc = desc;
         }
+        // 이름으로 스킬 찾기
+        public static GameSkill GetSkillByName(string name)
+        {
+            return AllSkills.FirstOrDefault(s => s.Name == name)
+                   ?? throw new ArgumentException($"스킬 '{name}'을(를) 찾을 수 없습니다.");
+        }
 
         public static GameSkill GetRandomSkill() // 영매사 - 랜덤 스킬 획득
         {
             Random rnd = new Random();
-            int idx = rnd.Next(0, allSkills.Count);
-            return allSkills[idx];
+            int idx = rnd.Next(0, AllSkills.Count);
+            return AllSkills[idx];
         }
 
 
