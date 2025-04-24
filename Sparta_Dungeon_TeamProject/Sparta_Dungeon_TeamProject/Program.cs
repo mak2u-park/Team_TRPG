@@ -9,6 +9,7 @@ namespace Sparta_Dungeon_TeamProject
         private static Player player;
         private static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
         private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
+
         {
             //강화하기에서 true
             { "강화", false },
@@ -78,24 +79,6 @@ namespace Sparta_Dungeon_TeamProject
             int result = CheckInput(1, 5);
 
             JobType jobType = (JobType)result;
-            JobData jobData = JobDB.Jobs[jobType];
-
-            // 플레이어 이름, 직업 기본 능력치 지급
-            player = new Player
-            (
-            level: 1,
-            exp: 0,
-            maxExp: 100,
-            name: name,
-            job: jobType,
-            atk: jobData.BaseAtk,
-            def: jobData.BaseDef,
-            hp: jobData.BaseMaxHp,
-            maxHp: jobData.BaseMaxHp,
-            mp: jobData.BaseMaxMp,
-            maxMp: jobData.BaseMaxMp,
-            gold: 10000
-            );
 
             player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
 
