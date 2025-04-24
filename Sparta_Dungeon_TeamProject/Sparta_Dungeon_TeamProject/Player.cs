@@ -30,6 +30,11 @@ namespace Sparta_Dungeon_TeamProject
         private List<Item> Inventory = new List<Item>();
         private List<Item> EquipList = new List<Item>();
 
+        public List<GameSkill> Skills { get; private set; } = new List<GameSkill>();
+        public List<GameSkill> EquipSkillList { get; private set; } = new List<GameSkill>();
+
+        private GameSkill gameSkill;
+
         public int InventoryCount
         {
             get
@@ -67,45 +72,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"Gold : {Gold} G");
         }
 
-        // 직업 DB # SetData()
-        public enum JobType
-        {
-            전사 = 1,
-            마법사,
-            궁수,
-            도적,
-            성직자,
-        }
-
-        public class JobData
-        {
-            public int BaseAtk { get; }
-            public int BaseDef { get; }
-            public int BaseMaxHp { get; }
-            public int BaseMaxMp { get; }
-
-            public JobData(int atk, int def, int maxHp, int maxMp)
-            {
-                BaseAtk = atk;
-                BaseDef = def;
-                BaseMaxHp = maxHp;
-                BaseMaxMp = maxMp;
-            }
-        }
-        public static class JobDB
-        {
-            public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
-            {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
-                { JobType.전사, new JobData(7, 8, 150, 50 ) },
-                { JobType.마법사, new JobData(13, 2, 50, 150) },
-                { JobType.궁수, new JobData(8, 7, 100, 100) },
-                { JobType.도적, new JobData(10, 5, 80, 120) },
-                { JobType.성직자, new JobData(5, 4, 125, 75) }
-            };
-        }
-
-
-        // 경험치 획득
+        // 경험치 획득 # Program.cs
         public void GainExp()
         {
             while (Exp >= MaxExp) // 레벨업
@@ -130,20 +97,184 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
             }
 
-            if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
+        }
+
+        // 직업 DB # SetData()
+        public enum JobType
+        {
+            전사 = 1,
+            마법사,
+            과학자,
+            대장장이,
+            영매사,
+        }
+
+        public class JobData
+        {
+            public int BaseAtk { get; }
+            public int BaseDef { get; }
+            public int BaseMaxHp { get; }
+            public int BaseMaxMp { get; }
+
+            public JobData(int atk, int def, int maxHp, int maxMp)
             {
-                MaxHp += 10;
-                MaxMp += 5;
-                Hp = MaxHp;
-                Mp = MaxMp;
+                BaseAtk = atk;
+                BaseDef = def;
+                BaseMaxHp = maxHp;
+                BaseMaxMp = maxMp;
+            }
+        }
+
+        // 직업별 기본 능력치 DB # SetData()
+        public static class JobDB
+        {
+            public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
+            {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
+                { JobType.전사, new JobData(10, 10, 150, 100) },
+                { JobType.마법사, new JobData(12, 5, 60, 150) },
+                { JobType.과학자, new JobData(8, 10, 80, 200) },
+                { JobType.대장장이, new JobData(5, 5, 60, 0) },
+                { JobType.영매사, new JobData(10, 5, 80, 200) }
+            };
+        }
+
+        // 직업별 기본 스킬 지급 # SetData()
+        public void GetExclusiveSkill()
+        {
+            if (Job == JobType.전사)
+            {
+                Skills.Add(GameSkill.GetSkillByName("전사 공용 1"));
+                Skills.Add(GameSkill.GetSkillByName("전사 공용 2"));
+            }
+            else if (Job == JobType.마법사)
+            {
+                Skills.Add(GameSkill.GetSkillByName("마법사 공용 1"));
+                Skills.Add(GameSkill.GetSkillByName("마법사 공용 2"));
+            }
+            else if (Job == JobType.과학자)
+            {
+                Skills.Add(GameSkill.GetSkillByName("성직자 공용 1"));
+                Skills.Add(GameSkill.GetSkillByName("성직자 공용 2"));
+            }
+            else if (Job == JobType.대장장이)
+            {
+                Skills.Add(GameSkill.GetSkillByName("대장장이 공용 1"));
+                Skills.Add(GameSkill.GetSkillByName("대장장이 공용 2"));
+            }
+            else if (Job == JobType.영매사)
+            {
+                Skills.Add(GameSkill.GetRandomSkill());
+                Skills.Add(GameSkill.GetRandomSkill());
+            }
+        }
+        public void DisplaySkillUI()
+        {
+            Console.Clear();
+            Console.WriteLine("스킬 관리");
+            Console.WriteLine("이곳에서 캐릭터의 스킬을 관리할 수 있습니다.\n");
+            Console.WriteLine("[스킬 목록]");
+
+            ShowSkillList(false);
+
+            Console.WriteLine("\n1. 장착 관리");
+            Console.WriteLine("0. 나가기");
+            Console.Write("\n원하시는 행동을 입력해주세요 >> ");
+
+            int choice = Program.CheckInput(0, 2);
+            switch (choice)
+            {
+                case 1:
+                    DisplayEquipSkill();
+                    break;
+                case 0:
+                    Program.DisplayMainUI();
+                    break;
+            }
+        }
+
+        public void DisplayEquipSkill()
+        {
+            Console.Clear();
+            Console.WriteLine("스킬관리 - 장착 관리");
+            Console.WriteLine("이곳에서 캐릭터의 스킬을 장착할 수 있습니다.\n");
+            Console.WriteLine("[스킬 목록]");
+
+            ShowSkillList(true);
+
+            Console.WriteLine("\n0. 돌아가기");
+            Console.Write("장착할 스킬 번호를 입력하세요 >> ");
+
+            int input = Program.CheckInput(0, Skills.Count);
+
+            switch (input)
+            {
+
+                case 0:
+                    DisplaySkillUI();
+                    break;
+                default:
+                    GameSkill selectedSkill = Skills[input - 1];
+
+                    if (EquipSkillList.Contains(selectedSkill))
+                    {
+                        EquipSkillList.Remove(selectedSkill);
+                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 해제했습니다.");
+                    }
+                    else
+                    {
+                        EquipSkillList.Add(selectedSkill);
+                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 장착했습니다.");
+                    }
+                    DisplayEquipSkill();
+                    break;
+            }
+        }
+
+        // 스킬 목록 출력 # Program.cs
+        public void ShowSkillList(bool showIdx)
+        {
+            for (int i = 0; i < Skills.Count; i++)
+            {
+                GameSkill targetSkill = Skills[i];
+
+                string displayIdx = showIdx ? $"{i + 1} " : "";
+                string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
+                Console.WriteLine($"- {displayIdx} {targetSkill.Name} (소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime})");
+            }
+        }
+        public bool IsEquippedSkill(GameSkill skill)
+        {
+            return EquipSkillList.Contains(skill);
+        }
+
+        // 보유 스킬 카운팅 # Program.cs
+        public int SkillListCount
+        {
+            get
+            {
+                return Skills.Count;
+            }
+        }
+
+        // 스킬 장착 # Program.cs
+        public void EquipSkill(GameSkill AllSkills)
+        {
+            if (IsEquippedSkill(AllSkills))
+            {
+                EquipSkillList.Remove(AllSkills);
+                Console.WriteLine($"{AllSkills.Name} 스킬 장착 해제");    
             }
             else
             {
-                MaxHp += 5;
-                MaxMp += 10;
-                Hp = MaxHp;
-                Mp = MaxMp;
+                EquipSkillList.Add(AllSkills);
+                Console.WriteLine($"{AllSkills.Name} 스킬 장착 완료");
             }
+        }
+
+        // 스킬 장착 목록 # Program.cs
+        public List<GameSkill> GetListSkill()
+        {
+            return Skills;
         }
 
         public void AddGold(int amount) // 골드를 추가해주는 매서드
@@ -228,11 +359,10 @@ namespace Sparta_Dungeon_TeamProject
             else ExtraDef -= item.Value;
         }
 
-        // 휴식기능 관련 # Program.cs
         public void Rest()
         {
             Gold -= 500;
-            MaxHp += Hp;
+            Hp = MaxHp;
         }
 
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
@@ -245,6 +375,7 @@ namespace Sparta_Dungeon_TeamProject
             return item.Value < 20 ? 5 : 10;
         }
 
+        // 아이템 강화 # Inventory.cs
         public bool UpgradeItem(Item item)
         {
             int cost = GetUpgradeCost(item);
@@ -286,11 +417,12 @@ namespace Sparta_Dungeon_TeamProject
             if (Hp < 0)
             {
                 Hp = 0;
-                Console.WriteLine("게임을 종료합니다.");
+                Console.WriteLine("사망하셨습니다.");
                 Thread.Sleep(1000);
                 Environment.Exit(0);
             }
         }
+        
         public void Heal(int amount)//체력회복 메서드
         {
             if (Hp + amount <= 0) //계산된 체력이 0이하면 Hp10남기도록설정
@@ -319,5 +451,6 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
+
     }
 }
