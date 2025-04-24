@@ -6,42 +6,96 @@ using System.Threading.Tasks;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    // 직업 DB # SetData()
+    // 직업 DB
     public enum JobType
     {
         전사 = 1,
         마법사,
         과학자,
         대장장이,
-        영매사,
+        영매사
     }
 
-    public class JobData
+    public interface JobData
     {
+        JobType Type { get; } // 직업 타입-코드작업용
+        string DisplayName { get; } // 출력될 직업명
+        string Story { get; } // 구체적인 설명
+        string Description { get; } // 간단한 설명
         public int BaseAtk { get; }
         public int BaseDef { get; }
-        public int BaseMaxHp { get; }
-        public int BaseMaxMp { get; }
-
-        public JobData(int atk, int def, int maxHp, int maxMp)
-        {
-            BaseAtk = atk;
-            BaseDef = def;
-            BaseMaxHp = maxHp;
-            BaseMaxMp = maxMp;
-        }
+        public int BaseHp { get; }
+        public int BaseMp { get; }
+        string Trait { get; } // 직업 특성
     }
 
-    // 직업별 기본 능력치 DB # SetData()
-    public static class JobDB
+    // 직업별 베이스 DB / 공격과 스킬은 Skill에서 정의
+    
+    public class Warrior : JobData
     {
-        public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
-            {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
-                { JobType.전사, new JobData(5, 2, 70, 100 ) },
-                { JobType.마법사, new JobData(1, 1, 50, 0) },
-                { JobType.과학자, new JobData(8, 2, 50, 150) },
-                { JobType.대장장이, new JobData(1, 5, 70, 120) },
-                { JobType.영매사, new JobData(5, 4, 100, 75) }
-            };
+        public JobType Type => JobType.전사;
+        public string DisplayName => "은퇴한 전사";
+        public string Story => "전장을 떠나 산지 벌써 10년이 지났습니다" +
+            "\n전사가 은퇴하며 세상은 어지러워지고, 다시 전장으로 갈 수 밖에 없습니다.";
+        public string Description => "잃어버린 전투 감각으로 일정한 데미지를 입히진 않는 트릭형 전사입니다.";
+        public int BaseAtk => 5;
+        public int BaseDef => 2;
+        public int BaseHp => 70;
+        public int BaseMp => 100;
+        public string Trait => "물리 공격력 증가";
+    }
+
+    public class Mage : JobData
+    {
+        public JobType Type => JobType.마법사;
+        public string DisplayName => "마법사";
+        public string Story => "떠돌이 마법사로서 세계를 돌아다닌다.";
+        public string Description => "MP 중심의 마법 공격,저주 확률 증가";
+        public int BaseAtk => 8;
+        public int BaseDef => 2;
+        public int BaseHp => 50;
+        public int BaseMp => 0;
+        public string Trait => "마법 공격력 증가";
+    }
+
+    public class Scientist : JobData
+    {
+        public JobType Type => JobType.과학자;
+        public string DisplayName => "과학자";
+        public string Story => "마을에서 추방된 이단 과학자.\r\n금기된 재료들을 지니고 있다.";
+        public string Description => "금기된 독성 중심의 스킬을 사용해 상대적으로 마나소모가 잦고, 체력 소모가 적음.";
+        public int BaseAtk => 2;
+        public int BaseDef => 5;
+        public int BaseHp => 50;
+        public int BaseMp => 150;
+        public string Trait => "기술 사용 능력 증가";
+    }
+
+    public class smith : JobData
+    {
+        public JobType Type => JobType.대장장이;
+        public string DisplayName => "대장장이";
+        public string Story => "제자의 비극 이후 제련을 멈춘 대장장이. 무기는 남았지만 상처도 남았다.";
+        public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업";
+        public int BaseAtk => 1;
+        public int BaseDef => 1;
+        public int BaseHp => 70;
+        public int BaseMp => 0;
+        public string Trait => "스킬 슬롯 +1  |  기본 장비 3개 보유";
+    }
+
+    public class Medium : JobData
+    {
+        public JobType Type => JobType.영매사;
+        public string DisplayName => "침묵의 영매사";
+        public string Story => "목소리를 잃어 세상과 단절된 인생을 살아가고 있던 영매입니다." +
+            "그 대신에 생긴 고양이와의 탁월한 교감 능력으로 세상을 읽어냅니다.";
+        public string Description => "고양이와 조우 시, 항상 이로운 효과를 얻을 수 있습니다." +
+            "영매이기에 다른 이의 스킬을 흡수해 사용할 수 있습니다.";
+        public int BaseAtk => 5;
+        public int BaseDef => 4;
+        public int BaseHp => 100;
+        public int BaseMp => 75;
+        public string Trait => "정신력 증가";
     }
 }
