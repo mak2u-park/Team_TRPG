@@ -1,7 +1,10 @@
-﻿namespace Sparta_Dungeon_TeamProject
+﻿using System.Security.Cryptography.X509Certificates;
+
+namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
+        List<Quest> questList = new List<Quest>();
         internal class DungeonEvent
         {
             public List<Item> eventitemlist = new List<Item>();
@@ -9,29 +12,29 @@
             int eventNum;
             int eventValue;
             int result;
-            DungeonEvent()
+            public DungeonEvent()
             {
                 Console.WriteLine("주변을 살펴봅니다.");
                 eventNum = random.Next(0, 9);
                 switch (eventNum)
                 {
                     case 0:
-                        statue();
+                        statue();//석상 발견
                         break;
                     case 1:
-                        treasureBox();
+                        treasureBox();//보물상자 발견
                         break;
                     case 2:
-                        MerchantOrThief();
+                        MerchantOrThief();//상인or약탈자 조우
                         break;
                     case 3:
-                        brokenCart();
+                        brokenCart();//부서진수레
                         break;
                     case 4:
-                        hut();
+                        hut();//부서진오두막
                         break;
                     case 5:
-                        cryingChild();
+                        cryingChild();//우는아이
                         break;
                     case 6:
                         wanderingMage();// 떠돌이 마법사 조우
@@ -51,7 +54,7 @@
                         {
                             smith();//검복구 이벤트
                         }
-                        else 
+                        else
                         {
                             brokenSword();//부러진 검 이벤트
                         }
@@ -88,7 +91,7 @@
                         Console.WriteLine("석상을 지나쳤습니다.");
                         break;
                 }
-                
+
 
 
             }
@@ -292,7 +295,7 @@
                         if (eventNum <= 3)
                         {
                             Console.WriteLine("검이 복구되었습니다.");
-                            
+
 
                             //player.SelectRemove(eventitemlist[0].Name);
                             player.BuyItem(eventitemlist[1]);
@@ -392,7 +395,8 @@
         //이벤트 몬스터 추가
         class Mimic : Monster
         {
-            public Mimic() : base("ㅁ",
+            public Mimic() : base(
+                name: "미믹",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,
@@ -402,13 +406,13 @@
                 isAlive: true,
                 orgin: 0.15f)
             {
-                Name = "미믹";
             }
 
         }
         class Banshee : Monster
         {
-            public Banshee() : base("2ㅁ",
+            public Banshee() : base(
+                name: "밴시",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,
@@ -418,10 +422,43 @@
                 isAlive: true,
                 orgin: 0.15f)
             {
-                Name = "밴시";
             }
 
         }
+       
+        public void QustList()
+        {
+            questList.Add(new Quest("고블린 사냥", "고블린을 사냥해주세요!", 5));
+            questList.Add(new Quest("오크 사냥", "오크를 사냥해주세요!", 3));
+            questList.Add(new Quest("광부와 수레 조사", "일주일전 들어간 광부와 수레가 돌아오지않아 조사를 의뢰받았다.", 1));
+            questList.Add(new Quest("부서진 오두막 조사", "부서진 오두막을 조사해주세요!", 1));
+            questList.Add(new Quest("아이 구하기", "며칠전 우리마을의 한 아이가 사라져 조사를 의뢰받았다.",1));
+        }
+        
+
+        public class Quest
+        {
+            public string Name { get; }// 퀘스트 이름
+            public string Description { get; }// 퀘스트 설명
+            public int TargetCount { get; set; } // 퀘스트 목표 수치
+            public int Progress { get; set; } = 0; // 퀘스트 진행도
+            public bool IsCompleted { get; private set; } = false;// 퀘스트 완료 여부
+            public bool Agree { get; set; } = false;// 퀘스트 수락 여부
+            public Quest(string name, string description, int targetcount)
+            {
+                Name = name;
+                Description = description;
+                TargetCount = targetcount;
+            }
+            public void CompleteQuest()
+            {
+                IsCompleted = true;
+                Console.WriteLine($"퀘스트 '{Name}' 완료!");
+            }
+            
+        }
+
+
 
 
     }

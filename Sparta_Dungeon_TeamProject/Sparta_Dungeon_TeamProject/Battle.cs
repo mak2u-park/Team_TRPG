@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Numerics;
 using System.Threading;
 using System.Xml.Linq;
+using Sparta_Dungeon_TeamProject;
 using static Sparta_Dungeon_TeamProject.Monster;
 using static Sparta_Dungeon_TeamProject.Monster.MonsterFactory;
 
@@ -18,7 +19,8 @@ namespace Sparta_Dungeon_TeamProject
         public static int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
         public static int Chapter = 0; // 챕터 변수
-
+        string[] impactLines = null;
+        string criticalImpact = null;
 
         // 4. 던전
 
@@ -66,6 +68,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             BossInfo.BossDesc(Chapter);
             Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[Lv.10][BOSS][카피바라]"); // 나중에 보스 추가되면 호출해서 내용 채우기
+            Console.ResetColor();
+
+            Console.WriteLine();
             Console.WriteLine("1. 전투 시작");
             Console.WriteLine("2. 아이텝 사용");
             Console.WriteLine("3. 상태 보기");
@@ -75,15 +83,13 @@ namespace Sparta_Dungeon_TeamProject
             int result = CheckInput(1, 3);
             switch (result)
             {
-                case 1:                    
-                    break;// 보스 전투 아직 미구현
-                case 2:                    
+                case 1:
+                    BossBattlechap1();
+                    break;
+                case 2:
                     break; // 아이템 사용 미구현
                 case 3:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    Console.WriteLine("\n\n\n");
                     player.DisplayPlayerInfo();
                     Console.WriteLine();
                     Console.WriteLine("0. 나가기");
@@ -93,7 +99,7 @@ namespace Sparta_Dungeon_TeamProject
                     switch (CheckInput(0, 0))
                     {
                         case 0:
-                            EnterBossUI(); 
+                            EnterBossUI();
                             break;
                     }
                     break;
@@ -124,27 +130,72 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
+        static void BossBattlechap1()
+        {
+            BattleTurn = 1;
+            // 보스몬스터 초기화
+            Playerturn = true;
+
+            while (true)
+            {
+                if (Playerturn) // 만약 플레이어의 턴이라면
+                {
+
+                }
+
+                else // 만약 플레이어의 턴이 아니라면
+                {
+
+                }
+            }
+
+        }
+
         static void PlayerTurn()
         {
             Console.Clear();
-            Console.WriteLine($"[ 현재 스테이지 {Stage+1} ]");
             Console.WriteLine();
-            Console.WriteLine("당신의 턴입니다.");
             Console.WriteLine();
-            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
-            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"┏━━━━━━━[ 현재 스테이지 {Stage + 1} ]━━━━━━━┓");
             Console.WriteLine();
-            Console.WriteLine("**현재 전투 중 입니다.**");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("        ! 당신의 턴입니다 !");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"   ▶ 현재 턴 수 : {BattleTurn}");
+            Console.WriteLine();
+            Console.WriteLine($"   ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"   ▶ 현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("   > 전투가 계속되고 있습니다! <");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"┖━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("┏━━━━━━━━━━<< 등장 몬스터 목록 >>━━━━━━━━━━┓");
+            Console.ResetColor();
 
             PrintMonsters(); // 몬스터 출력
 
             Console.WriteLine();
-            Console.WriteLine("1. 일반 공격");
-            Console.WriteLine("2. 스킬 선택");
-            Console.WriteLine("3. 상태 보기");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
@@ -178,16 +229,30 @@ namespace Sparta_Dungeon_TeamProject
         static void MonsterTurn()
         {
             Console.Clear();
-            Console.WriteLine($"[ 현재 스테이지 {Stage + 1} ]");
             Console.WriteLine();
-            Console.WriteLine("상대의 턴입니다.");
             Console.WriteLine();
-            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
-            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"┏━━━━━━━[ 현재 스테이지 {Stage + 1} ]━━━━━━━┓");
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("**현재 전투 중 입니다.**");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("        ! 상대의 턴입니다 !");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"   ▶ 현재 턴 수 : {BattleTurn}");
+            Console.WriteLine();
+            Console.WriteLine($"   ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"   ▶ 현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("   > 전투가 계속되고 있습니다! <");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"┖━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
             Thread.Sleep(500);
             foreach (var m in battleMonsters)
@@ -195,18 +260,22 @@ namespace Sparta_Dungeon_TeamProject
 
                 if (m.IsAlive)
                 {
-                    Console.WriteLine($"[Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"    [Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
+                    Console.ResetColor();
                     Console.WriteLine();
                     player.EnemyDamage(m.Atk);
                     Console.WriteLine();
-                    Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine($"    ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
+                    Console.ResetColor();
                     Console.WriteLine();
                     Thread.Sleep(300);
                 }
             }
 
             Console.WriteLine();
-            Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
+            Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
             Console.ReadKey();
 
             Playerturn = true; // 플레이어 턴으로 변경
@@ -216,17 +285,32 @@ namespace Sparta_Dungeon_TeamProject
         {
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine("**현재 일반 공격을 시도하는 중 입니다.**");
             Console.WriteLine();
-            Console.WriteLine($"현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("   > 일반 공격을 시도하고 있습니다. . . <");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"   ▶ 현재 턴 수 : {BattleTurn}");
+            Console.ResetColor();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("┏━━━━━━━━━━<< 등장 몬스터 목록 >>━━━━━━━━━━┓");
+            Console.ResetColor();
 
             PrintMonsters(); // 몬스터 출력
 
             Console.WriteLine();
-            Console.WriteLine("0. 취소");
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
+
             Console.WriteLine();
-            Console.WriteLine("대상을 선택해주세요.");
+            Console.WriteLine("    ▶ 0. 취소");
+            Console.WriteLine();
+            Console.WriteLine("    대상을 선택해주세요.");
 
             int result = CheckInput(0, battleMonsters.Count);
 
@@ -237,7 +321,7 @@ namespace Sparta_Dungeon_TeamProject
             if (!target.IsAlive)
             {
                 Console.WriteLine();
-                Console.WriteLine("이미 사망한 몬스터는 공격할 수 없습니다.");
+                Console.WriteLine("    [!] 이미 사망한 몬스터는 공격할 수 없습니다.");
                 Console.WriteLine();
                 Thread.Sleep(500);
                 Playerturn = true;
@@ -249,7 +333,9 @@ namespace Sparta_Dungeon_TeamProject
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine();
-                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"    [Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
                 Console.ResetColor();
                 Thread.Sleep(700);
                 Playerturn = false;
@@ -261,27 +347,63 @@ namespace Sparta_Dungeon_TeamProject
                 double multiplier = DamageCalculation.GetRandomMultiplier();
 
                 double baseDamage = isCritical ? player.FinalAtk * 1.5 : player.FinalAtk;
-                int finalDamage = (int)Math.Ceiling(baseDamage * multiplier);
+                int finalDamage = (int)Math.Ceiling((baseDamage * multiplier - target.Def * 0.5)); // 몬스터 방어력의 절반 만큼 최종 데미지 감소
+                finalDamage = Math.Max(1, finalDamage); // 최소 데미지 1
 
                 target.Hp -= finalDamage;
 
                 Console.Clear();
                 Console.WriteLine();
-                if (isCritical)
+                if (isCritical) // 먄약 크리티컬 이라면
                 {
-                    string CriticalMessage = "그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다. . .";
+                    JobType job = player.Job;
+
+                    string[] impactLines = DamageMessages.CriticalDamageMessage.ContainsKey(job)
+                        ? DamageMessages.CriticalDamageMessage[job]
+                        : new[] {
+            "\n\n\n\n    ...정적 속에", // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
+            "\n\n    강렬한 일격이 내려친다!" };
+
+                    string criticalImpact = DamageMessages.CriticalDamageFinalMessage.ContainsKey(job)
+                        ? DamageMessages.CriticalDamageFinalMessage[job][0]
+                        : "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!"; // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
+
                     Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (char c in CriticalMessage)
+                    foreach (var line in impactLines)
                     {
-                        Console.Write(c);
-                        Thread.Sleep(30);
+                        foreach (char c in line) { Console.Write(c); Thread.Sleep(30); }
+                        Thread.Sleep(800);
                     }
+
+                    // 흔들림 2회 (화면 깜빡임)
+                    for (int i = 0; i < 2; i++)
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        string prefix = new string(' ', 4 + i % 2);
+                        Console.WriteLine("\n\n\n\n" + prefix + criticalImpact);
+                        Console.ResetColor();
+                        Thread.Sleep(120);
+                    }
+
+                    // 마지막 1회는 클리어 없이 그대로 출력 (최종 상태)
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n\n\n\n    " + criticalImpact);
                     Console.ResetColor();
-                    Console.WriteLine();
+                    Console.WriteLine("\n\n\n");
                 }
+
                 Console.WriteLine();
-                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {finalDamage} 만큼 피해를 입혔다!");
-                Thread.Sleep(700);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"    [Lv.{target.Level}][{target.Name}] 에게 {finalDamage} 만큼 피해를 입혔다!");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                Console.ReadKey();
+                Console.Clear();
                 if (target.Hp <= 0)
                 {
                     KillMon++; // 몬스터 처치 수 증가
@@ -290,7 +412,7 @@ namespace Sparta_Dungeon_TeamProject
                     player.GainReward(target.DropGold, target.DropExp);
                     ExpGoldCheck();
                     Console.WriteLine();
-                    Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
                     Console.ReadKey();
 
                     if (battleMonsters.All(m => !m.IsAlive))
@@ -305,18 +427,30 @@ namespace Sparta_Dungeon_TeamProject
                 static void DisplayKillMessage(Monster target)
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
+                    Console.WriteLine($"    [Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
                     Thread.Sleep(700);
                     Console.WriteLine();
-                    Console.WriteLine($"{target.DropGold} G 를 획득했다.");
-                    Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"    {target.DropGold} G 를 획득했다.");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"    {target.DropExp} 만큼 경험치를 획득했다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
                 }
 
                 static void ExpGoldCheck()
                 {
                     Console.WriteLine();
-                    Console.WriteLine($"보유 골드 {player.Gold}");
-                    Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine($"    보유 골드 {player.Gold}");
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine($"    현재 경험치 {player.Exp}/{player.MaxExp}");
+                    Console.ResetColor();
+                    Console.WriteLine();
                 }
             }
         }
@@ -326,20 +460,38 @@ namespace Sparta_Dungeon_TeamProject
         {
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine("전투 승리!");
             Console.WriteLine();
-            Console.WriteLine($"현재 스테이지에서 몬스터를 {KillMon} 마리 만큼 처치 하셨습니다.");
             Console.WriteLine();
-            Console.WriteLine($"Lv.{player.Level} [{player.Name}]");
-            Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┏━━━━━━━━━━━━━━━<< 전투 결과 >>━━━━━━━━━━━━━━━┓");
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("              ★ 전투에 승리하셨습니다! ★");
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("1. 다음 스테이지로 이동하기");
-            Console.WriteLine("0. 복귀하기");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"    ▶ 현재 스테이지에서 {KillMon}마리의 몬스터를 처치하셨습니다.");
             Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine($"    ▶ Lv.{player.Level} [{player.Name}]");
+            Console.WriteLine($"    ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
+            Console.WriteLine($"    ▶ 현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.WriteLine();
+            Console.WriteLine($"    ▶ 현재 경험치 : {player.Exp}/{player.MaxExp}");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 다음 스테이지로 이동하기");
+            Console.WriteLine("    ▶ 0. 복귀하기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    원하시는 행동을 입력해주세요.");
 
             switch (CheckInput(0, 1))
             {
@@ -365,13 +517,33 @@ namespace Sparta_Dungeon_TeamProject
         {
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine("전투 패배!");
             Console.WriteLine();
-            Console.WriteLine($"Lv.{player.Level} [{player.Name}]");
             Console.WriteLine();
-            Console.WriteLine("0. 복귀");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┏━━━━━━━━━━━━━━━<< 전투 결과 >>━━━━━━━━━━━━━━━┓");
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("              ◆ 전투에 패배하셨습니다! ◆");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine();
+            Console.WriteLine($"    ▶ Lv.{player.Level} [{player.Name}]");
+            Console.WriteLine();
+            Console.WriteLine($"    ▶ 현재 경험치 : {player.Exp}/{player.MaxExp}");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 0. 복귀하기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    원하시는 행동을 입력해주세요.");
 
             if (CheckInput(0, 0) == 0)
             {
@@ -386,13 +558,20 @@ namespace Sparta_Dungeon_TeamProject
                 var m = battleMonsters[i];
                 if (m.IsAlive)
                 {
-                    Console.WriteLine($"[{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine();
+                    Console.WriteLine($"    [{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                    Console.ResetColor();
                     Console.WriteLine();
                 }
                 else
                 {
+                    Console.ResetColor();
+                    Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"[{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+                    Console.WriteLine($"    [{i + 1}] [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
                     Console.ResetColor();
                     Console.WriteLine();
                 }
@@ -402,22 +581,31 @@ namespace Sparta_Dungeon_TeamProject
 
     public static class MonsterSpawner
     {
+        // 스테이지에 따른 몬스터 리스트 생성
         public static List<Monster> SpawnMonsters(int Stage)
         {
             Random rand = new Random();
-            List<MonsterTypeChap1> allowedTypes;
-            int monsterCount = Math.Min(1 + Program.Stage / 2, 5);
+            Array allowedTypes;
 
-            if (Stage < 4) // 1 ~ 3 스테이지
-                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin }; // 고블린만 소환
-            else if (Stage < 7) // 4 ~ 6 스테이지
-                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin, MonsterTypeChap1.Orc }; // 고블린과 오크만 소환
-            else // 7 ~ 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1)).Cast<MonsterTypeChap1>().ToList(); // 모든 몬스터 소환
+            int monsterCount = Math.Min(1 + Program.Stage / 2, 5); // 몬스터 최대치 결정 (최대 5마리)
+
+            if (Stage < 3) // 0 ~ 2 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1));
+            else if (Stage < 6) // 3 ~ 5 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2));
+            else if (Stage < 9)// 6 ~ 7 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));
+            else // 9 ~ 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));
 
             return Enumerable.Range(0, monsterCount)
-                    .Select(_ => MonsterFactory.CreateMonster(allowedTypes[rand.Next(allowedTypes.Count)]))
-                    .ToList();
+                    .Select(_ =>
+                    {
+                        var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                        return MonsterFactory.CreateMonster(randomType.ToString());
+
+                    }).ToList();
+
         }
     }
 
@@ -454,7 +642,7 @@ namespace Sparta_Dungeon_TeamProject
                 case 0:
                     Console.WriteLine("당신은 수많은 사람들의 발자국이 남은 길을 따라 어둑한 숲 속으로 서서히 스며듭니다.");
                     Console.WriteLine("저편의 어둠 속에서는 이름 모를 짐승의 울음소리가 들려오는 듯 합니다.");
-                    Console.WriteLine("진흑 위 발자국들은 어느새 더 이상 사람의 것으로 보이지 않습니다.");
+                    Console.WriteLine("진흙 위 발자국들은 어느새 더 이상 사람의 것으로 보이지 않습니다.");
                     break;
                 case 1:
                     Console.WriteLine("동굴 입구에 다다른 당신은, 그 앞에 남겨진 몇몇 발자국에서 묘한 기운을 느낍니다.");
@@ -487,7 +675,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("숲이 한차례 더 어두워집니다. 짙은 안개와 어둠이 뒤엉킨 공간에서 갑작스레 정적이 찾아옵니다.");
                     Console.WriteLine("바스락거리는 풀잎 소리마저 멎은 순간, 거대한 형체가 모습을 드러냅니다.");
                     Console.WriteLine("북슬북슬한 털과 느긋한 기운에도 불구하고, 그 존재를 마주한 순간 당신은 깨닫습니다.");
-                    Console.WriteLine("이 숲을 지나기 위해서는 이 알 수 없는 거대한 존재와 맞서야 한다는 것을.");
+                    Console.WriteLine("이 숲을 지나기 위해서는 이 알 수 없는 거대한 존재와 맞서야 한다는 것을 말입니다.");
                     break;
                 case 1:
                     Console.WriteLine("동굴의 어둠을 뚫고 가장 깊은 곳에 들어서자, 희미한 등불을 조명삼아 한 사람이 웅크리고 있습니다.");
@@ -519,5 +707,54 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
+    }
+    public static class DamageMessages
+    {
+
+        // 직업별 크리티컬 데미지 메시지
+
+        public static Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
+{
+    { JobType.전사, new[]
+    {   "\n\n\n\n    고요한 전장의 메아리.",
+        "\n\n    녹슨 검이 다시 한 번, 적의 심장을 겨눈다!" }},
+
+    { JobType.마법사, new[]
+    {   "\n\n\n\n    비틀린 마법진이 휘청인다.",
+        "\n\n    그 틈을 찔러, 한 줄기 마력이 폭주한다!" }},
+
+    { JobType.영매사, new[]
+    {   "\n\n\n\n    말을 잃은 존재의 눈이 빛난다.",
+        "\n\n    고양이의 울음 대신, 사념이 퍼져간다…" }},
+
+    { JobType.대장장이, new[]
+    {   "\n\n\n\n    녹슨 망치가 손에서 덜컹거린다.",
+        "\n\n    마지막 불꽃이 담긴 한 방이 울려 퍼진다!" }},
+
+    { JobType.과학자, new[]
+    {   "\n\n\n\n    금기된 공식이 마침내 완성된다.",
+        "\n\n    불안정한 빛이 공기를 찢으며 발산된다!" }},
+    };
+
+
+        public static Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
+{ 
+    // 직업별 크리티컬 데미지 마지막 메시지
+
+    { JobType.전사, new[]
+    {"──  잊힌 전사의 일격이, 다시 역사의 피를 흐르게 했다."}},
+
+    { JobType.마법사, new[]
+    {"──  허황된 주문조차 진실의 순간엔 검이 된다."}},
+
+    { JobType.영매사, new[]
+    {"──  침묵의 일격은 소리 없이, 그러나 확실히 끝을 남긴다."}},
+
+    { JobType.대장장이, new[]
+    {"──  무너진 기억과 함께, 대지에 새긴 죄의 불꽃."}},
+
+    {JobType.과학자, new[]
+    {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
+    };
     }
 }

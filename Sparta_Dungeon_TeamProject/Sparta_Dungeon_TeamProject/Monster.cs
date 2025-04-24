@@ -73,20 +73,33 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static class MonsterFactory
         {
-            private static Random rand = new Random();
-
-            // 각 몬스터 타입을 생성하는 메서드
-            public static Monster CreateMonster(MonsterTypeChap1 type)
+            // 문자열로 몬스터 이름을 받아 해당 몬스터 객체 생성
+            public static Monster CreateMonster(string monsterName)
             {
-                return type switch
+                return monsterName switch
                 {
-                    MonsterTypeChap1.Wolf => new Wolf(),
-                    MonsterTypeChap1.Goblin => new Goblin(),
-                    MonsterTypeChap1.Orc => new Orc(),
-                    _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
+                    "Wolf" => new Wolf(),
+                    "Goblin" => new Goblin(),
+                    "Orc" => new Orc(),
+
+                    "Cavebat" => new Cavebat(),
+                    "Ghost" => new Ghost(),
+                    "Skeleton" => new Skeleton(),
+
+                    "Adventurer" => new Adventurer(),
+                    "SmilingSlime" => new SmilingSlime(),
+                    "HeadlessSkeletion" => new HeadlessSkeletion(),
+
+                    "Swordsman" => new Swordsman(),
+                    "Mage" => new Mage(),
+                    "Archer" => new Archer(),
+
+                    _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
                 };
             }
 
+ 
+            /*======================================[ 챕터 1 ]=====================================================*/
 
             public enum MonsterTypeChap1
             {
@@ -151,6 +164,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
+            /*======================================[ 챕터 2 ]=====================================================*/
+
             public enum MonsterTypeChap2
             {
                 Cavebat,
@@ -213,6 +228,8 @@ namespace Sparta_Dungeon_TeamProject
                 }
 
             }
+
+            /*======================================[ 챕터 3 ]=====================================================*/
 
             public enum MonsterTypeChap3
             {
@@ -277,6 +294,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
+            /*======================================[ 챕터 4 ]=====================================================*/
+
             public enum MonsterTypeChap4
             {
                 Swordsman,
@@ -340,7 +359,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
-            // 보스 몬스터
+            /*======================================[ 보스 몬스터 ]=====================================================*/
+
             class Capybara : Monster
             {
                 public Capybara() : base(

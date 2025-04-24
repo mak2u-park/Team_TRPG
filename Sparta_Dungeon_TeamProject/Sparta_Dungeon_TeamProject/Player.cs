@@ -19,7 +19,7 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
-        public int MaxHp { get; private set; }
+        public int MaxHp { get; private set; } = 100;
         public int Mp { get; set; }
         public int MaxMp { get; private set; }
         public int Gold { get; set; }
@@ -47,7 +47,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             Level = level;
             Exp = exp;
-            MaxExp = maxExp;
+            MaxExp = maxExp; 
             Name = name;
             Job = job;
             Atk = atk;
@@ -83,16 +83,10 @@ namespace Sparta_Dungeon_TeamProject
 
                 Console.Clear();
                 Console.WriteLine();
-                Console.WriteLine();
-                string levelUpMessage = "쌓여온 경험이 당신을 한층 더 성장시켰습니다.";
-
+                string levelUpMessage = "\n\n\n\n\n    쌓여온 경험이 당신을 한층 더 성장시켰습니다.\n\n\n\n\n";
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
-                foreach (char c in levelUpMessage)
-                {
-                    Console.Write(c);
-                    Thread.Sleep(80);
-                }
+                foreach (char c in levelUpMessage) { Console.Write(c); Thread.Sleep(80); }
 
                 Console.ResetColor();
                 Console.WriteLine();
@@ -342,7 +336,7 @@ namespace Sparta_Dungeon_TeamProject
         public void Rest()
         {
             Gold -= 500;
-            MaxHp += Hp;
+            Hp = MaxHp;
         }
 
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
@@ -392,12 +386,18 @@ namespace Sparta_Dungeon_TeamProject
 
             Hp -= damage;
 
-            Console.WriteLine($"{damage}의 데미지를 받았습니다!");
+            Console.WriteLine();
+            Console.WriteLine($"    {damage}의 데미지를 받았습니다!");
+            Console.WriteLine();
 
-            if (Hp < 0)
+
+            if (Hp <= 0)
             {
                 Hp = 0;
-                Console.WriteLine("사망하셨습니다.");
+
+                Console.WriteLine();
+                Console.WriteLine("    사망하셨습니다.");
+                Console.WriteLine();
                 Thread.Sleep(1000);
                 Environment.Exit(0);
             }

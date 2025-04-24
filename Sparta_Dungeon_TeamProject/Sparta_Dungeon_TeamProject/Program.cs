@@ -30,12 +30,21 @@ namespace Sparta_Dungeon_TeamProject
             DisplayMainUI();
         }
 
+        // 직업 데이터
+        public static readonly Dictionary<JobType, IJob> JobDatas = new()
+        {
+            { JobType.전사, new Warrior() },
+            { JobType.마법사, new Mage() },
+            { JobType.과학자, new Scientist() },
+            { JobType.대장장이, new Smith() },
+            { JobType.영매사, new Medium() }
+        };
+
         // A. 기본 세팅
         static void SetData()
         {
             // 이름, 직업 세팅
             string name;
-
             while (true)
             {
                 Console.Clear();
@@ -52,36 +61,21 @@ namespace Sparta_Dungeon_TeamProject
                 break;
             }
 
-            Console.Clear();
-            Console.WriteLine("캐릭터 직업을 선택해주세요.");
-
-            // foreach 반복문으로 직업 개수 무관하게 모두 출력됨.
-            foreach (Player.JobType job in Enum.GetValues(typeof(Player.JobType)))
-            {
-                Console.WriteLine($"{(int)job}. {job}");
-            }
-            Console.WriteLine();
-            Console.Write("번호입력: ");
-            int result = CheckInput(1, 5);
-
-            Player.JobType jobType = (Player.JobType)result;
-            JobData jobData = JobDB.Jobs[jobType];
-
-            // 플레이어 이름, 직업 기본 능력치 지급
-            player = new Player
-            (
-            level: 1,
-            exp: 0,
-            maxExp: 100,
-            name: name,
-            job: jobType,
-            atk: jobData.BaseAtk,
-            def: jobData.BaseDef,
-            hp: jobData.BaseMaxHp,
-            maxHp: jobData.BaseMaxHp,
-            mp: jobData.BaseMaxMp,
-            maxMp: jobData.BaseMaxMp,
-            gold: 10000
+            // 직업 선택
+            IJob job = JobDatas[Prompt()];
+            player = new Player(
+                level: 1,
+                exp: 0,
+                maxExp: 100,
+                name: name,
+                job: JobType.전사,
+                hp: job.BaseHp,
+                mp: job.BaseMp,
+                atk: job.BaseAtk,
+                def: job.BaseDef,
+                maxHp: job.BaseHp,
+                maxMp: job.BaseMp,
+              gold: 10000
             );
 
             switch (jobType)
