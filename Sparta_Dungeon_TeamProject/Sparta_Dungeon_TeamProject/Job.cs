@@ -20,7 +20,7 @@ namespace Sparta_Dungeon_TeamProject
     {
         JobType Type { get; } // 직업 타입-코드작업용
         string DisplayName { get; } // 출력될 직업명
-        string Story { get; } // 구체적인 설명
+        string Story { get; } // 서사 - 얘만 선택 완료후 출력.
         string Description { get; } // 간단한 설명
         public int BaseAtk { get; }
         public int BaseDef { get; }
@@ -34,35 +34,46 @@ namespace Sparta_Dungeon_TeamProject
     {
         public JobType Type => JobType.전사;
         public string DisplayName => "은퇴한 전사";
-        public string Story => "전장을 떠나 산지 벌써 10년이 지났습니다" +
-            "\n전사가 은퇴하며 세상은 어지러워지고, 다시 전장으로 갈 수 밖에 없습니다.";
-        public string Description => "잃어버린 전투 감각으로 일정한 데미지를 입히진 않는 트릭형 전사입니다.";
+        public string Story => "한 때 전장에서 목숨을 바치던 전사였습니다." +
+            "\n은퇴 후, 전장을 떠나 산지 벌써 10년이 지난 지금," +
+            "\n아직도 세상은 어지러운 상황...전사가 부족합니다." +
+            "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
+        public string Description => "잃어버린 전투 감각으로 데미지를" +
+            "\n       랜덤하게 입히는 트릭형 전사입니다.\n";
         public int BaseAtk => 5;
         public int BaseDef => 2;
         public int BaseHp => 70;
         public int BaseMp => 100;
-        public string Trait => "물리 공격력 증가";
+        public string Trait => "랜덤성이 주요 전략 요소";
     }
 
     public class Mage : IJob
     {
         public JobType Type => JobType.마법사;
         public string DisplayName => "마법사";
-        public string Story => "떠돌이 마법사로서 세계를 돌아다닌다.";
-        public string Description => "MP 중심의 마법 공격,저주 확률 증가";
+        public string Story => "재능이 미천해 마법사의 탑에서 쫒겨난 후," +
+            "\n무시당하기 싫어 허풍만 늘었습니다.\n" +
+            "\n\n뛰어난 사람들에게 질투를 느끼며," +
+            "\n던전에서 발견되는 마법서를 얻기 위해" +
+            "\n가벼운 마음을 갖고 전장으로 향합니다.\n";
+        public string Description => "떠돌이 마법사로서 세계를 돌아다니며," +
+            "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.\n";
         public int BaseAtk => 8;
         public int BaseDef => 2;
         public int BaseHp => 50;
         public int BaseMp => 0;
-        public string Trait => "마법 공격력 증가";
+        public string Trait => "마법 스킬 위주의 전투";
     }
 
     public class Scientist : IJob
     {
         public JobType Type => JobType.과학자;
         public string DisplayName => "과학자";
-        public string Story => "마을에서 추방된 이단 과학자.\r\n금기된 재료들을 지니고 있다.";
-        public string Description => "금기된 독성 중심의 스킬을 사용해 상대적으로 마나소모가 잦고, 체력 소모가 적음.";
+        public string Story => "마을에서 추방당한 이단 과학자로서" +
+            "\n금기된 재료들을 가지고 위험한 연구를 계속합니다.\n" +
+            "\n자신만의 독특한 기술로 세상에 맞서려 합니다.\n";
+        public string Description => "금기된 독성 중심의 스킬을 사용하며," +
+            "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.\n";
         public int BaseAtk => 2;
         public int BaseDef => 5;
         public int BaseHp => 50;
@@ -70,12 +81,15 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "기술 사용 능력 증가";
     }
 
-    public class smith : IJob
+    public class Smith : IJob
     {
         public JobType Type => JobType.대장장이;
         public string DisplayName => "대장장이";
-        public string Story => "제자의 비극 이후 제련을 멈춘 대장장이. 무기는 남았지만 상처도 남았다.";
-        public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업";
+        public string Story => "주변 사람들로부터 죽은 줄 알았던 제자를" +
+            "\n던전에서 봤다는 소문을 듣게 되어 제자를 찾아 나섭니다.\n" +
+            "\n제자의 비극 이후 제련을 멈췄지만" +
+            "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
+        public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
         public int BaseAtk => 1;
         public int BaseDef => 1;
         public int BaseHp => 70;
@@ -87,10 +101,12 @@ namespace Sparta_Dungeon_TeamProject
     {
         public JobType Type => JobType.영매사;
         public string DisplayName => "침묵의 영매사";
-        public string Story => "목소리를 잃어 세상과 단절된 인생을 살아가고 있던 영매입니다." +
-            "그 대신에 생긴 고양이와의 탁월한 교감 능력으로 세상을 읽어냅니다.";
-        public string Description => "고양이와 조우 시, 항상 이로운 효과를 얻을 수 있습니다." +
-            "영매이기에 다른 이의 스킬을 흡수해 사용할 수 있습니다.";
+        public string Story => "어느날 갑자기 목소리를 잃고" +
+            "\n세상과 단절된 인생을 살고 있습니다.\n" +
+            "\n대신 고양이와의 깊은 교감을 통해" +
+            "\n세상과 소통하며 살아갑니다.\n";
+        public string Description => "고양이와의 교감을 통해 이로운 효과를 얻지만," +
+            "\n       추가 스킬을 받지 못하는 독특한 제약을 가진 직업입니다.\n";
         public int BaseAtk => 5;
         public int BaseDef => 4;
         public int BaseHp => 100;
@@ -103,12 +119,15 @@ namespace Sparta_Dungeon_TeamProject
         static JobType Prompt()
         {
             var jobs = JobDatas;
-            JobType current = jobs.Keys.First();
+            JobType? current = null; // 처음에 아무것도 선택 X
+
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("직업을 선택하세요.");
-                Console.WriteLine("숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
+                Console.WriteLine("[직업]을 선택하세요.");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
+                Console.ForegroundColor = ConsoleColor.White;
 
                 foreach (var jobk in jobs)
                 {
@@ -118,28 +137,55 @@ namespace Sparta_Dungeon_TeamProject
 
                     if (selected)
                     {
-                        Console.WriteLine($"    └{jobk.Value.Story}");
-                        Console.WriteLine($"    └{jobk.Value.Description}");
+                        Console.WriteLine($"    └ {jobk.Value.Description}");
                         Console.WriteLine($"    └ Atk:{jobk.Value.BaseAtk}  |  " +
                             $"Def:{jobk.Value.BaseDef}  |  " +
                             $"Hp:{jobk.Value.BaseHp}  |  " +
                             $"Mp:{jobk.Value.BaseMp}");
                         Console.WriteLine($"    └ Trait: {jobk.Value.Trait}");
+                        Console.WriteLine();
                     }
                 }
 
                 var key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Enter)
+                if (key.Key == ConsoleKey.Enter && current.HasValue)
                 {
-                    return current;
+                    ShowJobFinalUI(jobs[current.Value]);
+                    return current.Value;
                 }
 
-                if (key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5)
+                if ((key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5) ||
+                        (key.Key >= ConsoleKey.NumPad1 && key.Key <= ConsoleKey.NumPad5))
                 {
-                    int num = key.Key - ConsoleKey.D0;
-                    current = (JobType)num;
+                    int num = (key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5)
+                        ? key.Key - ConsoleKey.D0 : key.Key - ConsoleKey.NumPad0;
+
+                    if (Enum.IsDefined(typeof(JobType), num))
+                    {
+                        current = (JobType)num;
+                    }
                 }
             }
+        }
+
+        static void ShowJobFinalUI(IJob job)
+        {
+            Console.Clear();
+            Console.WriteLine($"직업명: {job.DisplayName}\n");
+            Console.WriteLine($"{job.Story}\n");
+            Console.WriteLine($"{job.Description}\n");
+
+            Console.WriteLine("기본 장비 지급: 무기1, 방어구1, 포션1");
+            Console.WriteLine("3개의 스킬 슬롯이 열렸습니다.\n");
+
+            Console.WriteLine($"공격력: {job.BaseAtk}  |  방어력: {job.BaseDef}  |  Hp: {job.BaseHp}  |  Mp: {job.BaseMp}  |  특성: {job.Trait}");
+            Console.WriteLine();
+            Console.WriteLine("1. 이 직업으로 선택하겠습니다.");
+            Console.WriteLine("2. 다른 직업을 더 보겠습니다.");
+
+            int input = CheckInput(1, 2);
+            if (input == 2)
+                return; // 다시 Prompt()로 복귀
         }
     }
 }

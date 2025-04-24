@@ -36,7 +36,7 @@ namespace Sparta_Dungeon_TeamProject
             { JobType.전사, new Warrior() },
             { JobType.마법사, new Mage() },
             { JobType.과학자, new Scientist() },
-            { JobType.대장장이, new smith() },
+            { JobType.대장장이, new Smith() },
             { JobType.영매사, new Medium() }
         };
 
@@ -44,22 +44,6 @@ namespace Sparta_Dungeon_TeamProject
         static void SetData()
         {
             GameSkill.InitSkills(); // 스킬 세팅 호출
-
-            GameSkill.AllSkills = new List<GameSkill>
-            {
-                new GameSkill("전사 기본 1", 50, 50, 2, "전사 스킬 1"),
-                new GameSkill("전사 2", 50, 50, 2, "전사 스킬 2"),
-                new GameSkill("전사 3", 50, 50, 2, "전사 스킬 3"),
-                new GameSkill("마법사 기본 1", 50, 50, 2, "마법사 스킬 1"),
-                new GameSkill("마법사 2", 50, 50, 2, "마법사 스킬 2"),
-                new GameSkill("마법사 3", 50, 50, 2, "마법사 스킬 3"),
-                new GameSkill("과학자 기본 1", 50, 50, 2, "과학자 스킬 1"),
-                new GameSkill("과학자 2", 50, 50, 2, "과학자 스킬 2"),
-                new GameSkill("과학자 3", 50, 50, 2, "과학자 스킬 3"),
-                new GameSkill("대장장이 기본 1", 50, 50, 2, "대장장이 스킬 1"),
-                new GameSkill("대장장이 2", 50, 50, 2, "대장장이 스킬 2"),
-                new GameSkill("대장장이 3", 50, 50, 2, "대장장이 스킬 3"),
-            };
 
             // 이름, 직업 세팅
             string name;
