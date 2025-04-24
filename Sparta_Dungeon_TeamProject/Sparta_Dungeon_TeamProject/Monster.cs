@@ -73,8 +73,6 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static class MonsterFactory
         {
-            private static Random rand = new Random();
-
             // 각 몬스터 타입을 생성하는 메서드
             public static Monster CreateMonster(string monsterName)
             {
