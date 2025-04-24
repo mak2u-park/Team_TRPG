@@ -87,6 +87,7 @@ namespace Sparta_Dungeon_TeamProject
                 };
             }
 
+            /*======================================[ 챕터 1 ]=====================================================*/
 
             public enum MonsterTypeChap1
             {
@@ -151,6 +152,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
+            /*======================================[ 챕터 2 ]=====================================================*/
+
             public enum MonsterTypeChap2
             {
                 Cavebat,
@@ -213,6 +216,8 @@ namespace Sparta_Dungeon_TeamProject
                 }
 
             }
+
+            /*======================================[ 챕터 3 ]=====================================================*/
 
             public enum MonsterTypeChap3
             {
@@ -277,6 +282,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
+            /*======================================[ 챕터 4 ]=====================================================*/
+
             public enum MonsterTypeChap4
             {
                 Swordsman,
@@ -340,7 +347,8 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
-            // 보스 몬스터
+            /*======================================[ 보스 몬스터 ]=====================================================*/
+
             class Capybara : Monster
             {
                 public Capybara() : base(
