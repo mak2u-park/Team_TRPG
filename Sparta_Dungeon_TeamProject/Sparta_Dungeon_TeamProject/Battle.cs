@@ -174,27 +174,40 @@ namespace Sparta_Dungeon_TeamProject
                 return;
             }
 
-            target.Hp -= player.Atk; // 몬스터를 때리는 플레이어 데미지 계산식
-
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {player.Atk} 만큼 피해를 입혔다!");
-            Thread.Sleep(700);
-
-            if (target.Hp <= 0)
+            if (DamageCalculation.Evasion())
             {
-                KillMon++; // 몬스터 처치 수 증가
-                target.IsAlive = false;
-                DisplayKillMessage(target);
-                player.GainReward(target.DropGold, target.DropExp);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine();
-                Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
-                Console.ReadKey();
-
-                if (battleMonsters.All(m => !m.IsAlive))
+                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
+                Console.ResetColor();
+                Thread.Sleep(700);
+                Playerturn = false;
+                return;
+            }
+            else
+            {
+                target.Hp -= player.Atk; // 몬스터를 때리는 플레이어 데미지 계산식
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {player.Atk} 만큼 피해를 입혔다!");
+                Thread.Sleep(700);
+                if (target.Hp <= 0)
                 {
-                    BattleSuccessUI();
-                    return;
+                    KillMon++; // 몬스터 처치 수 증가
+                    target.IsAlive = false;
+                    DisplayKillMessage(target);
+                    player.GainReward(target.DropGold, target.DropExp);
+                    ExpGoldCheck();
+                    Console.WriteLine();
+                    Console.WriteLine("아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.ReadKey();
+
+                    if (battleMonsters.All(m => !m.IsAlive))
+                    {
+                        BattleSuccessUI();
+                        return;
+                    }
                 }
             }
 
@@ -208,6 +221,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{target.DropGold} G 를 획득했다.");
             Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
+        }
+        static void ExpGoldCheck()
+        {
             Console.WriteLine();
             Console.WriteLine($"보유 골드 {player.Gold}");
             Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
@@ -305,4 +321,12 @@ namespace Sparta_Dungeon_TeamProject
                     .ToList();
         }
     }
+    public class DamageCalculation // 데미지 계산식
+    {
+        public static bool Evasion() // 몬스터 회피 기능
+        {
+            Random rand = new Random();
+            return rand.Next(0, 100) < 10; // 10% 확률
+        }
+        }
 }
