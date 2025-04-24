@@ -24,6 +24,9 @@ namespace Sparta_Dungeon_TeamProject
         public int ExtraAtk { get; private set; }
         public int ExtraDef { get; private set; }
 
+        public int FinalAtk => Atk + ExtraAtk; // 최종 공격력
+        public int FinalDef => Def + ExtraDef; // 최종 방어력
+
         private List<Item> Inventory = new List<Item>();
         private List<Item> EquipList = new List<Item>();
 
