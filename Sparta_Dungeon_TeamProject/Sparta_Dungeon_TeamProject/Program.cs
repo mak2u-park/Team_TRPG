@@ -35,6 +35,20 @@ namespace Sparta_Dungeon_TeamProject
         {
             // 이름, 직업 세팅
             string name;
+
+            GameSkill.AllSkills = new List<GameSkill>
+            {
+             new GameSkill("전사 공용 1", 50, 50, 2,""),
+             new GameSkill("전사 공용 2", 50, 30, 1,""),
+             new GameSkill("마법사 공용 1",50, 40, 3,""),
+             new GameSkill("마법사 공용 2", 50,60, 4,""),
+             new GameSkill("과학자 공용 1", 50, 50, 2,""),
+             new GameSkill("과학자 공용 2", 50, 35, 1,""),
+             new GameSkill("대장장이 공용 1", 50, 20, 1,""),
+             new GameSkill("대장장이 공용 2", 50, 25, 2,""),
+            };
+
+
             while (true)
             {
                 Console.Clear();
@@ -83,11 +97,13 @@ namespace Sparta_Dungeon_TeamProject
             gold: 10000
             );
 
+            player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
+
             InitItemDb(); // 아이템 세팅 호출
         }
 
         // 0. 메인메뉴
-        static void DisplayMainUI()
+        public static void DisplayMainUI()
         {
             Console.Clear();
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
@@ -116,7 +132,7 @@ namespace Sparta_Dungeon_TeamProject
                     DisplayShopUI();
                     break;
                 case 4:
-                    DisplayDungeonUI(0);
+                    DisplayDungeonUI(Chapter);
                     break;
                 case 5:
                     DisplayRestUI();
@@ -140,16 +156,20 @@ namespace Sparta_Dungeon_TeamProject
             player.DisplayPlayerInfo(); // # Player.cs
 
             Console.WriteLine();
+            Console.WriteLine("1. 스킬 관리");
             Console.WriteLine("0. 나가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 0);
+            int result = CheckInput(0, 1);
 
             switch (result)
             {
                 case 0:
                     DisplayMainUI();
+                    break;
+                case 1: // 스킬 관리
+                    player.DisplaySkillUI();
                     break;
             }
         }
@@ -187,7 +207,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // B. 입력값 체크
-        static int CheckInput(int min, int max)
+        public static int CheckInput(int min, int max)
         {
             int result;
 

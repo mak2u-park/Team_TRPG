@@ -261,7 +261,8 @@ namespace Sparta_Dungeon_TeamProject
                 double multiplier = DamageCalculation.GetRandomMultiplier();
 
                 double baseDamage = isCritical ? player.FinalAtk * 1.5 : player.FinalAtk;
-                int finalDamage = (int)Math.Ceiling(baseDamage * multiplier);
+                int finalDamage = (int)Math.Ceiling((baseDamage * multiplier - target.Def * 0.5)); // 몬스터 방어력의 절반 만큼 최종 데미지 감소
+                finalDamage = Math.Max(1, finalDamage); // 최소 데미지 1
 
                 target.Hp -= finalDamage;
 
@@ -405,15 +406,15 @@ namespace Sparta_Dungeon_TeamProject
         public static List<Monster> SpawnMonsters(int Stage)
         {
             Random rand = new Random();
-            List<MonsterType> allowedTypes;
+            List<MonsterTypeChap1> allowedTypes;
             int monsterCount = Math.Min(1 + Program.Stage / 2, 5);
 
             if (Stage < 4) // 1 ~ 3 스테이지
-                allowedTypes = new List<MonsterType> { MonsterType.Goblin }; // 고블린만 소환
+                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin }; // 고블린만 소환
             else if (Stage < 7) // 4 ~ 6 스테이지
-                allowedTypes = new List<MonsterType> { MonsterType.Goblin, MonsterType.Orc }; // 고블린과 오크만 소환
+                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin, MonsterTypeChap1.Orc }; // 고블린과 오크만 소환
             else // 7 ~ 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterType)).Cast<MonsterType>().ToList(); // 모든 몬스터 소환
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1)).Cast<MonsterTypeChap1>().ToList(); // 모든 몬스터 소환
 
             return Enumerable.Range(0, monsterCount)
                     .Select(_ => MonsterFactory.CreateMonster(allowedTypes[rand.Next(allowedTypes.Count)]))

@@ -76,19 +76,21 @@ namespace Sparta_Dungeon_TeamProject
             private static Random rand = new Random();
 
             // 각 몬스터 타입을 생성하는 메서드
-            public static Monster CreateMonster(MonsterType type)
+            public static Monster CreateMonster(MonsterTypeChap1 type)
             {
                 return type switch
                 {
-                    MonsterType.Goblin => new Goblin(),
-                    MonsterType.Orc => new Orc(),
+                    MonsterTypeChap1.Wolf => new Wolf(),
+                    MonsterTypeChap1.Goblin => new Goblin(),
+                    MonsterTypeChap1.Orc => new Orc(),
                     _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
                 };
             }
 
 
-            public enum MonsterType
+            public enum MonsterTypeChap1
             {
+                Wolf,
                 Goblin,
                 Orc
             }
@@ -149,10 +151,194 @@ namespace Sparta_Dungeon_TeamProject
 
             }
 
+            public enum MonsterTypeChap2
+            {
+                Cavebat,
+                Ghost,
+                Skeleton
+            }
+
+            // 아직 스탯은 변경하지 않음
+            class Cavebat : Monster
+            {
+                public Cavebat() : base(
+                    name: "동굴 박쥐",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
+
+            class Ghost : Monster
+            {
+                public Ghost() : base(
+                    name: "유령",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
 
 
+            class Skeleton : Monster
+            {
+                public Skeleton() : base(
+                    name: "해골",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
+
+            public enum MonsterTypeChap3
+            {
+                Adventurer,
+                SmilingSlime,
+                HeadlessSkeletion
+            }
+
+            // 아직 스탯은 변경하지 않음
+            class Adventurer : Monster
+            {
+                public Adventurer() : base(
+                    name: "잃을 게 없는 모험가",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
+
+            class SmilingSlime : Monster
+            {
+                public SmilingSlime() : base(
+                    name: "웃는 슬라임",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
 
 
+            class HeadlessSkeletion : Monster
+            {
+                public HeadlessSkeletion() : base(
+                    name: "머리 없는 해골",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
+
+            public enum MonsterTypeChap4
+            {
+                Swordsman,
+                Mage,
+                Archer
+            }
+
+            // 아직 스탯은 변경하지 않음
+            class Swordsman : Monster
+            {
+                public Swordsman() : base(
+                    name: "기억 잃은 검사",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
+
+            class Mage : Monster
+            {
+                public Mage() : base(
+                    name: "기억 잃은 마법사",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+
+                }
+
+            }
+
+
+            class Archer : Monster
+            {
+                public Archer() : base(
+                    name: "기억 잃은 궁수",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
 
             // 보스 몬스터
             class Capybara : Monster
