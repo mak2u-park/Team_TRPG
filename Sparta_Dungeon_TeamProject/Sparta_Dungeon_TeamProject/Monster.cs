@@ -76,13 +76,24 @@ namespace Sparta_Dungeon_TeamProject
             private static Random rand = new Random();
 
             // 각 몬스터 타입을 생성하는 메서드
-            public static Monster CreateMonster(MonsterTypeChap1 type)
+            public static Monster CreateMonster(string monsterName)
+            {
+                return monsterName switch
+                {
+                    "Wolf" => new Wolf(),
+                    "Goblin" => new Goblin(),
+                    "Orc" => new Orc(),
+                    _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
+                };
+            }
+
+            public static Monster CreateMonster(MonsterTypeChap2 type)
             {
                 return type switch
                 {
-                    MonsterTypeChap1.Wolf => new Wolf(),
-                    MonsterTypeChap1.Goblin => new Goblin(),
-                    MonsterTypeChap1.Orc => new Orc(),
+                    MonsterTypeChap2.Cavebat => new Cavebat(),
+                    MonsterTypeChap2.Ghost => new Ghost(),
+                    MonsterTypeChap2.Skeleton => new Skeleton(),
                     _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
                 };
             }

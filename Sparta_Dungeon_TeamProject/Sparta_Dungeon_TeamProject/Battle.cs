@@ -431,19 +431,27 @@ namespace Sparta_Dungeon_TeamProject
         public static List<Monster> SpawnMonsters(int Stage)
         {
             Random rand = new Random();
-            List<MonsterTypeChap1> allowedTypes;
+            Array allowedTypes;
+
             int monsterCount = Math.Min(1 + Program.Stage / 2, 5);
 
-            if (Stage < 4) // 1 ~ 3 스테이지
-                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin }; // 고블린만 소환
-            else if (Stage < 7) // 4 ~ 6 스테이지
-                allowedTypes = new List<MonsterTypeChap1> { MonsterTypeChap1.Goblin, MonsterTypeChap1.Orc }; // 고블린과 오크만 소환
-            else // 7 ~ 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1)).Cast<MonsterTypeChap1>().ToList(); // 모든 몬스터 소환
+            if (Stage < 3) // 0 ~ 2 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1));
+            else if (Stage < 6) // 3 ~ 5 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2)); 
+            else if  (Stage < 9)// 6 ~ 7 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));
+            else // 9 ~ 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));
 
             return Enumerable.Range(0, monsterCount)
-                    .Select(_ => MonsterFactory.CreateMonster(allowedTypes[rand.Next(allowedTypes.Count)]))
-                    .ToList();
+                    .Select(_ => 
+                    { 
+                        var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                        return MonsterFactory.CreateMonster(randomType.ToString());
+
+                    }).ToList();
+
         }
     }
 
