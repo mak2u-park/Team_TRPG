@@ -16,30 +16,46 @@ namespace Sparta_Dungeon_TeamProject
         public static bool Playerturn = true; // 플레이어의 턴 여부
         public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 1; // 스테이지 변수
+        public static int Stage = 0; // 스테이지 변수
+        public static int Chapter = 0; // 챕터 변수
 
 
         // 4. 던전
-        static void DisplayDungeonUI()
+
+        // 던전 입장 스크립트
+
+        static void DisplayDungeonUI(int Chapter)
         {
             Console.Clear();
+            Console.WriteLine($"Chapter. {Chapter + 1}");
             Console.WriteLine();
-            Console.WriteLine($"**던전입장 - 현재 스테이지 {Stage} **");
+            Console.WriteLine($"**던전입장 - {ChapterInfo.ChapterTitle[Chapter]}**");
             Console.WriteLine();
-            Console.WriteLine("1. 입장");
-            Console.WriteLine("0. 나가기");
+            ChapterInfo.ChapterDesc(Chapter);
+            Console.WriteLine();
+            Console.WriteLine("1. 앞으로 나아가기");
+            Console.WriteLine("0. 마을로 돌아가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            switch (CheckInput(0, 1))
+            int result = CheckInput(0, 1);
+            switch (result)
             {
                 case 0:
-                    DisplayMainUI(); break;
+                    DisplayMainUI();
+                    break;
                 case 1:
-                    Battle(); break;
+                    Battle(Stage);
+                    break;
             }
+
         }
-        static void Battle()
+
+
+
+
+
+        static void Battle(int stage)
         {
             KillMon = 0; // 몬스터 킬 수 초기화
             BattleTurn = 1; // 전투 턴 수 초기화
@@ -59,6 +75,8 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
+
+
         static void PlayerTurn()
         {
             Console.Clear();
@@ -107,6 +125,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
+
         static void MonsterTurn()
         {
             Console.Clear();
@@ -209,25 +228,28 @@ namespace Sparta_Dungeon_TeamProject
                         return;
                     }
                 }
-            }
 
-            Playerturn = false; // 몬스터의 턴으로 변경
+                Playerturn = false; // 몬스터에게 턴 넘김
+
+                static void DisplayKillMessage(Monster target)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
+                    Thread.Sleep(700);
+                    Console.WriteLine();
+                    Console.WriteLine($"{target.DropGold} G 를 획득했다.");
+                    Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
+                }
+
+                static void ExpGoldCheck()
+                {
+                    Console.WriteLine();
+                    Console.WriteLine($"보유 골드 {player.Gold}");
+                    Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
+                }
+            }
         }
-        static void DisplayKillMessage(Monster target)
-        {
-            Console.WriteLine();
-            Console.WriteLine($"[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
-            Thread.Sleep(700);
-            Console.WriteLine();
-            Console.WriteLine($"{target.DropGold} G 를 획득했다.");
-            Console.WriteLine($"{target.DropExp} 만큼 경험치를 획득했다.");
-        }
-        static void ExpGoldCheck()
-        {
-            Console.WriteLine();
-            Console.WriteLine($"보유 골드 {player.Gold}");
-            Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
-        }
+
 
         public static void BattleSuccessUI()
         {
@@ -235,7 +257,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("전투 승리!");
             Console.WriteLine();
-            Console.WriteLine($"현재 층에서 몬스터를 {KillMon} 마리 만큼 처치 하셨습니다.");
+            Console.WriteLine($"현재 스테이지에서 몬스터를 {KillMon} 마리 만큼 처치 하셨습니다.");
             Console.WriteLine();
             Console.WriteLine($"Lv.{player.Level} [{player.Name}]");
             Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
@@ -243,7 +265,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"현재 경험치 {player.Exp}/{player.MaxExp}");
             Console.WriteLine();
-            Console.WriteLine("1. 다음 층으로 이동하기");
+            Console.WriteLine("1. 다음 스테이지로 이동하기");
             Console.WriteLine("0. 복귀하기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
@@ -251,12 +273,18 @@ namespace Sparta_Dungeon_TeamProject
             switch (CheckInput(0, 1))
             {
                 case 0:
-                    Stage = 1; // 마을로 복귀하면서 스테이지 값 초기화
+                    Stage = 0; // 마을로 복귀하면서 스테이지 값 초기화
                     DisplayMainUI();
                     break;
                 case 1:
                     Stage++; // 다음 층으로 이동하면서 스테이지 값 +1
-                    DisplayDungeonUI(); // 이건 임시로 작성해둔 것. 추후에 다른 걸로 교체해야함
+                    // 3스테이지마다 다음 챕터로 이동, 
+                    if (Stage % 3 == 0 && Chapter < 4)
+                    {
+                        DisplayDungeonUI(++Chapter);
+                        return;
+                    }
+                    Battle(Stage); // 이건 임시로 작성해둔 것. 추후에 다른 걸로 교체해야함
                     break;
 
             }
@@ -276,7 +304,7 @@ namespace Sparta_Dungeon_TeamProject
 
             if (CheckInput(0, 0) == 0)
             {
-                Stage = 1; // 사망하고 돌아가면서 스테이지 값 초기화
+                Stage = 0; // 사망하고 돌아가면서 스테이지 값 초기화
                 DisplayMainUI();
             }
         }
@@ -321,6 +349,7 @@ namespace Sparta_Dungeon_TeamProject
                     .ToList();
         }
     }
+
     public class DamageCalculation // 데미지 계산식
     {
         public static bool Evasion() // 몬스터 회피 기능
@@ -328,5 +357,43 @@ namespace Sparta_Dungeon_TeamProject
             Random rand = new Random();
             return rand.Next(0, 100) < 10; // 10% 확률
         }
+    }
+
+
+// 챕터를 구분하는 클래스 생성, 4챕터까지 존재
+public static class ChapterInfo
+    {
+        public static string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
+
+        public static void ChapterDesc(int Chapter)
+        {
+            switch (Chapter)
+            {
+                case 0:
+                    Console.WriteLine("당신은 수많은 사람들의 발자국이 남은 길을 따라 어둑한 숲 속으로 서서히 스며듭니다.");
+                    Console.WriteLine("저편의 어둠 속에서는 이름 모를 짐승의 울음소리가 들려오는 듯 합니다.");
+                    Console.WriteLine("진흑 위 발자국들은 어느새 더 이상 사람의 것으로 보이지 않습니다.");
+                    break;
+                case 1:
+                    Console.WriteLine("동굴 입구에 다다른 당신은, 그 앞에 남겨진 몇몇 발자국에서 묘한 기운을 느낍니다.");
+                    Console.WriteLine("누군가의 두려움, 그리고 되돌아가고 싶었던 마음이 고스란히 전해지는 듯합니다.");
+                    Console.WriteLine("당신 역시 잠시 발걸음을 멈추고, 깊은 숨을 내쉽니다.");
+                    break;
+                case 2:
+                    Console.WriteLine("당신은 길을 가로막던 모든 적들을 쓰러뜨리고, 마침내 던전의 입구에 도달했습니다만 그 마음은 한없이 무겁습니다.");
+                    Console.WriteLine("질척이는 탐욕과 후회의 그림자가 발끝을 물고 늘어지는 듯 합니다.");
+                    Console.WriteLine("멀리서 빛나는 고양이의 눈빛을 애써 피하며 당신은 발걸음을 옮깁니다.");
+                    break;
+                case 3:
+                    Console.WriteLine("던전에 처음 들어섰을 때, 당신은 당신의 고통과 투지가 누군가의 오락거리로 소비되고 있음에 불쾌감을 느꼈습니다.");
+                    Console.WriteLine("그러나 시간이 지날수록 이 기묘한 분위기에 점점 익숙해졌고, 당신도 모르는 새즐거움을 느끼기 시작합니다. ");
+                    Console.WriteLine("이제는 이 던전을 하나의 놀이로 받아들이며, 이 놀이의 일부가 되고 싶다는 욕망을 느낍니다.");
+                    break;
+            }
+
         }
+
+    }
+
+
 }
