@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
         영매사
     }
 
-    public interface JobData
+    public interface IJob
     {
         JobType Type { get; } // 직업 타입-코드작업용
         string DisplayName { get; } // 출력될 직업명
@@ -27,11 +27,10 @@ namespace Sparta_Dungeon_TeamProject
         public int BaseHp { get; }
         public int BaseMp { get; }
         string Trait { get; } // 직업 특성
-    }
+    };
 
     // 직업별 베이스 DB / 공격과 스킬은 Skill에서 정의
-    
-    public class Warrior : JobData
+    public class Warrior : IJob
     {
         public JobType Type => JobType.전사;
         public string DisplayName => "은퇴한 전사";
@@ -45,7 +44,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "물리 공격력 증가";
     }
 
-    public class Mage : JobData
+    public class Mage : IJob
     {
         public JobType Type => JobType.마법사;
         public string DisplayName => "마법사";
@@ -58,7 +57,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "마법 공격력 증가";
     }
 
-    public class Scientist : JobData
+    public class Scientist : IJob
     {
         public JobType Type => JobType.과학자;
         public string DisplayName => "과학자";
@@ -71,7 +70,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "기술 사용 능력 증가";
     }
 
-    public class smith : JobData
+    public class smith : IJob
     {
         public JobType Type => JobType.대장장이;
         public string DisplayName => "대장장이";
@@ -84,7 +83,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "스킬 슬롯 +1  |  기본 장비 3개 보유";
     }
 
-    public class Medium : JobData
+    public class Medium : IJob
     {
         public JobType Type => JobType.영매사;
         public string DisplayName => "침묵의 영매사";
@@ -98,4 +97,50 @@ namespace Sparta_Dungeon_TeamProject
         public int BaseMp => 75;
         public string Trait => "정신력 증가";
     }
+
+    public partial class Program
+    {
+        static JobType Prompt()
+        {
+            var jobs = JobDatas;
+            JobType current = jobs.Keys.First();
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("직업을 선택하세요.");
+                Console.WriteLine("숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
+
+                foreach (var jobk in jobs)
+                {
+                    bool selected = jobk.Key == current;
+                    Console.Write(selected ? "> " : "");
+                    Console.WriteLine($"{(int)jobk.Key}. {jobk.Value.DisplayName}");
+
+                    if (selected)
+                    {
+                        Console.WriteLine($"    └{jobk.Value.Story}");
+                        Console.WriteLine($"    └{jobk.Value.Description}");
+                        Console.WriteLine($"    └ Atk:{jobk.Value.BaseAtk}  |  " +
+                            $"Def:{jobk.Value.BaseDef}  |  " +
+                            $"Hp:{jobk.Value.BaseHp}  |  " +
+                            $"Mp:{jobk.Value.BaseMp}");
+                        Console.WriteLine($"    └ Trait: {jobk.Value.Trait}");
+                    }
+                }
+
+                var key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    return current;
+                }
+
+                if (key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5)
+                {
+                    int num = key.Key - ConsoleKey.D0;
+                    current = (JobType)num;
+                }
+            }
+        }
+    }
 }
+

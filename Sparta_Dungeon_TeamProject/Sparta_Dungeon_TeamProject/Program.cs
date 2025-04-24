@@ -11,9 +11,8 @@ namespace Sparta_Dungeon_TeamProject
         private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
 
         {
-            //강화하기에서 true
             { "강화", false },
-
+            //{ 다른 곳에서도 사용가능 }
         };
 
         // ** 실제 구동되는 메인함수 **
@@ -31,11 +30,20 @@ namespace Sparta_Dungeon_TeamProject
             DisplayMainUI();
         }
 
+        // 직업 데이터
+        public static readonly Dictionary<JobType, IJob> JobDatas = new()
+        {
+            { JobType.전사, new Warrior() },
+            { JobType.마법사, new Mage() },
+            { JobType.과학자, new Scientist() },
+            { JobType.대장장이, new smith() },
+            { JobType.영매사, new Medium() }
+        };
+
         // A. 기본 세팅
         static void SetData()
         {
-            // 이름, 직업 세팅
-            string name;
+            GameSkill.InitSkills(); // 스킬 세팅 호출
 
             GameSkill.AllSkills = new List<GameSkill>
             {
@@ -53,7 +61,8 @@ namespace Sparta_Dungeon_TeamProject
                 new GameSkill("대장장이 3", 50, 50, 2, "대장장이 스킬 3"),
             };
 
-
+            // 이름, 직업 세팅
+            string name;
             while (true)
             {
                 Console.Clear();
@@ -70,14 +79,24 @@ namespace Sparta_Dungeon_TeamProject
                 break;
             }
 
-            Console.Clear();
-            Console.WriteLine("캐릭터 직업을 선택해주세요.");
+            // 직업 선택
+            IJob job = JobDatas[Prompt()];
+            player = new Player(
+                level: 1,
+                exp: 0,
+                maxExp: 100,
+                name: name,
+                job: JobType.전사,
+                hp: job.BaseHp,
+                mp: job.BaseMp,
+                atk: job.BaseAtk,
+                def: job.BaseDef,
+                maxHp: job.BaseHp,
+                maxMp: job.BaseMp,
+              gold: 10000
+            );
+            player.GetExclusiveSkill();
 
-            // foreach 반복문으로 직업 개수 무관하게 모두 출력됨.
-            foreach (JobType job in Enum.GetValues(typeof(JobType)))
-            {
-                Console.WriteLine($"{(int)job}. {job}");
-            }
             Console.WriteLine();
             Console.Write("번호입력: ");
             int result = CheckInput(1, 5);
@@ -85,7 +104,6 @@ namespace Sparta_Dungeon_TeamProject
             JobType jobType = (JobType)result;
 
             player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
-
             InitItemDb(); // 아이템 세팅 호출
         }
 
