@@ -34,7 +34,7 @@ namespace Sparta_Dungeon_TeamProject
         private List<Item> EquipList = new List<Item>();
 
         public List<SkillLibrary> Skills = new List<SkillLibrary>();
-
+        public List<SkillLibrary> EquipSkills = new List<SkillLibrary>();
         public int InventoryCount
         {
             get
@@ -108,7 +108,7 @@ namespace Sparta_Dungeon_TeamProject
             마법사,
             과학자,
             대장장이,
-            영매사,
+            영매사
         }
 
         public class JobData
@@ -189,7 +189,7 @@ namespace Sparta_Dungeon_TeamProject
                     DisplaySkillUI();
                     break;
                 default:
-                    GameSkill selectedSkill = Skills[input - 1];
+                    SkillLibrary selectedSkill = Skills[input - 1];
 
                     if (EquipSkillList.Contains(selectedSkill))
                     {
@@ -212,7 +212,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             for (int i = 0; i < Skills.Count; i++)
             {
-                GameSkill targetSkill = Skills[i];
+                SkillLibrary targetSkill = Skills[i];
 
                 string displayIdx = showIdx ? $"{i + 1} " : "";
                 string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
@@ -221,7 +221,7 @@ namespace Sparta_Dungeon_TeamProject
 
             }
         }
-        public bool IsEquippedSkill(GameSkill skill)
+        public bool IsEquippedSkill(SkillLibrary skill)
         {
             return EquipSkillList.Contains(skill);
         }
@@ -236,7 +236,7 @@ namespace Sparta_Dungeon_TeamProject
         }
         
         // 스킬 장착 # Program.cs
-        public void EquipSkill(GameSkill AllSkills)
+        public void EquipSkill(SkillLibrary AllSkills)
         {
             if (IsEquippedSkill(AllSkills))
             {
@@ -251,7 +251,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 스킬 장착 목록 # Program.cs
-        public List<GameSkill> GetListSkill()
+        public List<SkillLibrary> GetListSkill()
         {
             return Skills;
         }
