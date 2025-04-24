@@ -38,18 +38,24 @@ namespace Sparta_Dungeon_TeamProject
 
             GameSkill.AllSkills = new List<GameSkill>
             {
-                new GameSkill("전사 기본 1", 50, 50, 2, "전사 스킬 1"),
-                new GameSkill("전사 2", 50, 50, 2, "전사 스킬 2"),
-                new GameSkill("전사 3", 50, 50, 2, "전사 스킬 3"),
-                new GameSkill("마법사 기본 1", 50, 50, 2, "마법사 스킬 1"),
-                new GameSkill("마법사 2", 50, 50, 2, "마법사 스킬 2"),
-                new GameSkill("마법사 3", 50, 50, 2, "마법사 스킬 3"),
-                new GameSkill("과학자 기본 1", 50, 50, 2, "과학자 스킬 1"),
-                new GameSkill("과학자 2", 50, 50, 2, "과학자 스킬 2"),
-                new GameSkill("과학자 3", 50, 50, 2, "과학자 스킬 3"),
-                new GameSkill("대장장이 기본 1", 50, 50, 2, "대장장이 스킬 1"),
-                new GameSkill("대장장이 2", 50, 50, 2, "대장장이 스킬 2"),
-                new GameSkill("대장장이 3", 50, 50, 2, "대장장이 스킬 3"),
+                new GameSkill("전사 기본 1", 50, 2, "전사 스킬 1"),
+                new GameSkill("불안한 패링", 50, 2, "전사 스킬 2"),
+                new GameSkill("어렴풋이 기억나는 동작", 50, 2, "전사 스킬 3"),
+                new GameSkill("능숙한 이간질", 50, 2, "전사 스킬 3"),
+
+                new GameSkill("마법사 기본 1", 50, 2, "마법사 스킬 1"),
+                new GameSkill("마법사 2", 50, 2, "마법사 스킬 2"),
+                new GameSkill("마법사 3", 50, 2, "마법사 스킬 3"),
+
+                new GameSkill("과학자 기본 1", 50, 2, "과학자 스킬 1"),
+                new GameSkill("과학자 3", 50, 2, "과학자 스킬 3"),
+                new GameSkill("과학자 2", 50, 2, "과학자 스킬 2"),
+
+                new GameSkill("대장장이 기본 1", 50, 2, "대장장이 스킬 1"),
+                new GameSkill("대장장이 2", 50, 2, "대장장이 스킬 2"),
+                new GameSkill("대장장이 3", 50, 2, "대장장이 스킬 3"),
+
+                new GameSkill("망설이던 사람들은 떠나지 못하고,", 30, 0, """우리들은 아직 이곳에 있으니.""")
             };
 
 

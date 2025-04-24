@@ -1,7 +1,9 @@
+using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Sparta_Dungeon_TeamProject;
 
 namespace Sparta_Dungeon_TeamProject
 {
@@ -85,6 +87,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine();
                 string levelUpMessage = "쌓여온 경험이 당신을 한층 더 성장시켰습니다.";
+
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 foreach (char c in levelUpMessage)
@@ -99,6 +102,38 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
+
+        public void GetRandomJobSkill(JobType job)
+        {
+            switch (job)
+            {
+                case JobType.전사:
+                    GameSkill.GetWarriorSkill();
+                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
+                    break;
+
+                case JobType.마법사:
+                    GameSkill.GetWizzardSkill();
+                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
+                    break;
+
+                case JobType.과학자:
+                    GameSkill.GetScientistSkill();
+                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
+                    break;
+
+                case JobType.대장장이:
+                    GameSkill.GetBlacksmithSkill();
+                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
+                    break;
+                case JobType.영매사:
+                    GameSkill.GetWhispererSkill();
+                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
+                    break;
+            }
+
+        }
+
 
         // 직업 DB # SetData()
         public enum JobType
@@ -144,7 +179,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             if (Job == JobType.전사)
             {
-                Skills.Add(GameSkill.GetSkillByName("전사 기본 1"));
+                Skills.Add(GameSkill.GetSkillByName("불안한 패링"));
             }
             else if (Job == JobType.마법사)
             {
@@ -160,7 +195,7 @@ namespace Sparta_Dungeon_TeamProject
             }
             else if (Job == JobType.영매사)
             {
-                Skills.Add(GameSkill.GetRandomSkill());
+                Skills.Add(GameSkill.GetSkillByName("망설이던 사람들은 떠나지 못하고,"));
             }
         }
         public void DisplaySkillUI()
@@ -237,7 +272,7 @@ namespace Sparta_Dungeon_TeamProject
                 string displayIdx = showIdx ? $"{i + 1} " : "";
                 string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
                 Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
-                $" ( 피해량: {targetSkill.Damage} / 소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime} / {targetSkill.Desc} )");
+                $" ( 소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime} / {targetSkill.Desc} )");
             }
         }
         public bool IsEquippedSkill(GameSkill skill)
@@ -260,7 +295,7 @@ namespace Sparta_Dungeon_TeamProject
             if (IsEquippedSkill(AllSkills))
             {
                 EquipSkillList.Remove(AllSkills);
-                Console.WriteLine($"{AllSkills.Name} 스킬 장착 해제");    
+                Console.WriteLine($"{AllSkills.Name} 스킬 장착 해제");
             }
             else
             {
@@ -420,7 +455,7 @@ namespace Sparta_Dungeon_TeamProject
                 Environment.Exit(0);
             }
         }
-        
+
         public void Heal(int amount)//체력회복 메서드
         {
             if (Hp + amount <= 0) //계산된 체력이 0이하면 Hp10남기도록설정
