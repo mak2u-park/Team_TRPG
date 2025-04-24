@@ -108,7 +108,7 @@ namespace Sparta_Dungeon_TeamProject
                     DisplayShopUI();
                     break;
                 case 4:
-                    DisplayDungeonUI();
+                    DisplayDungeonUI(1);
                     break;
                 case 5:
                     DisplayRestUI();
