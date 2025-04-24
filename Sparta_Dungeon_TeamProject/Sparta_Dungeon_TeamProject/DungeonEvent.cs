@@ -392,7 +392,7 @@
         //이벤트 몬스터 추가
         class Mimic : Monster
         {
-            public Mimic() : base(
+            public Mimic() : base("ㅁ",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,
@@ -408,7 +408,7 @@
         }
         class Banshee : Monster
         {
-            public Banshee() : base(
+            public Banshee() : base("2ㅁ",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,

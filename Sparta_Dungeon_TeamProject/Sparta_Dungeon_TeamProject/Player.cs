@@ -80,6 +80,7 @@ namespace Sparta_Dungeon_TeamProject
                 Exp -= MaxExp;
                 MaxExp += 10;
                 Level++;
+
                 Console.Clear();
                 Console.WriteLine();
                 Console.WriteLine();
@@ -143,27 +144,22 @@ namespace Sparta_Dungeon_TeamProject
         {
             if (Job == JobType.전사)
             {
-                Skills.Add(GameSkill.GetSkillByName("전사 공용 1"));
-                Skills.Add(GameSkill.GetSkillByName("전사 공용 2"));
+                Skills.Add(GameSkill.GetSkillByName("전사 기본 1"));
             }
             else if (Job == JobType.마법사)
             {
-                Skills.Add(GameSkill.GetSkillByName("마법사 공용 1"));
-                Skills.Add(GameSkill.GetSkillByName("마법사 공용 2"));
+                Skills.Add(GameSkill.GetSkillByName("마법사 기본 1"));
             }
             else if (Job == JobType.과학자)
             {
-                Skills.Add(GameSkill.GetSkillByName("성직자 공용 1"));
-                Skills.Add(GameSkill.GetSkillByName("성직자 공용 2"));
+                Skills.Add(GameSkill.GetSkillByName("성직자 기본 1"));
             }
             else if (Job == JobType.대장장이)
             {
-                Skills.Add(GameSkill.GetSkillByName("대장장이 공용 1"));
-                Skills.Add(GameSkill.GetSkillByName("대장장이 공용 2"));
+                Skills.Add(GameSkill.GetSkillByName("대장장이 기본 1"));
             }
             else if (Job == JobType.영매사)
             {
-                Skills.Add(GameSkill.GetRandomSkill());
                 Skills.Add(GameSkill.GetRandomSkill());
             }
         }
@@ -239,7 +235,8 @@ namespace Sparta_Dungeon_TeamProject
 
                 string displayIdx = showIdx ? $"{i + 1} " : "";
                 string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
-                Console.WriteLine($"- {displayIdx} {targetSkill.Name} (소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime})");
+                Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
+                $" ( 피해량: {targetSkill.Damage} / 소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime} / {targetSkill.Desc} )");
             }
         }
         public bool IsEquippedSkill(GameSkill skill)
