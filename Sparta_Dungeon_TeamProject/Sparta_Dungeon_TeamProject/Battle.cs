@@ -197,7 +197,7 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     Console.WriteLine($"[Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
                     Console.WriteLine();
-                    player.Damage(m.Atk);
+                    player.EnemyDamage(m.Atk);
                     Console.WriteLine();
                     Console.WriteLine($"현재 HP : {player.Hp}/{player.MaxHp}");
                     Console.WriteLine();

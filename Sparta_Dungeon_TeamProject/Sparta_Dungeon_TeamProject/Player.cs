@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using Sparta_Dungeon_TeamProject;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Sparta_Dungeon_TeamProject
 {
@@ -23,8 +24,8 @@ namespace Sparta_Dungeon_TeamProject
         public int MaxMp { get; private set; }
         public int Gold { get; set; }
 
-        public int ExtraAtk { get; private set; }
-        public int ExtraDef { get; private set; }
+        public int ExtraAtk { get; set; }
+        public int ExtraDef { get; set; }
 
         public int FinalAtk => Atk + ExtraAtk; // 최종 공격력
         public int FinalDef => Def + ExtraDef; // 최종 방어력
@@ -32,10 +33,7 @@ namespace Sparta_Dungeon_TeamProject
         private List<Item> Inventory = new List<Item>();
         private List<Item> EquipList = new List<Item>();
 
-        public List<GameSkill> Skills { get; private set; } = new List<GameSkill>();
-        public List<GameSkill> EquipSkillList { get; private set; } = new List<GameSkill>();
-
-        private GameSkill gameSkill;
+        public List<SkillLibrary> Skills = new List<SkillLibrary>();
 
         public int InventoryCount
         {
@@ -103,38 +101,6 @@ namespace Sparta_Dungeon_TeamProject
 
         }
 
-        public void GetRandomJobSkill(JobType job)
-        {
-            switch (job)
-            {
-                case JobType.전사:
-                    GameSkill.GetWarriorSkill();
-                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
-                    break;
-
-                case JobType.마법사:
-                    GameSkill.GetWizzardSkill();
-                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
-                    break;
-
-                case JobType.과학자:
-                    GameSkill.GetScientistSkill();
-                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
-                    break;
-
-                case JobType.대장장이:
-                    GameSkill.GetBlacksmithSkill();
-                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
-                    break;
-                case JobType.영매사:
-                    GameSkill.GetWhispererSkill();
-                    Console.WriteLine("당신은 새로운 스킬을 배웠습니다.");
-                    break;
-            }
-
-        }
-
-
         // 직업 DB # SetData()
         public enum JobType
         {
@@ -175,29 +141,8 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 직업별 기본 스킬 지급 # SetData()
-        public void GetExclusiveSkill()
-        {
-            if (Job == JobType.전사)
-            {
-                Skills.Add(GameSkill.GetSkillByName("불안한 패링"));
-            }
-            else if (Job == JobType.마법사)
-            {
-                Skills.Add(GameSkill.GetSkillByName("마법사 기본 1"));
-            }
-            else if (Job == JobType.과학자)
-            {
-                Skills.Add(GameSkill.GetSkillByName("성직자 기본 1"));
-            }
-            else if (Job == JobType.대장장이)
-            {
-                Skills.Add(GameSkill.GetSkillByName("대장장이 기본 1"));
-            }
-            else if (Job == JobType.영매사)
-            {
-                Skills.Add(GameSkill.GetSkillByName("망설이던 사람들은 떠나지 못하고,"));
-            }
-        }
+
+
         public void DisplaySkillUI()
         {
             Console.Clear();
@@ -273,6 +218,7 @@ namespace Sparta_Dungeon_TeamProject
                 string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
                 Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
                 $" ( 소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime} / {targetSkill.Desc} )");
+
             }
         }
         public bool IsEquippedSkill(GameSkill skill)
@@ -288,7 +234,7 @@ namespace Sparta_Dungeon_TeamProject
                 return Skills.Count;
             }
         }
-
+        
         // 스킬 장착 # Program.cs
         public void EquipSkill(GameSkill AllSkills)
         {
@@ -437,7 +383,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         //피격 피해량 계산
-        public void Damage(int amount)
+        public void EnemyDamage(int amount)
         {
             int damage = amount - Def;
 
@@ -471,6 +417,16 @@ namespace Sparta_Dungeon_TeamProject
                 Hp += amount;
             }
 
+        }
+
+        public void DefUP(int num)
+        {
+            num += ExtraDef;
+        }
+
+        public void UP(int num)
+        {
+            num += ExtraDef;
         }
 
         public void SelectRemove(string name)//아이템을 찾아서 삭제하는 메서드
