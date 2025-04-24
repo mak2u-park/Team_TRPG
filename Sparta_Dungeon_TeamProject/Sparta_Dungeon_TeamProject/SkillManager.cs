@@ -69,7 +69,7 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static void FirstWhispererSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName(""));
+            player.Skills.Add(GetSkillByName("끝맺음"));
         }
 
         //===============================[직업별 무작위 스킬 추가]=================================
@@ -132,22 +132,20 @@ namespace Sparta_Dungeon_TeamProject
 
             for (int i = 1; i <= Count; i++)
             {
+                Console.WriteLine($"공격이 {Count}번 적중했습니다.");
                 //int damage = player.Atk / i;
                 //damage = Math.Max(damage, 10); // 최소 데미지
 
                 if (Count == 1)
                 {
-                    Console.WriteLine("공격이 1번 적중했습니다.");
-                    Console.WriteLine("""옛날 생각나게 하는 걸.""");
+                    Console.WriteLine("""나도 참 녹슬었군.""");
                 }
                 if (Count == 2)
                 {
-                    Console.WriteLine("공격이 2번 적중했습니다.");
-                    Console.WriteLine("""아직 안 죽었군.""");
+                    Console.WriteLine("""옛날 생각이 나는 걸.""");
                 }
                 else if (Count == 3)
                 {
-                    Console.WriteLine("공격이 3번 적중했습니다.");
                     Console.WriteLine("""나는 기억 못해도, 내 몸은 전부 기억해.""");
                 }
             }
