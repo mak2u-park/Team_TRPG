@@ -47,7 +47,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             Level = level;
             Exp = exp;
-            MaxExp = maxExp;
+            MaxExp = maxExp; 
             Name = name;
             Job = job;
             Atk = atk;

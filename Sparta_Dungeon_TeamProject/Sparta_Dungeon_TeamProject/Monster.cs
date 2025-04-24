@@ -83,21 +83,24 @@ namespace Sparta_Dungeon_TeamProject
                     "Wolf" => new Wolf(),
                     "Goblin" => new Goblin(),
                     "Orc" => new Orc(),
+
+                    "Cavebat" => new Cavebat(),
+                    "Ghost" => new Ghost(),
+                    "Skeleton" => new Skeleton(),
+
+                    "Adventurer" => new Adventurer(),
+                    "SmilingSlime" => new SmilingSlime(),
+                    "HeadlessSkeletion" => new HeadlessSkeletion(),
+
+                    "Swordsman" => new Swordsman(),
+                    "Mage" => new Mage(),
+                    "Archer" => new Archer(),
+
                     _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
                 };
             }
 
-            public static Monster CreateMonster(MonsterTypeChap2 type)
-            {
-                return type switch
-                {
-                    MonsterTypeChap2.Cavebat => new Cavebat(),
-                    MonsterTypeChap2.Ghost => new Ghost(),
-                    MonsterTypeChap2.Skeleton => new Skeleton(),
-                    _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
-                };
-            }
-
+ 
             /*======================================[ 챕터 1 ]=====================================================*/
 
             public enum MonsterTypeChap1
