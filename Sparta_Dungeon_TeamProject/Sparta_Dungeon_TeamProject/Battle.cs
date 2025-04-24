@@ -66,6 +66,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             BossInfo.BossDesc(Chapter);
             Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[Lv.10][BOSS][카피바라]"); // 나중에 보스 추가되면 호출해서 내용 채우기
+            Console.ResetColor();
+
+            Console.WriteLine();
             Console.WriteLine("1. 전투 시작");
             Console.WriteLine("2. 아이텝 사용");
             Console.WriteLine("3. 상태 보기");
@@ -75,15 +81,13 @@ namespace Sparta_Dungeon_TeamProject
             int result = CheckInput(1, 3);
             switch (result)
             {
-                case 1:                    
-                    break;// 보스 전투 아직 미구현
+                case 1:
+                    BossBattlechap1();
+                    break;
                 case 2:                    
                     break; // 아이템 사용 미구현
                 case 3:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
+                    Console.WriteLine("\n\n\n");
                     player.DisplayPlayerInfo();
                     Console.WriteLine();
                     Console.WriteLine("0. 나가기");
@@ -123,6 +127,27 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+
+        static void BossBattlechap1()
+        {
+            BattleTurn = 1;
+            // 보스몬스터 초기화
+            Playerturn = true;
+
+            while (true)
+            {
+                if (Playerturn) // 만약 플레이어의 턴이라면
+                {
+                    
+                }
+
+                else // 만약 플레이어의 턴이 아니라면
+                {
+                    
+                }
+            }
+
+        }
 
         static void PlayerTurn()
         {
