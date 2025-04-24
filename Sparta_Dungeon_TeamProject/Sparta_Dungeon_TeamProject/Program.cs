@@ -9,10 +9,10 @@ namespace Sparta_Dungeon_TeamProject
         private static Player player;
         private static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
         private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
-
         {
+            //강화하기에서 true
             { "강화", false },
-            //{ 다른 곳에서도 사용가능 }
+
         };
 
         // ** 실제 구동되는 메인함수 **
@@ -43,8 +43,6 @@ namespace Sparta_Dungeon_TeamProject
         // A. 기본 세팅
         static void SetData()
         {
-            GameSkill.InitSkills(); // 스킬 세팅 호출
-
             // 이름, 직업 세팅
             string name;
             while (true)
@@ -79,15 +77,9 @@ namespace Sparta_Dungeon_TeamProject
                 maxMp: job.BaseMp,
               gold: 10000
             );
-            player.GetExclusiveSkill();
-
-            Console.WriteLine();
-            Console.Write("번호입력: ");
-            int result = CheckInput(1, 5);
-
-            JobType jobType = (JobType)result;
 
             player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
+
             InitItemDb(); // 아이템 세팅 호출
         }
 
