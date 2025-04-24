@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Sparta_Dungeon_TeamProject
+﻿namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program 
+    public partial class Program
     {
         internal class DungeonEvent
         {
+            public List<Item> eventitemlist = new List<Item>();
             Random random = new Random();
             int eventNum;
             int eventValue;
@@ -17,14 +12,14 @@ namespace Sparta_Dungeon_TeamProject
             DungeonEvent()
             {
                 Console.WriteLine("주변을 살펴봅니다.");
-                eventNum = random.Next(0, 12);
-                switch (eventNum) 
+                eventNum = random.Next(0, 9);
+                switch (eventNum)
                 {
                     case 0:
-                        Shrine();
+                        statue();
                         break;
                     case 1:
-                        TreasureBox();
+                        treasureBox();
                         break;
                     case 2:
                         MerchantOrThief();
@@ -39,30 +34,36 @@ namespace Sparta_Dungeon_TeamProject
                         cryingChild();
                         break;
                     case 6:
-                        brokenSword();
+                        wanderingMage();// 떠돌이 마법사 조우
                         break;
                     case 7:
-                        fishingSpot();
+                        if (player.HasItem(eventitemlist[3]))
+                        {
+                            cat();// 고양이 조우 이벤트
+                        }
+                        else
+                        {
+                            fishingSpot();// 낚시 스폿 발견
+                        }
                         break;
                     case 8:
-                        // 고블린 조우
+                        if (player.HasItem(eventitemlist[0]))
+                        {
+                            smith();//검복구 이벤트
+                        }
+                        else 
+                        {
+                            brokenSword();//부러진 검 이벤트
+                        }
                         break;
-                    case 9:
-                        // 떠돌이 마법사 조우
-                        break;
-                    case 10:
-                        // 고양이 조우 이벤트
-                        break;
-                    case 11:
-                        // 검복구 이벤트
-                        break;
+
                 }
             }
 
-            void Shrine()//신전(체력회복, 감소)-10~30
+            void statue()//석상(체력회복, 감소)-10~30
             {
 
-                Console.WriteLine("부서진 신전에 도착했습니다.");
+                Console.WriteLine("부서진 석상을 발견했습니다.");
                 Console.WriteLine("\n1.기도한다.\n2.지나간다");
                 result = CheckInput(1, 2);
 
@@ -74,25 +75,26 @@ namespace Sparta_Dungeon_TeamProject
                         if (eventNum == 1)
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 회복되었습니다.");
-                            //player.Hp += eventValue;
+                            //player.Heal(eventValue);
                         }
                         else
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 감소하였습니다.");
-                            //player.Hp -= eventValue;
+                            //player.Heal(-eventValue);
+
                         }
                         break;
                     case 2:
-                            Console.WriteLine("신전을 지나쳤습니다.");
+                        Console.WriteLine("석상을 지나쳤습니다.");
                         break;
                 }
-
-               
                 
+
+
             }
 
             //보물상자(아이템드랍or미믹)3:7
-            void TreasureBox()
+            void treasureBox()
             {
                 Console.WriteLine("보물상자를 발견했습니다.");
                 Console.WriteLine("\n1.열어본다.\n2.지나간다");
@@ -101,7 +103,7 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     case 1:
                         eventNum = random.Next(1, 11);
-                        if (eventNum <= 3)
+                        if (eventNum <= 7)
                         {
                             Console.WriteLine("보물상자에서 아이템을 획득했습니다.");
                             //아이템 드랍
@@ -119,17 +121,17 @@ namespace Sparta_Dungeon_TeamProject
             }
 
 
-            //상인or약탈자3:7
+            //상인or약탈자7:3
             void MerchantOrThief()
             {
-                Console.WriteLine("상인과 조우했습니다.");
+                Console.WriteLine("상인처럼보이는 사람을 발견했습니다.");
                 Console.WriteLine("\n1.대화한다.\n2.지나간다");
                 result = CheckInput(1, 2);
                 switch (result)
                 {
                     case 1:
                         eventNum = random.Next(1, 11);
-                        if (eventNum <= 4)
+                        if (eventNum <= 7)
                         {
                             Console.WriteLine("상인과 대화하여 아이템을 구매했습니다.");
                             //아이템 구매
@@ -141,16 +143,16 @@ namespace Sparta_Dungeon_TeamProject
                         }
                         break;
                     case 2:
-                        Console.WriteLine("상인을 지나쳤습니다.");
+                        Console.WriteLine("사람몰래 지나갔습니다.");
                         break;
                 }
             }
 
-            //부서진 마차 이벤트
-            //-> 부서진 마차 사이에서 보물발견 OR 몬스터 발견
+            //부서진 수레 이벤트
+            //-> 부서진 수레 사이에서 보물발견 OR 함정발동
             void brokenCart()
             {
-                Console.WriteLine("부서진 마차를 발견했습니다.");
+                Console.WriteLine("부서진 수레를 발견했습니다.");
                 Console.WriteLine("\n1.조사한다.\n2.지나간다");
                 result = CheckInput(1, 2);
                 switch (result)
@@ -159,13 +161,14 @@ namespace Sparta_Dungeon_TeamProject
                         eventNum = random.Next(1, 11);
                         if (eventNum <= 5)
                         {
-                            Console.WriteLine("부서진 마차에서 보물을 발견했습니다.");
+                            Console.WriteLine("부서진 수레에서 보물을 발견했습니다.");
                             //아이템 드랍
                         }
                         else
                         {
-                            Console.WriteLine("부서진 마차에서 몬스터를 발견했습니다.");
-                            //몬스터와 전투
+                            Console.WriteLine("수레를 만지자 벽에서 함정이나왔습니다!");
+                            player.Damage(random.Next(1, 6));
+
                         }
                         break;
                     case 2:
@@ -214,9 +217,10 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     case 1:
                         eventNum = random.Next(1, 11);
-                        if (eventNum <= 3)
+                        if (eventNum <= 7)
                         {
                             Console.WriteLine("우는 아이를 발견했습니다.");
+                            //퀘스트 완료판정넣기
                             //마을로 데리고가서 보상을받음
                         }
                         else
@@ -242,17 +246,9 @@ namespace Sparta_Dungeon_TeamProject
                 switch (result)
                 {
                     case 1:
-                        eventNum = random.Next(1, 11);
-                        if (eventNum <= 7)
-                        {
-                            Console.WriteLine("부러진 검을 획득했습니다.");
-                            //아이템 획득
-                        }
-                        else
-                        {
-                            Console.WriteLine("부러진 검을 지나쳤습니다.");
-                            //아무것도 없음
-                        }
+                        Console.WriteLine("부러진 검을 획득했습니다.");
+                        player.BuyItem(eventitemlist[0]);
+                        //아이템 획득
                         break;
                     case 2:
                         Console.WriteLine("부러진 검을 지나쳤습니다.");
@@ -270,8 +266,9 @@ namespace Sparta_Dungeon_TeamProject
                 switch (result)
                 {
                     case 1:
-                            Console.WriteLine("낚시를 통해 물고기를 잡았습니다.");
-                            //물고기 획득
+                        Console.WriteLine("낚시를 통해 물고기를 잡았습니다.");
+                        player.BuyItem(eventitemlist[3]);
+                        //물고기 획득
                         break;
                     case 2:
                         Console.WriteLine("낚시 스폿을 지나쳤습니다.");
@@ -279,22 +276,154 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
 
-            //고블린 조우
-            //-> 고블린과 대화(지능+) 고블린 굴복(힘+)
-
-            //검복구 이벤트 상점 or 던전이벤트?
+            //검복구 
             //-> 검 복구시 좋은 검 OR 저주받은 검 OR 어이쿠 손이.. 3:4:3 (저주디버프 추가)
+            void smith()
+            {
+                Console.WriteLine("대장간을 발견했습니다!\n대장장이 : 자네 혹시 부러진검을 갖고있나?");
+                Console.WriteLine("대장장이 : 그 검을 고쳐줄수있다네.");
+                Console.WriteLine("대장장이 : 하지만 고치고 나서 어떤검이 나올지는 모르지.");
+                Console.WriteLine("\n1.검을 복구한다.\n2.지나간다");
+                result = CheckInput(1, 2);
+                switch (result)
+                {
+                    case 1:
+                        eventNum = random.Next(1, 11);
+                        if (eventNum <= 3)
+                        {
+                            Console.WriteLine("검이 복구되었습니다.");
+                            
+
+                            //player.SelectRemove(eventitemlist[0].Name);
+                            player.BuyItem(eventitemlist[1]);
+
+                            //아이템 드랍
+                        }
+                        else if (eventNum <= 7)
+                        {
+                            Console.WriteLine("저주받은 검이 복구되었습니다.");
+                            //player.SelectRemove(eventitemlist[0].Name);
+                            player.BuyItem(eventitemlist[2]);
+                            //아이템 드랍
+                        }
+                        else
+                        {
+                            Console.WriteLine("어이쿠 손이 미끄러졌네...\n");
+                            //player.SelectRemove(eventitemlist[0].Name);
+                            //디버프
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("대장간을 지나쳤습니다.");
+                        break;
+                }
+            }
 
             //떠돌이 마법사 조우
             //-> 랜덤 스크롤 한개 획득 OR 스탯 랜덤 +1~3
+            void wanderingMage()
+            {
+                Console.WriteLine("떠돌이 마법사를 발견했습니다.");
+                Console.WriteLine("\n1.대화한다.\n2.지나간다");
+                result = CheckInput(1, 2);
+                switch (result)
+                {
+                    case 1:
+                        eventNum = random.Next(1, 11);
+                        if (eventNum <= 7)
+                        {
+                            Console.WriteLine("떠돌이 마법사에게서 스크롤을 획득했습니다.");
+                            //아이템 드랍
+                        }
+                        else
+                        {
+                            Console.WriteLine("떠돌이 마법사에게서 지식을 얻었습니다.");
+                            Console.WriteLine("스탯+@");
+                            //스탯 랜덤 +1~3
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("떠돌이 마법사를 지나쳤습니다.");
+                        break;
+                }
+            }
 
             //고양이 조우 이벤트
             //-> 고양이 조우 시 인벤에 있는 물고기 하나 주고 돌려보냄
             //-> 고양이에게 물고기를 줄 시 마을로 복귀 시 고양이가 랜덤 템을 줌
+            void cat()
+            {
+                Console.WriteLine("고양이를 발견했습니다.");
+                Console.WriteLine("\n1.고양이에게 물고기를 준다.\n2.지나간다");
+                result = CheckInput(1, 2);
+                switch (result)
+                {
+                    case 1:
+                        if (player.HasItem(eventitemlist[3]))
+                        {
+                            //player.SelectRemove(eventitemlist[3].Name);
+                            Console.WriteLine("고양이에게 물고기를 주었습니다.");
+                            //아이템 드랍
+                        }
+                        else
+                        {
+                            Console.WriteLine("고양이에게 줄 물고기가 없습니다.");
+                        }
+                        break;
+                    case 2:
+                        Console.WriteLine("고양이를 지나쳤습니다.");
+                        break;
+                }
+            }
 
+
+            //이벤트용 아이템 리스트
+            public void EventItemList()
+            {                           // 아이템 이름 / 타입 / 능력치 / 설명 / 가격
+                eventitemlist.Add(new Item("부러진 검", 5, 5, "세월의 흔적이 보이는 부러진 검 입니다.", 0));
+                eventitemlist.Add(new Item("옛 영웅의 검", 5, 20, "옛 영웅의 검", 0));
+                eventitemlist.Add(new Item("저주받은 검", 5, 15, "기분나쁜 검 입니다.", 0));
+                eventitemlist.Add(new Item("물고기", 5, 2, "아주 싱싱해보이는 물고기이다.", 0));
+            }
 
 
         }
+
+        //이벤트 몬스터 추가
+        class Mimic : Monster
+        {
+            public Mimic() : base(
+                minLevel: 3, maxLevel: 5,
+                minAtk: 5, maxAtk: 10,
+                minDef: 10, maxDef: 20,
+                minHp: 10, maxHp: 30,
+                minDropGold: 2000, maxDropGold: 5000,
+                minDropExp: 50, maxDropExp: 100,
+                isAlive: true,
+                orgin: 0.15f)
+            {
+                Name = "미믹";
+            }
+
+        }
+        class Banshee : Monster
+        {
+            public Banshee() : base(
+                minLevel: 3, maxLevel: 5,
+                minAtk: 5, maxAtk: 10,
+                minDef: 10, maxDef: 20,
+                minHp: 10, maxHp: 30,
+                minDropGold: 2000, maxDropGold: 5000,
+                minDropExp: 50, maxDropExp: 100,
+                isAlive: true,
+                orgin: 0.15f)
+            {
+                Name = "밴시";
+            }
+
+        }
+
+
     }
-    
+
 }
