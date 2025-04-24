@@ -13,29 +13,44 @@ namespace Sparta_Dungeon_TeamProject
 
     public class SkillManager
     {
-        //==============[게임 전체 스킬 리스트]=================================================
+        //===============================[게임 전체 스킬 리스트]=================================
 
         public static List<SkillLibrary> AllSkills = new List<SkillLibrary>
         {
+            // 전사 스킬
             new SkillLibrary("불안정한 패링", "굳었던 몸을 웅크리며 반격을 준비한다.", 30, 2),
             new SkillLibrary("어렴풋이 기억나는 동작", "몸의 기억을 되살린다.", 40, 3),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            // 마법사 스킬
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
-
+            // 과학자 스킬
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            // 대장장이 스킬
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            // 영매사 스킬
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
         };
 
-        //==============[스킬명으로 스킬 찾기]=================================================
+        //===============================[스킬명으로 스킬 찾기]=================================
         public static SkillLibrary GetSkillByName(string name)
         {
             return AllSkills.FirstOrDefault(s => s.Name == name);
         }
 
-
-        //==============[직업별 기본 스킬 지급]=================================================
+        //===============================[직업별 기본 스킬 추가]=================================
         public static void FirstWarriorSkill(Player player)
         {
            player.Skills.Add(GetSkillByName("불안정한 패링"));
@@ -57,7 +72,7 @@ namespace Sparta_Dungeon_TeamProject
             player.Skills.Add(GetSkillByName(""));
         }
 
-        //==============[무작위 직업 스킬 지급]=================================================
+        //===============================[직업별 무작위 스킬 추가]=================================
         public static void RandomWarriorSkill(Player player)
         {
             Random random = new Random();
@@ -89,8 +104,7 @@ namespace Sparta_Dungeon_TeamProject
             player.Skills.Add(AllSkills[idx]);
         }
 
-        //==============[전사 스킬 사용]=================================================
-
+        //===============================[전사 스킬 사용]=================================
         public void UnsteadyParry(Player player) // 기본 - 불안정한 패링
         {
             Random random = new Random();
@@ -100,7 +114,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 player.DefUP(5); // 방어력 +5
 
-                // 반격 데미지 추가 ( 방어력 계수? )
+                // 반격 데미지 추가? ( 공격,방어력 계수? )
                 
                 Console.WriteLine("""그리운 감각이네.""");
             }
