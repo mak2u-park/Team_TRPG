@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
-        public int MaxHp { get; private set; }
+        public int MaxHp { get; private set; } = 100;
         public int Mp { get; set; }
         public int MaxMp { get; private set; }
         public int Gold { get; set; }
@@ -70,11 +70,11 @@ namespace Sparta_Dungeon_TeamProject
         // 직업 DB # SetData()
         public enum JobType
         {
-            전사 = 1,
-            마법사,
-            궁수,
-            도적,
-            성직자,
+            침묵의영매사 = 1,
+            노쇄한대장장이,
+            뜨내기마법사,
+            불법과학자,
+            은퇴한전사,
         }
 
         public class JobData
@@ -96,11 +96,11 @@ namespace Sparta_Dungeon_TeamProject
         {
             public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
             {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
-                { JobType.전사, new JobData(7, 8, 150, 50 ) },
-                { JobType.마법사, new JobData(13, 2, 50, 150) },
-                { JobType.궁수, new JobData(8, 7, 100, 100) },
-                { JobType.도적, new JobData(10, 5, 80, 120) },
-                { JobType.성직자, new JobData(5, 4, 125, 75) }
+                { JobType.침묵의영매사, new JobData(5, 2, 70, 100 ) },
+                { JobType.노쇄한대장장이, new JobData(1, 1, 50, 0) },
+                { JobType.뜨내기마법사, new JobData(8, 2, 50, 150) },
+                { JobType.불법과학자, new JobData(1, 5, 70, 120) },
+                { JobType.은퇴한전사, new JobData(5, 4, 100, 75) }
             };
         }
 
@@ -130,7 +130,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
             }
 
-            if (Job == JobType.전사 || Job == JobType.궁수 || Job == JobType.도적)
+            if (Job == JobType.침묵의영매사 || Job == JobType.노쇄한대장장이 || Job == JobType.뜨내기마법사)
             {
                 MaxHp += 10;
                 MaxMp += 5;
