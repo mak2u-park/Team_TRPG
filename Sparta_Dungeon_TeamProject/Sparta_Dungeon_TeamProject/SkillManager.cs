@@ -14,11 +14,18 @@ namespace Sparta_Dungeon_TeamProject
     public class SkillManager
     {
         //==============[게임 전체 스킬 리스트]=================================================
+
         public static List<SkillLibrary> AllSkills = new List<SkillLibrary>
         {
             new SkillLibrary("불안정한 패링", "굳었던 몸을 웅크리며 반격을 준비한다.", 30, 2),
             new SkillLibrary("어렴풋이 기억나는 동작", "몸의 기억을 되살린다.", 40, 3),
-            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4)
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+            new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
+
         };
 
         //==============[스킬명으로 스킬 찾기]=================================================
@@ -100,7 +107,7 @@ namespace Sparta_Dungeon_TeamProject
             else
             {
                 player.Heal(-20); // HP -20, 해당 피해로 사망하지 않음
-                Console.WriteLine("""젠장, 나답지 못한 걸.""");
+                Console.WriteLine("""이런... 나답지 못한 걸.""");
             }
         }
         public void UnsteadyStrike(Player player) // 1 - 어렴풋이 기억나는 동작

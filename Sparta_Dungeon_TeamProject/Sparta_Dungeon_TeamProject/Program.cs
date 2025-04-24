@@ -68,7 +68,7 @@ namespace Sparta_Dungeon_TeamProject
                 exp: 0,
                 maxExp: 100,
                 name: name,
-                job: JobType.전사,
+                job: JobType,
                 hp: job.BaseHp,
                 mp: job.BaseMp,
                 atk: job.BaseAtk,
