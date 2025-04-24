@@ -21,6 +21,8 @@ namespace Sparta_Dungeon_TeamProject
 
 
         // 4. 던전
+
+        // 던전 입장 스크립트
         static void DisplayDungeonUI(int Chapter)
         {
             Console.Clear();
@@ -72,6 +74,8 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
+
+
         static void PlayerTurn()
         {
             Console.Clear();
@@ -120,6 +124,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
+
         static void MonsterTurn()
         {
             Console.Clear();
@@ -213,6 +218,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Playerturn = false; // 몬스터의 턴으로 변경
         }
+
         static void DisplayKillMessage(Monster target)
         {
             Console.WriteLine();
