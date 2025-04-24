@@ -69,7 +69,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("캐릭터 직업을 선택해주세요.");
 
             // foreach 반복문으로 직업 개수 무관하게 모두 출력됨.
-            foreach (Player.JobType job in Enum.GetValues(typeof(Player.JobType)))
+            foreach (JobType job in Enum.GetValues(typeof(JobType)))
             {
                 Console.WriteLine($"{(int)job}. {job}");
             }
@@ -77,7 +77,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.Write("번호입력: ");
             int result = CheckInput(1, 5);
 
-            Player.JobType jobType = (Player.JobType)result;
+            JobType jobType = (JobType)result;
             JobData jobData = JobDB.Jobs[jobType];
 
             // 플레이어 이름, 직업 기본 능력치 지급

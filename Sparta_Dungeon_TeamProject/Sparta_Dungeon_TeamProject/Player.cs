@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
-        public int MaxHp { get; private set; }
+        public int MaxHp { get; private set; } = 100;
         public int Mp { get; set; }
         public int MaxMp { get; private set; }
         public int Gold { get; set; }
@@ -97,45 +97,6 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
             }
 
-        }
-
-        // 직업 DB # SetData()
-        public enum JobType
-        {
-            전사 = 1,
-            마법사,
-            과학자,
-            대장장이,
-            영매사,
-        }
-
-        public class JobData
-        {
-            public int BaseAtk { get; }
-            public int BaseDef { get; }
-            public int BaseMaxHp { get; }
-            public int BaseMaxMp { get; }
-
-            public JobData(int atk, int def, int maxHp, int maxMp)
-            {
-                BaseAtk = atk;
-                BaseDef = def;
-                BaseMaxHp = maxHp;
-                BaseMaxMp = maxMp;
-            }
-        }
-
-        // 직업별 기본 능력치 DB # SetData()
-        public static class JobDB
-        {
-            public static Dictionary<JobType, JobData> Jobs = new Dictionary<JobType, JobData>
-            {   // 직업명 / 공격력 / 방어력 / 최대체력 / 최대마나
-                { JobType.전사, new JobData(10, 10, 150, 100) },
-                { JobType.마법사, new JobData(12, 5, 60, 150) },
-                { JobType.과학자, new JobData(8, 10, 80, 200) },
-                { JobType.대장장이, new JobData(5, 5, 60, 0) },
-                { JobType.영매사, new JobData(10, 5, 80, 200) }
-            };
         }
 
         // 직업별 기본 스킬 지급 # SetData()
