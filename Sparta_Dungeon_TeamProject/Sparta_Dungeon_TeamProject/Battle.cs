@@ -16,8 +16,8 @@ namespace Sparta_Dungeon_TeamProject
         public static bool Playerturn = true; // 플레이어의 턴 여부
         public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 1; // 스테이지 변수
-        public static int Chapter = 1; // 챕터 변수
+        public static int Stage = 0; // 스테이지 변수
+        public static int Chapter = 0; // 챕터 변수
 
 
         // 4. 던전
@@ -248,7 +248,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (CheckInput(0, 1))
             {
                 case 0:
-                    Stage = 1; // 마을로 복귀하면서 스테이지 값 초기화
+                    Stage = 0; // 마을로 복귀하면서 스테이지 값 초기화
                     DisplayMainUI();
                     break;
                 case 1:
@@ -279,7 +279,7 @@ namespace Sparta_Dungeon_TeamProject
 
             if (CheckInput(0, 0) == 0)
             {
-                Stage = 1; // 사망하고 돌아가면서 스테이지 값 초기화
+                Stage = 0; // 사망하고 돌아가면서 스테이지 값 초기화
                 DisplayMainUI();
             }
         }
