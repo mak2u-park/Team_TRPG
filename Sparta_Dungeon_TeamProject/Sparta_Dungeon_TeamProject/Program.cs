@@ -8,6 +8,12 @@ namespace Sparta_Dungeon_TeamProject
     {
         private static Player player;
         private static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
+        private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
+        {
+            //강화하기에서 true
+            { "강화", false },
+
+        };
 
         // ** 실제 구동되는 메인함수 **
         static void Main(string[] args)
@@ -36,11 +42,13 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("캐릭터 이름을 입력해주세요.");
                 Console.Write("이름: ");
                 name = Console.ReadLine()!;
-                if (!string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(name))
                 {
-                    break;
+                    Console.WriteLine("잘못된 입력입니다.");
+                    Thread.Sleep(500);
+                    continue;
                 }
-                Console.Write("이름: ");
+                break;
             }
 
             Console.Clear();
@@ -182,17 +190,45 @@ namespace Sparta_Dungeon_TeamProject
         static int CheckInput(int min, int max)
         {
             int result;
+
             while (true)
             {
+                int inputLine = Console.CursorTop;
+                int column = Console.CursorLeft;
+
                 string input = Console.ReadLine()!;
                 bool isNumber = int.TryParse(input, out result);
+
                 if (isNumber)
                 {
                     if (result >= min && result <= max)
                         return result;
                 }
+
+                int error = Console.CursorTop;
                 Console.WriteLine("잘못된 입력입니다.");
+                Thread.Sleep(500);
+
+                // 에러메시지 지우고
+                Console.SetCursorPosition(0, error);
+                Console.Write(new string(' ', Console.WindowWidth));
+
+                // 입력 지우기
+                Console.SetCursorPosition(column, inputLine);
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(column, inputLine);
             }
         }
+
+        // B-1. 하단 지우기 (강화에서 사용중이나, 다른데서도 호출 가능)
+        static void ClearBottom(int fromLine, int lineCount)
+        {
+            for (int i = 0; i < lineCount; i++)
+            {
+                Console.SetCursorPosition(0, fromLine + i);
+                Console.Write(new string(' ', Console.WindowWidth));
+            }
+        }
+
     }
 }
