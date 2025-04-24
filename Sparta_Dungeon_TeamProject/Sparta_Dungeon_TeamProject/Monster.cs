@@ -71,7 +71,6 @@ namespace Sparta_Dungeon_TeamProject
             */
 
         }
-
         public static class MonsterFactory
         {
             private static Random rand = new Random();
@@ -81,7 +80,6 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return type switch
                 {
-                    MonsterType.wolf => new Wolf(),
                     MonsterType.Goblin => new Goblin(),
                     MonsterType.Orc => new Orc(),
                     _ => throw new ArgumentException($"몬스터 타입 '{type}' 은(는) 존재하지 않습니다.")
@@ -91,28 +89,28 @@ namespace Sparta_Dungeon_TeamProject
 
             public enum MonsterType
             {
-                wolf,
                 Goblin,
                 Orc
             }
-            
+
+            // 아직 스탯은 변경하지 않음
             class Wolf : Monster
             {
-                public Wolf() :base(
-                    name: "늑대",                    
-                    minLevel: 1, maxLevel: 3,
-                    minAtk: 2, maxAtk: 5,
-                    minDef: 5, maxDef: 7,
-                    minHp: 7, maxHp: 10,
-                    minDropGold: 500, maxDropGold: 1000,
-                    minDropExp: 30, maxDropExp: 50,
+                public Wolf() : base(
+                    name: "늑대",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f
-                    )
-                { 
-                }
-            }
+                    orgin: 0.1f)
+                {
 
+                }
+
+            }
 
             class Goblin : Monster
             {
@@ -126,7 +124,8 @@ namespace Sparta_Dungeon_TeamProject
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     orgin: 0.1f)
-                {           
+                {
+                    
                 }
 
             }
@@ -145,24 +144,33 @@ namespace Sparta_Dungeon_TeamProject
                     isAlive: true,
                     orgin: 0.15f)
                 {
+
                 }
 
             }
 
+
+
+
+
+
+            // 보스 몬스터
             class Capybara : Monster
             {
                 public Capybara() : base(
                     name: "카피바라",
-                    minLevel: 10, maxLevel: 10,
-                    minAtk: 15, maxAtk: 15,
-                    minDef: 20, maxDef: 20,
-                    minHp: 40, maxHp: 40,
-                    minDropGold: 10000, maxDropGold: 10000,
-                    minDropExp: 0, maxDropExp: 0,
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.0f)
-                { 
+                    orgin: 0.15f)
+                {
+
                 }
+
             }
         }
     }
