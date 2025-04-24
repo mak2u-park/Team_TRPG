@@ -41,6 +41,7 @@ namespace Sparta_Dungeon_TeamProject
         private static Random random = new Random();
 
         public Monster(
+            string name,
             int minLevel, int maxLevel,
             int minAtk, int maxAtk,
             int minDef, int maxDef,
@@ -50,6 +51,7 @@ namespace Sparta_Dungeon_TeamProject
             bool isAlive,
             float orgin)
         {
+            Name = name;
             Level = random.Next(minLevel, maxLevel + 1);
             Atk = random.Next(minAtk, maxAtk + 1);
             Def = random.Next(minDef, maxDef + 1);
@@ -91,9 +93,11 @@ namespace Sparta_Dungeon_TeamProject
                 Orc
             }
 
-            class Goblin : Monster
+            // 아직 스탯은 변경하지 않음
+            class Wolf : Monster
             {
-                public Goblin() : base(
+                public Wolf() : base(
+                    name: "늑대",
                     minLevel: 1, maxLevel: 5,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
@@ -103,7 +107,25 @@ namespace Sparta_Dungeon_TeamProject
                     isAlive: true,
                     orgin: 0.1f)
                 {
-                    Name = "고블린";
+
+                }
+
+            }
+
+            class Goblin : Monster
+            {
+                public Goblin() : base(
+                    name: "고블린",
+                    minLevel: 1, maxLevel: 5,
+                    minAtk: 3, maxAtk: 5,
+                    minDef: 5, maxDef: 10,
+                    minHp: 10, maxHp: 15,
+                    minDropGold: 1000, maxDropGold: 3000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.1f)
+                {
+                    
                 }
 
             }
@@ -112,6 +134,7 @@ namespace Sparta_Dungeon_TeamProject
             class Orc : Monster
             {
                 public Orc() : base(
+                    name: "오크",
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
@@ -121,11 +144,34 @@ namespace Sparta_Dungeon_TeamProject
                     isAlive: true,
                     orgin: 0.15f)
                 {
-                    Name = "오거";
+
                 }
 
             }
 
+
+
+
+
+
+            // 보스 몬스터
+            class Capybara : Monster
+            {
+                public Capybara() : base(
+                    name: "카피바라",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
         }
     }
 }
