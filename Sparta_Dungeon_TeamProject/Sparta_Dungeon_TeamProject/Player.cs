@@ -221,6 +221,7 @@ namespace Sparta_Dungeon_TeamProject
                         EquipSkillList.Add(selectedSkill);
                         Console.WriteLine($"'{selectedSkill.Name}' 스킬을 장착했습니다.");
                     }
+                    Thread.Sleep(4000);
                     DisplayEquipSkill();
                     break;
             }
