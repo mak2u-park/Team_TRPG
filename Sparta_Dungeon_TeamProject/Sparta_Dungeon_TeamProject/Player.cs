@@ -34,7 +34,7 @@ namespace Sparta_Dungeon_TeamProject
         private List<Item> EquipList = new List<Item>();
 
         public List<SkillLibrary> Skills = new List<SkillLibrary>();
-        public List<SkillLibrary> EquipSkills = new List<SkillLibrary>();
+        public List<SkillLibrary> EquipSkillList = new List<SkillLibrary>();
         public int InventoryCount
         {
             get
@@ -201,7 +201,8 @@ namespace Sparta_Dungeon_TeamProject
                         EquipSkillList.Add(selectedSkill);
                         Console.WriteLine($"'{selectedSkill.Name}' 스킬을 장착했습니다.");
                     }
-                    Thread.Sleep(4000);
+                    Console.ReadKey();
+                    Console.WriteLine($"'아무 키나 누르세요.");
                     DisplayEquipSkill();
                     break;
             }
@@ -217,7 +218,7 @@ namespace Sparta_Dungeon_TeamProject
                 string displayIdx = showIdx ? $"{i + 1} " : "";
                 string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
                 Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
-                $" ( 소모: {targetSkill.Cost} / 쿨타임: {targetSkill.CoolTime} / {targetSkill.Desc} )");
+                $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 
             }
         }
