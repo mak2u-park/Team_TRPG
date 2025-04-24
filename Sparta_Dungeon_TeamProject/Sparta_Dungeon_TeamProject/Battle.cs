@@ -84,7 +84,7 @@ namespace Sparta_Dungeon_TeamProject
                 case 1:
                     BossBattlechap1();
                     break;
-                case 2:                    
+                case 2:
                     break; // 아이템 사용 미구현
                 case 3:
                     Console.WriteLine("\n\n\n");
@@ -97,7 +97,7 @@ namespace Sparta_Dungeon_TeamProject
                     switch (CheckInput(0, 0))
                     {
                         case 0:
-                            EnterBossUI(); 
+                            EnterBossUI();
                             break;
                     }
                     break;
@@ -138,12 +138,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
-                    
+
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
                 {
-                    
+
                 }
             }
 
@@ -319,7 +319,7 @@ namespace Sparta_Dungeon_TeamProject
             if (!target.IsAlive)
             {
                 Console.WriteLine();
-                Console.WriteLine("    이미 사망한 몬스터는 공격할 수 없습니다.");
+                Console.WriteLine("    [!] 이미 사망한 몬스터는 공격할 수 없습니다.");
                 Console.WriteLine();
                 Thread.Sleep(500);
                 Playerturn = true;
@@ -354,11 +354,38 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 if (isCritical)
                 {
-                    string CriticalMessage = "\n\n\n\n\n    그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다. . .\n\n\n\n\n";
+                    string[] impactLines = {
+        "\n\n\n\n    ...숨을 죽인 정적.",
+        "\n\n    순간, 검이 번개처럼 내리꽂힌다!"
+    };
+
                     Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (char c in CriticalMessage) { Console.Write(c); Thread.Sleep(30); }
+                    foreach (var line in impactLines)
+                    {
+                        foreach (char c in line) { Console.Write(c); Thread.Sleep(30); }
+                        Thread.Sleep(800);
+                    }
+
+                    string criticalImpact = "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!";
+
+                    // 흔들림 2회 (화면 깜빡임)
+                    for (int i = 0; i < 2; i++)
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        string prefix = new string(' ', 4 + i % 2);
+                        Console.WriteLine("\n\n\n\n" + prefix + criticalImpact);
+                        Console.ResetColor();
+                        Thread.Sleep(120);
+                    }
+
+                    // 마지막 1회는 클리어 없이 그대로 출력 (최종 상태)
+                    Console.Clear();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n\n\n\n    " + criticalImpact);
                     Console.ResetColor();
-                    Console.WriteLine();
+
+                    Console.WriteLine("\n\n\n");
                 }
                 Console.WriteLine();
                 Console.WriteLine();
@@ -367,16 +394,18 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
-                Thread.Sleep(700);
+                Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                Console.ReadKey();
+                Console.Clear();
                 if (target.Hp <= 0)
                 {
                     KillMon++; // 몬스터 처치 수 증가
-                    target.IsAlive = false; 
+                    target.IsAlive = false;
                     DisplayKillMessage(target);
                     player.GainReward(target.DropGold, target.DropExp);
                     ExpGoldCheck();
                     Console.WriteLine();
-                    Console.WriteLine("    아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
                     Console.ReadKey();
 
                     if (battleMonsters.All(m => !m.IsAlive))
@@ -556,15 +585,15 @@ namespace Sparta_Dungeon_TeamProject
             if (Stage < 3) // 0 ~ 2 스테이지
                 allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1));
             else if (Stage < 6) // 3 ~ 5 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2)); 
-            else if  (Stage < 9)// 6 ~ 7 스테이지
+                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2));
+            else if (Stage < 9)// 6 ~ 7 스테이지
                 allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));
             else // 9 ~ 스테이지
                 allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));
 
             return Enumerable.Range(0, monsterCount)
-                    .Select(_ => 
-                    { 
+                    .Select(_ =>
+                    {
                         var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
                         return MonsterFactory.CreateMonster(randomType.ToString());
 

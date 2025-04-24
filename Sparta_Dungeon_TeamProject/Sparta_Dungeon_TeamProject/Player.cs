@@ -371,7 +371,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
 
 
-            if (Hp < 0)
+            if (Hp <= 0)
             {
                 Hp = 0;
 
