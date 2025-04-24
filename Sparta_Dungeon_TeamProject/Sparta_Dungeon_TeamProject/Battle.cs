@@ -49,7 +49,20 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-
+        static void EnterBossUI()
+        {
+            Console.Clear();
+            Console.WriteLine($"Chapter. {Chapter + 1}");
+            Console.WriteLine();
+            Console.WriteLine($"**보스 등장 - {ChapterInfo.ChapterTitle[Chapter]}**");
+            Console.WriteLine();
+            ChapterInfo.ChapterDesc(Chapter);
+            Console.WriteLine();
+            Console.WriteLine("1. 일반 공격");
+            Console.WriteLine("0. 마을로 돌아가기");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+        }
 
         
 
@@ -79,6 +92,8 @@ namespace Sparta_Dungeon_TeamProject
         static void PlayerTurn()
         {
             Console.Clear();
+            Console.WriteLine($"[ 현재 스테이지 {Stage+1} ]");
+            Console.WriteLine();
             Console.WriteLine("당신의 턴입니다.");
             Console.WriteLine();
             Console.WriteLine($"현재 턴 수 : {BattleTurn}");
@@ -128,6 +143,8 @@ namespace Sparta_Dungeon_TeamProject
         static void MonsterTurn()
         {
             Console.Clear();
+            Console.WriteLine($"[ 현재 스테이지 {Stage + 1} ]");
+            Console.WriteLine();
             Console.WriteLine("상대의 턴입니다.");
             Console.WriteLine();
             Console.WriteLine($"현재 턴 수 : {BattleTurn}");
