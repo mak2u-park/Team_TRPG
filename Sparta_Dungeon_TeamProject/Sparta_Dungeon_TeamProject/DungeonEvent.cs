@@ -393,6 +393,7 @@
         class Mimic : Monster
         {
             public Mimic() : base(
+                name: "미믹",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,
@@ -402,13 +403,13 @@
                 isAlive: true,
                 orgin: 0.15f)
             {
-                Name = "미믹";
             }
 
         }
         class Banshee : Monster
         {
             public Banshee() : base(
+                name: "밴시",
                 minLevel: 3, maxLevel: 5,
                 minAtk: 5, maxAtk: 10,
                 minDef: 10, maxDef: 20,
@@ -418,7 +419,6 @@
                 isAlive: true,
                 orgin: 0.15f)
             {
-                Name = "밴시";
             }
 
         }

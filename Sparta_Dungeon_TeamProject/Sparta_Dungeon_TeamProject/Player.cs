@@ -362,7 +362,7 @@ namespace Sparta_Dungeon_TeamProject
         public void Rest()
         {
             Gold -= 500;
-            MaxHp += Hp;
+            Hp = MaxHp;
         }
 
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리

@@ -261,7 +261,8 @@ namespace Sparta_Dungeon_TeamProject
                 double multiplier = DamageCalculation.GetRandomMultiplier();
 
                 double baseDamage = isCritical ? player.FinalAtk * 1.5 : player.FinalAtk;
-                int finalDamage = (int)Math.Ceiling(baseDamage * multiplier);
+                int finalDamage = (int)Math.Ceiling((baseDamage * multiplier - target.Def * 0.5)); // 몬스터 방어력의 절반 만큼 최종 데미지 감소
+                finalDamage = Math.Max(1, finalDamage); // 최소 데미지 1
 
                 target.Hp -= finalDamage;
 
