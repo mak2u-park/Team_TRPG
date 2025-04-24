@@ -428,12 +428,13 @@ namespace Sparta_Dungeon_TeamProject
 
     public static class MonsterSpawner
     {
+        // 스테이지에 따른 몬스터 리스트 생성
         public static List<Monster> SpawnMonsters(int Stage)
         {
             Random rand = new Random();
             Array allowedTypes;
 
-            int monsterCount = Math.Min(1 + Program.Stage / 2, 5);
+            int monsterCount = Math.Min(1 + Program.Stage / 2, 5); // 몬스터 최대치 결정 (최대 5마리)
 
             if (Stage < 3) // 0 ~ 2 스테이지
                 allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1));
@@ -488,7 +489,7 @@ namespace Sparta_Dungeon_TeamProject
                 case 0:
                     Console.WriteLine("당신은 수많은 사람들의 발자국이 남은 길을 따라 어둑한 숲 속으로 서서히 스며듭니다.");
                     Console.WriteLine("저편의 어둠 속에서는 이름 모를 짐승의 울음소리가 들려오는 듯 합니다.");
-                    Console.WriteLine("진흑 위 발자국들은 어느새 더 이상 사람의 것으로 보이지 않습니다.");
+                    Console.WriteLine("진흙 위 발자국들은 어느새 더 이상 사람의 것으로 보이지 않습니다.");
                     break;
                 case 1:
                     Console.WriteLine("동굴 입구에 다다른 당신은, 그 앞에 남겨진 몇몇 발자국에서 묘한 기운을 느낍니다.");
@@ -521,7 +522,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("숲이 한차례 더 어두워집니다. 짙은 안개와 어둠이 뒤엉킨 공간에서 갑작스레 정적이 찾아옵니다.");
                     Console.WriteLine("바스락거리는 풀잎 소리마저 멎은 순간, 거대한 형체가 모습을 드러냅니다.");
                     Console.WriteLine("북슬북슬한 털과 느긋한 기운에도 불구하고, 그 존재를 마주한 순간 당신은 깨닫습니다.");
-                    Console.WriteLine("이 숲을 지나기 위해서는 이 알 수 없는 거대한 존재와 맞서야 한다는 것을.");
+                    Console.WriteLine("이 숲을 지나기 위해서는 이 알 수 없는 거대한 존재와 맞서야 한다는 것을 말입니다.");
                     break;
                 case 1:
                     Console.WriteLine("동굴의 어둠을 뚫고 가장 깊은 곳에 들어서자, 희미한 등불을 조명삼아 한 사람이 웅크리고 있습니다.");
