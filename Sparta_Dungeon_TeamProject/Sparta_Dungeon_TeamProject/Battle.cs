@@ -55,6 +55,8 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
+
+        // 보스 등장 스크립트 (3번째 스테이지마다 등장 예정)
         static void EnterBossUI()
         {
             Console.Clear();
@@ -69,8 +71,34 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("3. 상태 보기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
-        }
 
+            int result = CheckInput(1, 3);
+            switch (result)
+            {
+                case 1:                    
+                    break;// 보스 전투 아직 미구현
+                case 2:                    
+                    break; // 아이템 사용 미구현
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                    switch (CheckInput(0, 0))
+                    {
+                        case 0:
+                            EnterBossUI(); 
+                            break;
+                    }
+                    break;
+            }
+        }
 
 
 
@@ -301,13 +329,13 @@ namespace Sparta_Dungeon_TeamProject
                     break;
                 case 1:
                     Stage++; // 다음 층으로 이동하면서 스테이지 값 +1
-                    // 3스테이지마다 다음 챕터로 이동, 
+                    // 3스테이지마다 다음 챕터로 이동
                     if (Stage % 3 == 0 && Chapter < 4)
                     {
                         DisplayDungeonUI(++Chapter);
                         return;
                     }
-                    Battle(Stage); // 이건 임시로 작성해둔 것. 추후에 다른 걸로 교체해야함
+                    Battle(Stage); // 이건 임시로 작성해둔 것. 추후 이벤트로 이동
                     break;
 
             }
