@@ -193,7 +193,7 @@ namespace Sparta_Dungeon_TeamProject
                 return;
             }
 
-            if (DamageCalculation.Evasion())
+            if (DamageCalculation.Evasion()) // 몬스터가 회피했다면
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
@@ -204,12 +204,32 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = false;
                 return;
             }
-            else
+            else // 몬스터가 회피하지 못했을 경우 
             {
-                target.Hp -= player.Atk; // 몬스터를 때리는 플레이어 데미지 계산식
+                bool isCritical = DamageCalculation.IsCritical();
+                double multiplier = DamageCalculation.GetRandomMultiplier();
+
+                double baseDamage = isCritical ? player.FinalAtk * 1.5 : player.FinalAtk;
+                int finalDamage = (int)Math.Ceiling(baseDamage * multiplier);
+
+                target.Hp -= finalDamage;
+
                 Console.Clear();
                 Console.WriteLine();
-                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {player.Atk} 만큼 피해를 입혔다!");
+                if (isCritical)
+                {
+                    string CriticalMessage = "그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다. . .";
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    foreach (char c in CriticalMessage)
+                    {
+                        Console.Write(c);
+                        Thread.Sleep(30);
+                    }
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+                Console.WriteLine();
+                Console.WriteLine($"[Lv.{target.Level}][{target.Name}] 에게 {finalDamage} 만큼 피해를 입혔다!");
                 Thread.Sleep(700);
                 if (target.Hp <= 0)
                 {
@@ -352,16 +372,27 @@ namespace Sparta_Dungeon_TeamProject
 
     public class DamageCalculation // 데미지 계산식
     {
-        public static bool Evasion() // 몬스터 회피 기능
+        private static Random rand = new Random();
+
+        public static bool Evasion() // 몬스터 회피 
         {
-            Random rand = new Random();
             return rand.Next(0, 100) < 10; // 10% 확률
+        }
+
+        public static bool IsCritical() // 플레이어 치명타
+        {
+            return rand.Next(0, 100) < 20; // 20% 확률
+        }
+
+        public static double GetRandomMultiplier() // 공격 시 피해량 0.9 ~ 1.1 랜덤 설정
+        {
+            return rand.NextDouble() * 0.2 + 0.9; // 0.9 ~ 1.1 사이 배율
         }
     }
 
 
-// 챕터를 구분하는 클래스 생성, 4챕터까지 존재
-public static class ChapterInfo
+    // 챕터를 구분하는 클래스 생성, 4챕터까지 존재
+    public static class ChapterInfo
     {
         public static string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
 
