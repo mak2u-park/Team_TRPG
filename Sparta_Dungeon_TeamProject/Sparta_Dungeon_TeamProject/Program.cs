@@ -80,6 +80,25 @@ namespace Sparta_Dungeon_TeamProject
                 gold: 10000
             );
 
+            switch (player.Job) // 기본 스킬 지급
+            {
+                case JobType.전사:
+                    SkillManager.FirstWarriorSkill(player);
+                    break;
+                case JobType.마법사:
+                    SkillManager.FirstWizardSkill(player);
+                    break;
+                case JobType.과학자:
+                    SkillManager.FirstScientistSkill(player);
+                    break;
+                case JobType.대장장이:
+                    SkillManager.FirstBlacksmithSkill(player);
+                    break;
+                case JobType.영매사:
+                    SkillManager.FirstWhispererSkill(player);
+                    break;
+            }
+
             InitItemDb(); // 아이템 세팅 호출
         }
 
