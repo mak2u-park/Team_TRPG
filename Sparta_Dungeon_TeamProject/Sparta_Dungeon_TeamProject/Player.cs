@@ -171,9 +171,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(0, 1);
+            int choice = Program.CheckInput(0, 2);
             switch (choice)
             {
+                case 1:
+                    DisplayEquipSkill();
+                    break;
                 case 0:
                     Program.DisplayMainUI();
                     break;

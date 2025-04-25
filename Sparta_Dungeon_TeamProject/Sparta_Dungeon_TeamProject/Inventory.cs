@@ -122,7 +122,7 @@ namespace Sparta_Dungeon_TeamProject
             if (result == 0)
             {
                 Console.WriteLine("대장장이: 그래 다음에 또 봅세!");
-                Thread.Sleep(2000);
+                Thread.Sleep(500);
                 DisplayInventoryUI();
                 return;
             }
@@ -154,7 +154,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력하세요.");
             Console.Write(">>");
 
-            int input = CheckInput(0, 2);
+            int input = CheckInput(1, 2);
 
             ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
@@ -167,7 +167,7 @@ namespace Sparta_Dungeon_TeamProject
                 if (isSuccess) // 강화 성공!
                 {
                     Console.WriteLine($"[{targetItem.Name}] 강화 성공! 이야~ 잘 터졌구만!");
-                    Console.WriteLine($"이제 이 아이템은 {targetItem.DisplayTypeText}이 {targetItem.Value}으로 상승했다네!");
+                    Console.WriteLine($"{targetItem.DisplayTypeText}이 {targetItem.Value} 상승했다네!");
                 }
                 else if (targetItem.Value == targetItem.MaxValue) // 강화 실패!
                 {
@@ -180,21 +180,21 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("아이고, 골드가 부족한데? 준비 좀 더 하고 오게.");
                 }
                 Console.WriteLine("Loding...");
-                Thread.Sleep(4000);
+                Thread.Sleep(500);
                 UpgradeItemUI();
             }
             else if (input == 2) // 뒤로가기 
             {
                 Console.WriteLine("대장장이: 고민이 많구만~! 그럼 이건 돌려주겠네");
                 Console.WriteLine("Loding...");
-                Thread.Sleep(4000);
+                Thread.Sleep(500);
                 UpgradeItemUI();
             }
-            else if (input == 0) // 나가기
+            else if (input == -1) // 나가기
             {
                 Console.WriteLine("대장장이: 그래, 다음에 또 봅세!");
                 Console.WriteLine("Loding...");
-                Thread.Sleep(2000);
+                Thread.Sleep(500);
                 DisplayInventoryUI();
             }
         }

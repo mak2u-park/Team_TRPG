@@ -125,9 +125,9 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Console.Clear();
                 Console.WriteLine("[직업]을 선택하세요.");
-                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
                 Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
-                Console.ForegroundColor = ConsoleColor.White;
+                Console.ResetColor();
 
                 foreach (var jobk in jobs)
                 {
