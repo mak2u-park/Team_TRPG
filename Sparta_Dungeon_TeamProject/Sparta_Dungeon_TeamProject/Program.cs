@@ -68,7 +68,7 @@ namespace Sparta_Dungeon_TeamProject
                 exp: 0,
                 maxExp: 100,
                 name: name,
-                job: JobType.전사,
+                job: JobType,
                 hp: job.BaseHp,
                 mp: job.BaseMp,
                 atk: job.BaseAtk,
@@ -78,7 +78,24 @@ namespace Sparta_Dungeon_TeamProject
               gold: 10000
             );
 
-            player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
+            switch (jobType)
+            {
+                case Player.JobType.전사:
+                    SkillManager.FirstWarriorSkill(player);
+                    break;
+                case Player.JobType.마법사:
+                    SkillManager.FirstWizzardSkill(player);
+                    break;
+                case Player.JobType.과학자:
+                    SkillManager.FirstScientistSkill(player);
+                    break;
+                case Player.JobType.대장장이:
+                    SkillManager.FirstBlacksmithSkill(player);
+                    break;
+                case Player.JobType.영매사:
+                    SkillManager.FirstWhispererSkill(player);
+                    break;
+            }
 
             InitItemDb(); // 아이템 세팅 호출
         }

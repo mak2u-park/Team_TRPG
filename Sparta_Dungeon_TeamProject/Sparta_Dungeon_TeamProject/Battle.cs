@@ -3,6 +3,7 @@ using System.ComponentModel.Design;
 using System.Numerics;
 using System.Threading;
 using System.Xml.Linq;
+using Sparta_Dungeon_TeamProject;
 using static Sparta_Dungeon_TeamProject.Monster;
 using static Sparta_Dungeon_TeamProject.Monster.MonsterFactory;
 
@@ -18,7 +19,8 @@ namespace Sparta_Dungeon_TeamProject
         public static int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
         public static int Chapter = 0; // 챕터 변수
-
+        string[] impactLines = null;
+        string criticalImpact = null;
 
         // 4. 던전
 
@@ -265,7 +267,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine($"    [Lv.{m.Level}][{m.Name}] (이)가 공격을 시도 합니다!");
                     Console.ResetColor();
                     Console.WriteLine();
-                    player.Damage(m.Atk);
+                    player.EnemyDamage(m.Atk);
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine($"    ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
@@ -355,12 +357,19 @@ namespace Sparta_Dungeon_TeamProject
 
                 Console.Clear();
                 Console.WriteLine();
-                if (isCritical)
+                if (isCritical) // 먄약 크리티컬 이라면
                 {
-                    string[] impactLines = {
-        "\n\n\n\n    ...숨을 죽인 정적.",
-        "\n\n    순간, 검이 번개처럼 내리꽂힌다!"
-    };
+                    JobType job = player.Job;
+
+                    string[] impactLines = DamageMessages.CriticalDamageMessage.ContainsKey(job)
+                        ? DamageMessages.CriticalDamageMessage[job]
+                        : new[] {
+            "\n\n\n\n    ...정적 속에", // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
+            "\n\n    강렬한 일격이 내려친다!" };
+
+                    string criticalImpact = DamageMessages.CriticalDamageFinalMessage.ContainsKey(job)
+                        ? DamageMessages.CriticalDamageFinalMessage[job][0]
+                        : "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!"; // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
 
                     Console.ForegroundColor = ConsoleColor.Red;
                     foreach (var line in impactLines)
@@ -368,8 +377,6 @@ namespace Sparta_Dungeon_TeamProject
                         foreach (char c in line) { Console.Write(c); Thread.Sleep(30); }
                         Thread.Sleep(800);
                     }
-
-                    string criticalImpact = "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!";
 
                     // 흔들림 2회 (화면 깜빡임)
                     for (int i = 0; i < 2; i++)
@@ -387,9 +394,9 @@ namespace Sparta_Dungeon_TeamProject
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("\n\n\n\n    " + criticalImpact);
                     Console.ResetColor();
-
                     Console.WriteLine("\n\n\n");
                 }
+
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
@@ -777,5 +784,54 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
+    }
+    public static class DamageMessages
+    {
+
+        // 직업별 크리티컬 데미지 메시지
+
+        public static Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
+{
+    { JobType.전사, new[]
+    {   "\n\n\n\n    고요한 전장의 메아리.",
+        "\n\n    녹슨 검이 다시 한 번, 적의 심장을 겨눈다!" }},
+
+    { JobType.마법사, new[]
+    {   "\n\n\n\n    비틀린 마법진이 휘청인다.",
+        "\n\n    그 틈을 찔러, 한 줄기 마력이 폭주한다!" }},
+
+    { JobType.영매사, new[]
+    {   "\n\n\n\n    말을 잃은 존재의 눈이 빛난다.",
+        "\n\n    고양이의 울음 대신, 사념이 퍼져간다…" }},
+
+    { JobType.대장장이, new[]
+    {   "\n\n\n\n    녹슨 망치가 손에서 덜컹거린다.",
+        "\n\n    마지막 불꽃이 담긴 한 방이 울려 퍼진다!" }},
+
+    { JobType.과학자, new[]
+    {   "\n\n\n\n    금기된 공식이 마침내 완성된다.",
+        "\n\n    불안정한 빛이 공기를 찢으며 발산된다!" }},
+    };
+
+
+        public static Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
+{ 
+    // 직업별 크리티컬 데미지 마지막 메시지
+
+    { JobType.전사, new[]
+    {"──  잊힌 전사의 일격이, 다시 역사의 피를 흐르게 했다."}},
+
+    { JobType.마법사, new[]
+    {"──  허황된 주문조차 진실의 순간엔 검이 된다."}},
+
+    { JobType.영매사, new[]
+    {"──  침묵의 일격은 소리 없이, 그러나 확실히 끝을 남긴다."}},
+
+    { JobType.대장장이, new[]
+    {"──  무너진 기억과 함께, 대지에 새긴 죄의 불꽃."}},
+
+    {JobType.과학자, new[]
+    {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
+    };
     }
 }
