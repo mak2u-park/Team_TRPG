@@ -4,16 +4,16 @@ namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
-        List<Quest> questList = new List<Quest>();
-        internal class DungeonEvent
+        public class DungeonEvent
         {
             public List<Item> eventitemlist = new List<Item>();
             Random random = new Random();
             int eventNum;
             int eventValue;
             int result;
-            public DungeonEvent()
+            public void Start()
             {
+                EventItemList();
                 Console.WriteLine("주변을 살펴봅니다.");
                 eventNum = random.Next(0, 9);
                 switch (eventNum)
@@ -78,12 +78,12 @@ namespace Sparta_Dungeon_TeamProject
                         if (eventNum == 1)
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 회복되었습니다.");
-                            //player.Heal(eventValue);
+                            player.Heal(eventValue);
                         }
                         else
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 감소하였습니다.");
-                            //player.Heal(-eventValue);
+                            player.Heal(-eventValue);
 
                         }
                         break;
@@ -164,13 +164,13 @@ namespace Sparta_Dungeon_TeamProject
                         eventNum = random.Next(1, 11);
                         if (eventNum <= 5)
                         {
-                            Console.WriteLine("부서진 수레에서 보물을 발견했습니다.");
+                            Console.WriteLine("부서진 수레에서 아이템을 발견했습니다.");
                             //아이템 드랍
                         }
                         else
                         {
-                            Console.WriteLine("수레를 만지자 벽에서 함정이나왔습니다!");
-                            player.EnemyDamage(random.Next(1, 6));
+                            Console.WriteLine("수레를 만지자 누군가 남겨놓은 함정에 데미지를 받았습니다.");
+                            player.Heal(-random.Next(1, 6));
 
                         }
                         break;
@@ -426,37 +426,7 @@ namespace Sparta_Dungeon_TeamProject
 
         }
        
-        public void QustList()
-        {
-            questList.Add(new Quest("고블린 사냥", "고블린을 사냥해주세요!", 5));
-            questList.Add(new Quest("오크 사냥", "오크를 사냥해주세요!", 3));
-            questList.Add(new Quest("광부와 수레 조사", "일주일전 들어간 광부와 수레가 돌아오지않아 조사를 의뢰받았다.", 1));
-            questList.Add(new Quest("부서진 오두막 조사", "부서진 오두막을 조사해주세요!", 1));
-            questList.Add(new Quest("아이 구하기", "며칠전 우리마을의 한 아이가 사라져 조사를 의뢰받았다.",1));
-        }
         
-
-        public class Quest
-        {
-            public string Name { get; }// 퀘스트 이름
-            public string Description { get; }// 퀘스트 설명
-            public int TargetCount { get; set; } // 퀘스트 목표 수치
-            public int Progress { get; set; } = 0; // 퀘스트 진행도
-            public bool IsCompleted { get; private set; } = false;// 퀘스트 완료 여부
-            public bool Agree { get; set; } = false;// 퀘스트 수락 여부
-            public Quest(string name, string description, int targetcount)
-            {
-                Name = name;
-                Description = description;
-                TargetCount = targetcount;
-            }
-            public void CompleteQuest()
-            {
-                IsCompleted = true;
-                Console.WriteLine($"퀘스트 '{Name}' 완료!");
-            }
-            
-        }
 
 
 
