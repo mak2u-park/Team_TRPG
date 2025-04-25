@@ -62,13 +62,64 @@ namespace Sparta_Dungeon_TeamProject
         // 1. 상태보기 # Program.cs
         public void DisplayPlayerInfo()
         {
-            Console.WriteLine($"Lv. {Level:D2} {{ {Exp}/{MaxExp} }}");
-            Console.WriteLine($"{Name} {{ {Job} }}");
-            Console.WriteLine(ExtraAtk == 0 ? $"공격력 : {Atk}" : $"공격력 : {Atk + ExtraAtk} (+{ExtraAtk})");
-            Console.WriteLine(ExtraDef == 0 ? $"방어력 : {Def}" : $"방어력 : {Def + ExtraDef} (+{ExtraDef})");
-            Console.WriteLine($"체력 : {Hp}/{MaxHp}");
-            Console.WriteLine($"마나 : {Mp}/{MaxMp}");
-            Console.WriteLine($"Gold : {Gold} G");
+            Console.Clear();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("┏━━━━━━━━━━━━━━<< 여정의 기록 >>━━━━━━━━━━━━━━┓");
+            Console.ResetColor();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"  Lv. {Level:D2}  {{ {Exp}/{MaxExp} }}");
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine($"  {{ {Job} }}  {Name}");
+            Console.ResetColor();
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("  공격력 : ");
+            if (ExtraAtk == 0)
+                Console.WriteLine($"{Atk}");
+            else
+                Console.WriteLine($"{Atk + ExtraAtk} (+{ExtraAtk})");
+
+            Console.WriteLine();
+
+            Console.Write("  방어력 : ");
+            if (ExtraDef == 0)
+                Console.WriteLine($"{Def}");
+            else
+                Console.WriteLine($"{Def + ExtraDef} (+{ExtraDef})");
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"  체력 : {Hp}/{MaxHp}");
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine($"  마나 : {Mp}/{MaxMp}");
+            Console.ResetColor();
+
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine($"  Gold : {Gold} G");
+            Console.ResetColor();
+
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
+            Console.WriteLine();
         }
 
         // 경험치 획득 # Program.cs
@@ -368,11 +419,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Hp = 0;
 
-                Console.WriteLine();
-                Console.WriteLine("    사망하셨습니다.");
-                Console.WriteLine();
-                Thread.Sleep(1000);
-                Environment.Exit(0);
+                Program.BattleFailUI();
             }
         }
 

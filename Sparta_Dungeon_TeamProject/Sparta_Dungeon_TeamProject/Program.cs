@@ -20,10 +20,11 @@ namespace Sparta_Dungeon_TeamProject
         {
             // 인트로
             Console.Clear();
-            Console.WriteLine("인트로");
-            Console.WriteLine("6즙폭발");
+            Console.WriteLine("The Hollowed");
+            Console.WriteLine("공허한 자들의 도시");
             Console.WriteLine("Enter 눌러서 시작하기");
-            Console.ReadLine();
+
+            WaitForEnter();
 
             // 게임 시작
             SetData();
@@ -43,13 +44,18 @@ namespace Sparta_Dungeon_TeamProject
         // A. 기본 세팅
         static void SetData()
         {
-            // 이름, 직업 세팅
+            // 직업 선택
+            JobType selectType = Prompt();
+            IJob job = JobDatas[selectType];
+
+
+            // 이름 입력
             string name;
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("캐릭터를 생성합니다.");
-                Console.WriteLine("캐릭터 이름을 입력해주세요.");
+                Console.WriteLine($"직업이 [{job.DisplayName}]로 정해졌습니다.");
+                Console.WriteLine($"[{job.DisplayName}]의 이름을 정해주세요.");
                 Console.Write("이름: ");
                 name = Console.ReadLine()!;
                 if (string.IsNullOrWhiteSpace(name))
@@ -61,24 +67,32 @@ namespace Sparta_Dungeon_TeamProject
                 break;
             }
 
-            // 직업 선택
-            JobType selectType = Prompt();
-            IJob job = JobDatas[selectType];
+            // 스토리 출력
+            Console.Clear();
+            Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
+            Console.WriteLine($"{job.Story}\n\n");
+            Console.WriteLine($"{job.Description}\n");
+            Console.WriteLine($"공격력: {job.BaseAtk}  |  방어력: {job.BaseDef}  |  Hp: {job.BaseHp}  |  Mp: {job.BaseMp}  |  특성: {job.Trait}");
+            Console.WriteLine();
+            Console.WriteLine("Enter키를 눌러, The Hollowed의 세계로 이동합니다.");
+            
+            WaitForEnter();
 
+            // 플레이어 정보 세팅
             player = new Player(
-                level: 1,
-                exp: 0,
-                maxExp: 100,
-                name: name,
-                job: selectType,
-                hp: job.BaseHp,
-                mp: job.BaseMp,
-                atk: job.BaseAtk,
-                def: job.BaseDef,
-                maxHp: job.BaseHp,
-                maxMp: job.BaseMp,
-                gold: 10000
-            );
+                    level: 1,
+                    exp: 0,
+                    maxExp: 100,
+                    name: name,
+                    job: job.Type,
+                    hp: job.BaseHp,
+                    mp: job.BaseMp,
+                    atk: job.BaseAtk,
+                    def: job.BaseDef,
+                    maxHp: job.BaseHp,
+                    maxMp: job.BaseMp,
+                    gold: 10000
+                );
 
             switch (player.Job) // 기본 스킬 지급
             {
@@ -206,7 +220,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // B. 입력값 체크
+        // B. 입력값 체크(숫자 입력 후, 엔터)
         public static int CheckInput(int min, int max)
         {
             int result;
@@ -240,7 +254,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // B-1. 하단 지우기 (강화에서 사용중이나, 다른데서도 호출 가능)
+        // B-1. 입력값 받고 하단 지워 일부만 새로운 UI 덮어 씌우기 용
         static void ClearBottom(int fromLine, int lineCount)
         {
             for (int i = 0; i < lineCount; i++)
@@ -250,5 +264,26 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        // B-2. 입력값 체크 (Enter만!)
+        public static void WaitForEnter()
+        {
+            while (true)
+            {
+                var key = Console.ReadKey(true);
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    return;
+                }
+
+                // 에러메시지
+                Console.WriteLine("Enter를 눌러주세요.");
+                Thread.Sleep(500);
+
+                // 에러 메시지 지우기
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
+                Console.Write(new string(' ', Console.WindowWidth));
+                Console.SetCursorPosition(0, Console.CursorTop);
+            }
+        }
     }
 }
