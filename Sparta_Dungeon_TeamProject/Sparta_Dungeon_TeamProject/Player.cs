@@ -191,7 +191,19 @@ namespace Sparta_Dungeon_TeamProject
             return rand.NextDouble() * 0.2 + 0.9; 
         }
 
-
+        public static void AttackMes(Monster target)
+        {
+            Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 {player.finalAttackDamage}만큼 피해를 입혔다!");
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+        }
         public void DisplaySkillUI()
         {
             Console.Clear();

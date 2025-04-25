@@ -578,6 +578,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 BattleManager.MonEvasionMes(target);
                 Playerturn = false;
+                return;
             }
             // 몬스터가 회피하지 못했을 경우
             else
@@ -590,18 +591,18 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     Messages.CriticalMes(player);
                 }
-            }
 
-            Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
-            Console.ReadKey();
-            Console.Clear();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 만큼 피해를 입혔다!");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+                Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                Console.ReadKey();
+                Console.Clear();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 만큼 피해를 입혔다!");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
 
 
             if (target.Hp <= 0)
@@ -886,7 +887,6 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
             Console.ResetColor();
             Thread.Sleep(700);
-            return;
         }
     }
 
