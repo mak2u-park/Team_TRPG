@@ -925,7 +925,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",3}┃                ━━  전투 실패 ━━                ┃");
+            Console.WriteLine($"{"",3}┃                ━━  전투 실패 ━━              ┃");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
@@ -946,7 +946,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",3}┃             ▣ 게임이 종료됩니다 ▣              ┃");
+            Console.WriteLine($"{"",3}┃             ▣ 게임이 종료됩니다 ▣          ┃");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
