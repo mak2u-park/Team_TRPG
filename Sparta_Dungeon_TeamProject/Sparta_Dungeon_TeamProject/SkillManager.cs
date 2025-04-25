@@ -39,7 +39,7 @@ namespace Sparta_Dungeon_TeamProject
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             // 영매사 스킬 ( 16 ~ 19 )
-            new SkillLibrary("끝맺음", "검과 꽃을 쥐었던 그 손들을 대신한다.", 20, 4),
+            new SkillLibrary("영혼에 스민", "이 땅에 쓰러진채 끝맺지 못했던 춤을 재현한다.", 20, 4),
             new SkillLibrary("", ".", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
@@ -67,7 +67,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             player.Skills.Add(GetSkillByName("불안정한 패링"));
         }
-        public static void FirstWizzardSkill(Player player)
+        public static void FirstWizardSkill(Player player)
         {
             player.Skills.Add(GetSkillByName("."));
         }
@@ -81,7 +81,7 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static void FirstWhispererSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("끝맺음"));
+            player.Skills.Add(GetSkillByName("영혼에 스민 노래"));
         }
 
         //===============================[직업별 무작위 스킬 추가]=================================
