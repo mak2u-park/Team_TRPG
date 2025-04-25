@@ -170,7 +170,7 @@ namespace Sparta_Dungeon_TeamProject
                         else
                         {
                             Console.WriteLine("수레를 만지자 벽에서 함정이나왔습니다!");
-                            player.Damage(random.Next(1, 6));
+                            player.EnemyDamage(random.Next(1, 6));
 
                         }
                         break;
