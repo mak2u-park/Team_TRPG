@@ -373,6 +373,10 @@ namespace Sparta_Dungeon_TeamProject
 
                     Console.ForegroundColor = ConsoleColor.Red;
                     Messages.PrintLinesWithSkip(impactLines, 30, 800); // 스킵 가능한 연출 메시지 출력
+                    if (Messages.Skip)
+                    {
+                        Console.Clear(); // 스킵되었을 경우 화면 정리
+                    }
                     Console.ResetColor();
 
                     // 흔들림 2회 (화면 깜빡임)
