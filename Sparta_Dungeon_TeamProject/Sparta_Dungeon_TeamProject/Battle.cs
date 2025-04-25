@@ -644,7 +644,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-        
+
         static void PlayerAttack()
         {
             Console.Clear();
@@ -704,39 +704,10 @@ namespace Sparta_Dungeon_TeamProject
             // 몬스터가 회피하지 못했을 경우
             else
             {
+                Console.Clear();
+                Console.WriteLine();
                 player.PlayerAttack(target, 1);
-                Console.Clear();
-                Console.WriteLine();
-
-                if (player.IsCritical())
-                {
-                    Messages.CriticalMes(player);
-                }
-
-<<<<<<< HEAD
-                Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
-                Console.ReadKey();
-=======
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalDamage} 만큼 피해를 입혔다!");
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                Program.WaitForEnter();
->>>>>>> develop
-                Console.Clear();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 만큼 피해를 입혔다!");
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
             }
-
 
             if (target.Hp <= 0)
             {
@@ -751,12 +722,11 @@ namespace Sparta_Dungeon_TeamProject
 
                 if (battleMonsters.All(m => !m.IsAlive))
                 {
-<<<<<<< HEAD
                     BattleSuccessUI();
                     return;
-=======
                     KillMon++; // 몬스터 처치 수 증가
                     target.IsAlive = false;
+
                     DisplayKillMessage(target);
                     player.GainReward(target.DropGold, target.DropExp);
                     ExpGoldCheck();
@@ -800,39 +770,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine($"{"",10}현재 경험치 {player.Exp}/{player.MaxExp}");
                     Console.ResetColor();
                     Console.WriteLine();
->>>>>>> develop
                 }
-            }
-
-            Playerturn = false; // 몬스터에게 턴 넘김
-
-            static void DisplayKillMessage(Monster target)
-            {
-                Console.WriteLine();
-                Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
-                Thread.Sleep(700);
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"{"",10}{target.DropGold} G 를 획득했다.");
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine($"{"",10}{target.DropExp} 만큼 경험치를 획득했다.");
-                Console.ResetColor();
-                Console.WriteLine();
-            }
-
-            static void ExpGoldCheck()
-            {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"{"",10}보유 골드 {player.Gold}");
-                Console.ResetColor();
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine($"{"",10}현재 경험치 {player.Exp}/{player.MaxExp}");
-                Console.ResetColor();
-                Console.WriteLine();
             }
         }
 

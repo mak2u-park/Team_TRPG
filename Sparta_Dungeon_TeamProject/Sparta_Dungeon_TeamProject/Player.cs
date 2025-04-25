@@ -175,19 +175,15 @@ namespace Sparta_Dungeon_TeamProject
 
             target.Hp -= finalAttackDamage;
 
+            Console.Clear();
+            Console.WriteLine();
+
             if (this.IsCritical())
             {
                 Messages.CriticalMes(this);
             }
-
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+            Console.WriteLine($"\n\n\n{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
             Console.ReadKey();
             Console.Clear();
         }
@@ -214,7 +210,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(0, 1);
+            int choice = Program.CheckInput(0, 0);
             switch (choice)
             {
                 case 0:
