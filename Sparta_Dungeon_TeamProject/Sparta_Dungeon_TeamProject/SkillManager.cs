@@ -81,7 +81,7 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static void FirstWhispererSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("영혼에 스민 노래"));
+            player.Skills.Add(GetSkillByName("영혼에 스민"));
         }
 
         //===============================[직업별 무작위 스킬 추가]=================================

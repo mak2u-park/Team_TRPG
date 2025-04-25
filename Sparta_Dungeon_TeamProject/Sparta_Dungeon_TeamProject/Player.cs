@@ -164,78 +164,31 @@ namespace Sparta_Dungeon_TeamProject
         public void DisplaySkillUI()
         {
             Console.Clear();
-            Console.WriteLine("스킬 관리");
-            Console.WriteLine("이곳에서 캐릭터의 스킬을 관리할 수 있습니다.\n");
             Console.WriteLine("[스킬 목록]");
 
-            ShowSkillList(false);
+            ShowSkillList();
 
-            Console.WriteLine("\n1. 장착 관리");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(0, 2);
+            int choice = Program.CheckInput(0, 1);
             switch (choice)
             {
-                case 1:
-                    DisplayEquipSkill();
-                    break;
                 case 0:
                     Program.DisplayMainUI();
                     break;
             }
         }
 
-        public void DisplayEquipSkill()
-        {
-            Console.Clear();
-            Console.WriteLine("스킬관리 - 장착 관리");
-            Console.WriteLine("이곳에서 캐릭터의 스킬을 장착할 수 있습니다.\n");
-            Console.WriteLine("[스킬 목록]");
-
-            ShowSkillList(true);
-
-            Console.WriteLine("\n0. 돌아가기");
-            Console.Write("장착할 스킬 번호를 입력하세요 >> ");
-
-            int input = Program.CheckInput(0, Skills.Count);
-
-            switch (input)
-            {
-
-                case 0:
-                    DisplaySkillUI();
-                    break;
-                default:
-                    SkillLibrary selectedSkill = Skills[input - 1];
-
-                    if (EquipSkillList.Contains(selectedSkill))
-                    {
-                        EquipSkillList.Remove(selectedSkill);
-                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 해제했습니다.");
-                    }
-                    else
-                    {
-                        EquipSkillList.Add(selectedSkill);
-                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 장착했습니다.");
-                    }
-                    Console.ReadKey();
-                    Console.WriteLine($"'아무 키나 누르세요.");
-                    DisplayEquipSkill();
-                    break;
-            }
-        }
-
         // 스킬 목록 출력 # Program.cs
-        public void ShowSkillList(bool showIdx)
+        public void ShowSkillList()
         {
             for (int i = 0; i < Skills.Count; i++)
             {
                 SkillLibrary targetSkill = Skills[i];
 
-                string displayIdx = showIdx ? $"{i + 1} " : "";
-                string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
-                Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
+                string displayIdx = $"{i + 1}";
+                Console.WriteLine($"- {displayIdx} {targetSkill.Name}" +
                 $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 
             }
@@ -252,27 +205,6 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return Skills.Count;
             }
-        }
-        
-        // 스킬 장착 # Program.cs
-        public void EquipSkill(SkillLibrary AllSkills)
-        {
-            if (IsEquippedSkill(AllSkills))
-            {
-                EquipSkillList.Remove(AllSkills);
-                Console.WriteLine($"{AllSkills.Name} 스킬 장착 해제");
-            }
-            else
-            {
-                EquipSkillList.Add(AllSkills);
-                Console.WriteLine($"{AllSkills.Name} 스킬 장착 완료");
-            }
-        }
-
-        // 스킬 장착 목록 # Program.cs
-        public List<SkillLibrary> GetListSkill()
-        {
-            return Skills;
         }
 
         public void AddGold(int amount) // 골드를 추가해주는 매서드
