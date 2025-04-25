@@ -19,8 +19,6 @@ namespace Sparta_Dungeon_TeamProject
         public static int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
         public static int Chapter = 0; // 챕터 변수
-        string[] impactLines = null;
-        string criticalImpact = null;
 
         // 4. 던전
 
@@ -291,6 +289,7 @@ namespace Sparta_Dungeon_TeamProject
         }
         static void PlayerAttack()
         {
+
             Console.Clear();
             Console.WriteLine();
             Console.WriteLine();
@@ -362,30 +361,34 @@ namespace Sparta_Dungeon_TeamProject
 
                 Console.Clear();
                 Console.WriteLine();
+
                 if (isCritical) // 먄약 크리티컬 이라면
                 {
                     JobType job = player.Job;
 
-                    string[] impactLines = DamageMessages.CriticalDamageMessage.ContainsKey(job)
-                        ? DamageMessages.CriticalDamageMessage[job]
+                    string[] impactLines = Messages.CriticalDamageMessage.ContainsKey(job)
+                        ? Messages.CriticalDamageMessage[job]
                         : new[] {
             "\n\n\n\n    ...정적 속에", // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
             "\n\n    강렬한 일격이 내려친다!" };
 
-                    string criticalImpact = DamageMessages.CriticalDamageFinalMessage.ContainsKey(job)
-                        ? DamageMessages.CriticalDamageFinalMessage[job][0]
+                    string criticalImpact = Messages.CriticalDamageFinalMessage.ContainsKey(job)
+                        ? Messages.CriticalDamageFinalMessage[job][0]
                         : "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!"; // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
 
                     Console.ForegroundColor = ConsoleColor.Red;
-                    foreach (var line in impactLines)
+                    Messages.PrintLinesWithSkip(impactLines, 30, 800); // 스킵 가능한 연출 메시지 출력
+                    if (Messages.Skip)
                     {
-                        foreach (char c in line) { Console.Write(c); Thread.Sleep(30); }
-                        Thread.Sleep(800);
+                        Console.Clear(); // 스킵되었을 경우 화면 정리
                     }
+                    Console.ResetColor();
 
                     // 흔들림 2회 (화면 깜빡임)
                     for (int i = 0; i < 2; i++)
                     {
+                        if (Messages.Skip) break;
+
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Red;
                         string prefix = new string(' ', 4 + i % 2);
@@ -412,6 +415,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("    ▶ 아무 키나 눌러 다음으로 넘어가세요.");
                 Console.ReadKey();
                 Console.Clear();
+
                 if (target.Hp <= 0)
                 {
                     KillMon++; // 몬스터 처치 수 증가
@@ -759,8 +763,12 @@ namespace Sparta_Dungeon_TeamProject
 
         }
     }
-    public static class DamageMessages
+
+    public static class Messages
     {
+
+        public static bool Skip = false; // 메시지 스킵 기능
+        public static Thread inputThread; // 메시지 스킵 기능
 
         // 직업별 크리티컬 데미지 메시지
 
@@ -791,7 +799,7 @@ namespace Sparta_Dungeon_TeamProject
         public static Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
 { 
     // 직업별 크리티컬 데미지 마지막 메시지
-
+    
     { JobType.전사, new[]
     {"──  잊힌 전사의 일격이, 다시 역사의 피를 흐르게 했다."}},
 
@@ -807,5 +815,58 @@ namespace Sparta_Dungeon_TeamProject
     {JobType.과학자, new[]
     {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
     };
+
+        public static void StartSkipListener()
+        {
+            Skip = false;
+            inputThread = new Thread(() =>
+            {
+                Console.ReadKey(true);
+                Skip = true;
+            });
+            inputThread.IsBackground = true;
+            inputThread.Start();
+        }
+
+        public static void PrintMessageWithSkip(string message, int delay = 100)
+        {
+            foreach (char c in message)
+            {
+                if (Skip) break;
+                Console.Write(c);
+
+                int elapsed = 0;
+                while (elapsed < delay)
+                {
+                    if (Skip) break;
+                    Thread.Sleep(10);
+                    elapsed += 10;
+                }
+            }
+        }
+
+        public static void PrintLinesWithSkip(string[] lines, int charDelay = 30, int lineDelay = 800)
+        {
+            StartSkipListener();
+
+            foreach (string line in lines)
+            {
+                PrintMessageWithSkip(line, charDelay);
+                if (Skip) break;
+                Thread.Sleep(lineDelay);
+
+                int elapsed = 0;
+                while (elapsed < lineDelay)
+                {
+                    if (Skip) break;
+                    Thread.Sleep(10);
+                    elapsed += 10;
+                }
+            }
+
+            Skip = false; // 다음 출력을 위해 초기화
+
+        }
     }
 }
+

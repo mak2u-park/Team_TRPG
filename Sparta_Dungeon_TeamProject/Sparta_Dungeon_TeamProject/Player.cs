@@ -57,7 +57,6 @@ namespace Sparta_Dungeon_TeamProject
             Mp = mp;
             MaxMp = maxMp;
             Gold = gold;
-
         }
 
         // 1. 상태보기 # Program.cs
@@ -84,19 +83,32 @@ namespace Sparta_Dungeon_TeamProject
                 Console.Clear();
                 Console.WriteLine();
                 string levelUpMessage = "\n\n\n\n\n    쌓여온 경험이 당신을 한층 더 성장시켰습니다.\n\n\n\n\n";
+
+                Messages.StartSkipListener(); // 스킵 감지 시작
+
                 Console.ForegroundColor = ConsoleColor.Yellow;
-
-                foreach (char c in levelUpMessage) { Console.Write(c); Thread.Sleep(80); }
-
+                Messages.PrintMessageWithSkip(levelUpMessage, 80); // 스킵 가능한 출력
+                if (Messages.Skip)
+                {
+                    Console.Clear(); // 스킵되었을 경우 화면 정리
+                }
                 Console.ResetColor();
+
+                if (!Messages.Skip)
+                {
+                    Thread.Sleep(800); // 스킵되지 않은 경우에만 약간 멈춤
+                }
+
+                Messages.Skip = false; // 초기화
                 Console.WriteLine();
                 Console.WriteLine();
+
+                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
+                {
+                    SkillManager.LearnSkill(this);
+                }   
             }
-
         }
-
-        // 직업별 기본 스킬 지급 # SetData()
-
 
         public void DisplaySkillUI()
         {

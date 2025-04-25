@@ -14,6 +14,8 @@ namespace Sparta_Dungeon_TeamProject
         public int Cost { get; }
         public int Cool { get; }
 
+
+
         // 스킬명, 스킬 설명, 소모값, 쿨타임
         public SkillLibrary (string name, string desc , int cost, int cool)
         {
