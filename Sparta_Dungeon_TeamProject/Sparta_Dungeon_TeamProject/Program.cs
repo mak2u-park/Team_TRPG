@@ -80,8 +80,6 @@ namespace Sparta_Dungeon_TeamProject
                 gold: 10000
             );
 
-            //player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
-
             InitItemDb(); // 아이템 세팅 호출
         }
 

@@ -57,7 +57,6 @@ namespace Sparta_Dungeon_TeamProject
             Mp = mp;
             MaxMp = maxMp;
             Gold = gold;
-
         }
 
         // 1. 상태보기 # Program.cs
@@ -103,12 +102,13 @@ namespace Sparta_Dungeon_TeamProject
                 Messages.Skip = false; // 초기화
                 Console.WriteLine();
                 Console.WriteLine();
+
+                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
+                {
+                    SkillManager.LearnSkill(this);
+                }   
             }
-
         }
-
-        // 직업별 기본 스킬 지급 # SetData()
-
 
         public void DisplaySkillUI()
         {
