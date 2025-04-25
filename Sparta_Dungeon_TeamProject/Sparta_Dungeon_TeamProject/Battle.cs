@@ -14,11 +14,16 @@ namespace Sparta_Dungeon_TeamProject
         public static string GetMonsterStatus(Monster mon) => mon.IsAlive ? $"[HP:{mon.Hp}]" : "[사망]";
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
-        public static bool Playerturn = true; // 플레이어의 턴 여부
-        public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
         public static int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
-        public static int Chapter = 0; // 챕터 변수
+        public static int Chapter = Stage / 3; // 챕터 변수
+        public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
+
+        public static bool Playerturn = true; // 플레이어의 턴 여부
+        public static bool BossStage = false; // 보스스테이지 여부
+
+        public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
+
 
         // 4. 던전
 
@@ -79,6 +84,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
             var m = battleMonsters[0];
+            BossStage = true;
 
             Console.Clear();
             Console.WriteLine();
@@ -114,8 +120,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (result)
             {
                 case 1:
-                    HandleNextStage(++Stage); // 보스 전투가 아직 미구현이라서 바로 다음 스테이지로 넘어감
-                    // BossBattlechap(Chapter);
+                    BossBattlechap(Chapter);
                     break;
                 case 2:
                     Console.WriteLine();
@@ -172,6 +177,7 @@ namespace Sparta_Dungeon_TeamProject
 
         static void BossBattlechap(int chapter)
         {
+            KillMon = 0;
             BattleTurn = 1;
             battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
             Playerturn = true;
@@ -248,9 +254,8 @@ namespace Sparta_Dungeon_TeamProject
 
             switch (Stage)
             {
-                case 2:
-                    PlayerActionNormal();
-                    // PlayerActionBoss1(); 구현 X 임시로 일반 선택지 넣어두었음
+                case 2:                    
+                    PlayerActionBoss1(); 
                     break;
                 case 5:
                     PlayerActionNormal();
@@ -313,6 +318,9 @@ namespace Sparta_Dungeon_TeamProject
 
         static void PlayerActionBoss1()
         {
+            bool left = false;
+            bool right = false;
+
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
@@ -327,13 +335,25 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (CheckInput(1, 5))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
                 case 2:
                     break; //스킬창 불러오기
                 case 3:
+                    // 왼쪽 살피기
+                    left = true;
+                    Playerturn = false;
+                    // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                    break;
+                case 4:
+                    // 오른쪽 살피기
+                    right = true;
+                    Playerturn = false;
+                    // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                    break;
+                case 5:
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
@@ -527,8 +547,68 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
             Console.ReadKey();
 
+            // 보스 스테이지일 경우 기믹 추가
+            if (BossStage)
+            {
+                BossGimmick(Chapter);
+            }
+
             Playerturn = true; // 플레이어 턴으로 변경
             BattleTurn++; // 전체적인 한 턴이 끝났으니 턴 수 증가
+
+        }
+
+        // 보스 기믹 모음(보스 스테이지일 경우에만 실행)
+        public static void BossGimmick(int chapter)
+        {
+            switch (chapter)
+            {
+                case 0:
+                    // 1스테이지 보스, 카피바라의 기믹 "겁없는 멧돼지"                                      
+                    if (GimmickReady % 2 == 0)
+                    {
+                        // 첫턴은 기믹 준비 단계, 주변에서 흥분한 멧돼지의 울음소리가 들린다
+                        Console.WriteLine("기믹이 준비중입니다.");
+                    }
+                    else
+                    {
+                        // PlayerActionBoss1()에서 왼쪽을 선택한 경우
+                        // PlayerActionBoss1()에서 오른쪽을 선택한 경우
+                        // PlayerActionBoss1()에서 공격을을 선택한 경우
+                        Console.WriteLine("기믹이 준비되었습니다.");
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.ReadKey();
+                    break;
+                case 1:
+                    // 2스테이지 보스, 후회 하는 모험가의 기믹 "후회는 그림자처럼"
+                    if (GimmickReady % 3 == 1)
+                    {
+                        Console.WriteLine("모험가의 후회가 짙어진다...");
+                        // '자책' 상태 돌입
+                        // 2턴간 방어력 큰 폭으로 감소, 영구적인 공격력 증가,  다음턴 2회 공격
+                    }
+                    else if (GimmickReady % 3 == 2)
+                    {
+
+                        // 방어력 감소된 상태, 이번 턴만 2회 공격
+                        Console.WriteLine("2회 공격.");
+                    }
+                    else
+                    {
+                        // 방어력 원상태로 복구, 증가한 공격력은 유지, 1회 공격
+                        Console.WriteLine("모험가가 방어태세를 취합니다");
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
         }
         static void PlayerAttack()
         {
@@ -762,6 +842,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
+            BossStage = false;
+
             switch (CheckInput(0, 1))
             {
                 case 0:
@@ -782,7 +864,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (num)
             {
                 case 0:
-                    DisplayDungeonUI(++Chapter);
+                    DisplayDungeonUI(Chapter);
                     break;
                 case 1:
                     Battle(Stage);
