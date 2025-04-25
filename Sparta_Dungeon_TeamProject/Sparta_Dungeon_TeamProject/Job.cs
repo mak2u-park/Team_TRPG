@@ -38,6 +38,11 @@ namespace Sparta_Dungeon_TeamProject
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
+        public int BaseAtk => 1000; // 테스트용으로 잠깐 수정
+        public int BaseCri => 30;
+        public int BaseDef => 2;
+        public int BaseHp => 70;
+        public int BaseMp => 100;
         public int Atk => 10;
         public int Cri => 30;
         public int Def => 2;

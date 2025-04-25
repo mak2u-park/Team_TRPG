@@ -405,7 +405,7 @@ namespace Sparta_Dungeon_TeamProject
                 minDropGold: 2000, maxDropGold: 5000,
                 minDropExp: 50, maxDropExp: 100,
                 isAlive: true,
-                orgin: 0.15f)
+                origin: 0.15f)
             {
             }
 
@@ -422,7 +422,7 @@ namespace Sparta_Dungeon_TeamProject
                 minDropGold: 2000, maxDropGold: 5000,
                 minDropExp: 50, maxDropExp: 100,
                 isAlive: true,
-                orgin: 0.15f)
+                origin: 0.15f)
             {
             }
 

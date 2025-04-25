@@ -178,7 +178,7 @@ namespace Sparta_Dungeon_TeamProject
             int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
             finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
 
-            target.Hp -= finalAttackDamage;
+            target.CurrentHp -= finalAttackDamage;
 
             Console.Clear();
             Console.WriteLine();
