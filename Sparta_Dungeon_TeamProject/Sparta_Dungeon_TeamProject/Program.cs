@@ -12,7 +12,6 @@ namespace Sparta_Dungeon_TeamProject
         {
             //강화하기에서 true
             { "강화", false },
-
         };
 
         // ** 실제 구동되는 메인함수 **
@@ -20,9 +19,28 @@ namespace Sparta_Dungeon_TeamProject
         {
             // 인트로
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
             Console.WriteLine("The Hollowed");
-            Console.WriteLine("공허한 자들의 도시");
-            Console.WriteLine("Enter 눌러서 시작하기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("한때 무언가를 간절히 바랐던 이들이");
+            Console.WriteLine("스스로를 비워내며, 이 도시에 도착합니다.");
+            Console.WriteLine();
+            Console.WriteLine("잊고 싶은 기억, 치유되지 않은 상처,");
+            Console.WriteLine("돌이킬 수 없는 후회, 아니면... 그저 호기심.");
+            Console.WriteLine();
+            Console.WriteLine("그리고 누군가는 진실을 마주하기 위해,");
+            Console.WriteLine("던전 깊은 곳을 향해 나아갑니다.");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Enter를 눌러, 여정을 시작하세요.");
+            Console.ResetColor();
 
             WaitForEnter();
 
@@ -74,8 +92,10 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{job.Description}\n");
             Console.WriteLine($"공격력: {job.BaseAtk}  |  방어력: {job.BaseDef}  |  Hp: {job.BaseHp}  |  Mp: {job.BaseMp}  |  특성: {job.Trait}");
             Console.WriteLine();
-            Console.WriteLine("Enter키를 눌러, The Hollowed의 세계로 이동합니다.");
-            
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Enter키를 눌러, 마을로 입장합니다.");
+            Console.ResetColor();
+
             WaitForEnter();
 
             // 플레이어 정보 세팅
@@ -132,7 +152,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 5);
+            int result = CheckInput(1, 5);
 
             switch (result)
             {
@@ -151,9 +171,10 @@ namespace Sparta_Dungeon_TeamProject
                 case 5:
                     DisplayRestUI();
                     break;
-                case 0:
+                case -1:
                     Console.WriteLine("게임을 종료합니다.");
                     Thread.Sleep(1000);
+                    // `키를 눌러 종료
                     Environment.Exit(0);
                     break;
             }
@@ -175,11 +196,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 1);
+            int result = CheckInput(1, 1);
 
             switch (result)
             {
-                case 0:
+                case -1:
                     DisplayMainUI();
                     break;
                 case 1: // 스킬 관리
@@ -188,20 +209,20 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 5. 휴식
+        // 5. 휴식기능
         static void DisplayRestUI()
         {
             Console.Clear();
-            Console.WriteLine("**휴식하기**");
+            Console.WriteLine("** 여관 **");
             Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.Gold} G)");
             Console.WriteLine("1. 휴식하기");
             Console.WriteLine("0. 나가기");
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 1);
+            int result = CheckInput(1, 1);
             switch (result)
             {
-                case 0:
+                case -1:
                     DisplayMainUI();
                     break;
                 case 1:
@@ -231,6 +252,12 @@ namespace Sparta_Dungeon_TeamProject
                 int column = Console.CursorLeft;
 
                 string input = Console.ReadLine()!;
+
+                if (input == "`")
+                {
+                    return -1;
+                }
+
                 bool isNumber = int.TryParse(input, out result);
 
                 if (isNumber)

@@ -174,13 +174,13 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(0, 2);
+            int choice = Program.CheckInput(1, 1);
             switch (choice)
             {
                 case 1:
                     DisplayEquipSkill();
                     break;
-                case 0:
+                case -1:
                     Program.DisplayMainUI();
                     break;
             }
@@ -198,12 +198,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("\n0. 돌아가기");
             Console.Write("장착할 스킬 번호를 입력하세요 >> ");
 
-            int input = Program.CheckInput(0, Skills.Count);
+            int input = Program.CheckInput(1, Skills.Count);
 
             switch (input)
             {
 
-                case 0:
+                case -1:
                     DisplaySkillUI();
                     break;
                 default:
