@@ -1,10 +1,6 @@
 using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using Sparta_Dungeon_TeamProject;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Sparta_Dungeon_TeamProject
 {
@@ -16,49 +12,58 @@ namespace Sparta_Dungeon_TeamProject
         public int MaxExp { get; private set; }
         public string Name { get; private set; }
         public JobType Job { get; private set; }
+
+        // 기본 스탯
         public int Atk { get; private set; }
         public int Cri { get; private set; }
         public int Def { get; private set; }
+
+        // 체력·마나
         public int Hp { get; private set; }
-        public int MaxHp { get; private set; } = 100;
-        public int Mp { get; set; }
+        public int MaxHp { get; private set; }
+        public int Mp { get; private set; }
         public int MaxMp { get; private set; }
+
         public int Gold { get; set; }
 
+        // 장비에 따라 추가되는 스탯
         public int ExtraAtk { get; set; }
         public int ExtraDef { get; set; }
 
-        public int FinalAtk => Atk + ExtraAtk; // 최종 공격력
-        public int FinalDef => Def + ExtraDef; // 최종 방어력
+        // 최종 계산된 스탯
+        public int FinalAtk => Atk + ExtraAtk;
+        public int FinalDef => Def + ExtraDef;
 
-        private List<Item> Inventory = new List<Item>();
-        private List<Item> EquipList = new List<Item>();
+        private List<Item> Inventory = new();
+        private List<Item> EquipList = new();
 
-        public List<SkillLibrary> Skills = new List<SkillLibrary>();
-        public List<SkillLibrary> EquipSkillList = new List<SkillLibrary>();
+        public List<SkillLibrary> Skills = new();
+        public List<SkillLibrary> EquipSkillList = new();
 
-        public int InventoryCount
-        {
-            get
-            {
-                return Inventory.Count;
-            }
-        }
+        public int InventoryCount => Inventory.Count;
 
-        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int cri, int def, int hp, int maxHp, int mp, int maxMp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job,
+            int atk, int cri, int def, int maxHp, int maxMp, int gold)
         {
             Level = level;
             Exp = exp;
             MaxExp = maxExp;
             Name = name;
             Job = job;
+
+            // 기본 스탯 세팅
             Atk = atk;
             Cri = cri;
             Def = def;
-            Hp = hp;
+
+            // 최대치 세팅
             MaxHp = maxHp;
-            Mp = mp;
             MaxMp = maxMp;
+
+            // 생성 직후 현재 hp/mp를 전부 채워 줌
+            Hp = MaxHp;
+            Mp = MaxMp;
+
             Gold = gold;
         }
 
@@ -281,14 +286,14 @@ namespace Sparta_Dungeon_TeamProject
             if (IsEquipped(item))
             {
                 EquipList.Remove(item);
-                if (item.Type == 0) ExtraAtk -= item.Value;
-                else ExtraDef -= item.Value;
+                ExtraAtk -= item.Atk;
+                ExtraDef -= item.Def;
             }
             else
             {
                 EquipList.Add(item);
-                if (item.Type == 0) ExtraAtk += item.Value;
-                else ExtraDef += item.Value;
+                ExtraAtk += item.Atk;
+                ExtraDef += item.Def;
             }
         }
 
@@ -406,28 +411,6 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public void DefUP(int num)
-        {
-            num += ExtraDef;
-        }
-
-        public void UP(int num)
-        {
-            num += ExtraDef;
-        }
-
-        public void SelectRemove(string name)//아이템을 찾아서 삭제하는 메서드
-        {
-            foreach (var item in Inventory)
-            {
-                if (item.Name == name)
-                {
-                    Inventory.Remove(item);
-                    break;
-                }
-            }
-        }
-
         // 체력 회복 메서드
         public bool HealHp(int cost, int amount)
         {
@@ -451,6 +434,28 @@ namespace Sparta_Dungeon_TeamProject
                 return true;
             }
             return false;
+        }
+
+        public void DefUP(int num)
+        {
+            num += ExtraDef;
+        }
+
+        public void UP(int num)
+        {
+            num += ExtraDef;
+        }
+
+        public void SelectRemove(string name)//아이템을 찾아서 삭제하는 메서드
+        {
+            foreach (var item in Inventory)
+            {
+                if (item.Name == name)
+                {
+                    Inventory.Remove(item);
+                    break;
+                }
+            }
         }
     }
 }

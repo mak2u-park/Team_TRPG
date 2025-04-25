@@ -60,11 +60,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("장착하실 아이템 번호를 입력하세요");
             Console.Write(">>");
 
-            int result = CheckInput(0, player.InventoryCount);
+            int result = CheckInput(1, player.InventoryCount);
 
             switch (result)
             {
-                case 0:
+                case -1:
                     DisplayInventoryUI();
                     break;
 
@@ -122,8 +122,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("대장장이에게 보여줄 아이템 번호를 입력하세요.");
             Console.Write(">>");
 
-            int result = CheckInput(0, player.InventoryCount);
-            if (result == 0)
+            int result = CheckInput(1, player.InventoryCount);
+            if (result == -1)
             {
                 Console.WriteLine("대장장이: 그래 다음에 또 봅세!");
                 Thread.Sleep(500);
@@ -158,7 +158,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력하세요.");
             Console.Write(">>");
 
-            int input = CheckInput(1, 2);
+            int input = CheckInput(-1, 2);
 
             ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);

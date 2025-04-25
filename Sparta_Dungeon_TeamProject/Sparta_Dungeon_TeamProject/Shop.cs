@@ -71,11 +71,11 @@
             Console.WriteLine("구매하실 아이템 번호를 입력하세요.");
             Console.Write(">>");
 
-            int result = CheckInput(0, itemDb.Length);
+            int result = CheckInput(-1, itemDb.Length);
 
             switch (result)
             {
-                case 0:
+                case -1:
                     DisplayShopUI();
                     break;
 
