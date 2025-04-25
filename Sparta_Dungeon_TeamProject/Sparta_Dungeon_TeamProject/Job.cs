@@ -34,12 +34,12 @@ namespace Sparta_Dungeon_TeamProject
     {
         public JobType Type => JobType.전사;
         public string DisplayName => "은퇴한 전사";
-        public string Story => "한 때 전장에서 목숨을 바치던 전사였습니다." +
+        public string Story => "한 때 전장에서 목숨을 바치던 전사였습니다.\n" +
             "\n은퇴 후, 전장을 떠나 산지 벌써 10년이 지난 지금," +
-            "\n아직도 세상은 어지러운 상황...전사가 부족합니다." +
+            "\n아직도 세상은 어지러운 상황...전사가 부족합니다.\n" +
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
         public string Description => "잃어버린 전투 감각으로 데미지를" +
-            "\n       랜덤하게 입히는 트릭형 전사입니다.\n";
+            "\n       랜덤하게 입히는 트릭형 전사입니다.";
         public int BaseAtk => 5;
         public int BaseDef => 2;
         public int BaseHp => 70;
@@ -53,11 +53,11 @@ namespace Sparta_Dungeon_TeamProject
         public string DisplayName => "마법사";
         public string Story => "재능이 미천해 마법사의 탑에서 쫒겨난 후," +
             "\n무시당하기 싫어 허풍만 늘었습니다.\n" +
-            "\n\n뛰어난 사람들에게 질투를 느끼며," +
+            "\n뛰어난 사람들에게 질투를 느끼며," +
             "\n던전에서 발견되는 마법서를 얻기 위해" +
-            "\n가벼운 마음을 갖고 전장으로 향합니다.\n";
+            "\n가벼운 마음을 갖고 전장으로 향합니다.";
         public string Description => "떠돌이 마법사로서 세계를 돌아다니며," +
-            "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.\n";
+            "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.";
         public int BaseAtk => 8;
         public int BaseDef => 2;
         public int BaseHp => 50;
@@ -73,7 +73,7 @@ namespace Sparta_Dungeon_TeamProject
             "\n금기된 재료들을 가지고 위험한 연구를 계속합니다.\n" +
             "\n자신만의 독특한 기술로 세상에 맞서려 합니다.\n";
         public string Description => "금기된 독성 중심의 스킬을 사용하며," +
-            "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.\n";
+            "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.";
         public int BaseAtk => 2;
         public int BaseDef => 5;
         public int BaseHp => 50;
@@ -88,7 +88,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Story => "주변 사람들로부터 죽은 줄 알았던 제자를" +
             "\n던전에서 봤다는 소문을 듣게 되어 제자를 찾아 나섭니다.\n" +
             "\n제자의 비극 이후 제련을 멈췄지만" +
-            "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
+            "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.";
         public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
         public int BaseAtk => 1;
         public int BaseDef => 1;
@@ -104,9 +104,9 @@ namespace Sparta_Dungeon_TeamProject
         public string Story => "어느날 갑자기 목소리를 잃고" +
             "\n세상과 단절된 인생을 살고 있습니다.\n" +
             "\n대신 고양이와의 깊은 교감을 통해" +
-            "\n세상과 소통하며 살아갑니다.\n";
+            "\n세상과 소통하며 살아갑니다.";
         public string Description => "고양이와의 교감을 통해 이로운 효과를 얻지만," +
-            "\n       추가 스킬을 받지 못하는 독특한 제약을 가진 직업입니다.\n";
+            "\n       추가 스킬을 받지 못하는 독특한 제약을 가진 직업입니다.";
         public int BaseAtk => 5;
         public int BaseDef => 4;
         public int BaseHp => 100;
@@ -138,11 +138,11 @@ namespace Sparta_Dungeon_TeamProject
                     if (selected)
                     {
                         Console.WriteLine($"    └ {jobk.Value.Description}");
-                        Console.WriteLine($"    └ Atk:{jobk.Value.BaseAtk}  |  " +
-                            $"Def:{jobk.Value.BaseDef}  |  " +
+                        Console.WriteLine($"    └ 공격력:{jobk.Value.BaseAtk}  |  " +
+                            $"방어력:{jobk.Value.BaseDef}  |  " +
                             $"Hp:{jobk.Value.BaseHp}  |  " +
                             $"Mp:{jobk.Value.BaseMp}");
-                        Console.WriteLine($"    └ Trait: {jobk.Value.Trait}");
+                        Console.WriteLine($"    └ 특성: {jobk.Value.Trait}");
                         Console.WriteLine();
                     }
                 }
@@ -150,7 +150,6 @@ namespace Sparta_Dungeon_TeamProject
                 var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Enter && current.HasValue)
                 {
-                    ShowJobFinalUI(jobs[current.Value]);
                     return current.Value;
                 }
 
@@ -166,26 +165,6 @@ namespace Sparta_Dungeon_TeamProject
                     }
                 }
             }
-        }
-
-        static void ShowJobFinalUI(IJob job)
-        {
-            Console.Clear();
-            Console.WriteLine($"직업명: {job.DisplayName}\n");
-            Console.WriteLine($"{job.Story}\n");
-            Console.WriteLine($"{job.Description}\n");
-
-            Console.WriteLine("기본 장비 지급: 무기1, 방어구1, 포션1");
-            Console.WriteLine("3개의 스킬 슬롯이 열렸습니다.\n");
-
-            Console.WriteLine($"공격력: {job.BaseAtk}  |  방어력: {job.BaseDef}  |  Hp: {job.BaseHp}  |  Mp: {job.BaseMp}  |  특성: {job.Trait}");
-            Console.WriteLine();
-            Console.WriteLine("1. 이 직업으로 선택하겠습니다.");
-            Console.WriteLine("2. 다른 직업을 더 보겠습니다.");
-
-            int input = CheckInput(1, 2);
-            if (input == 2)
-                return; // 다시 Prompt()로 복귀
         }
     }
 }
