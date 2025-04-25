@@ -87,7 +87,8 @@ namespace Sparta_Dungeon_TeamProject
             switch (result)
             {
                 case 1:
-                    BossBattlechap1();
+                    HandleNextStage(++Stage); // 보스 전투가 아직 미구현이라서 바로 다음 스테이지로 넘어감
+                    // BossBattlechap1();
                     break;
                 case 2:
                     break; // 아이템 사용 미구현
@@ -522,8 +523,7 @@ namespace Sparta_Dungeon_TeamProject
                     Battle(Stage);
                     break;
                 case 2:
-                    // EnterBossUI();  보스 UI까지 정상적으로 나오는 것을 확인, 보스전이 구현되지 않아 일시정지
-                    Battle(Stage);   // 임시로 일반 몬스터 배틀을 넣어놓았음
+                    EnterBossUI();  
                     break;
             }
         }
