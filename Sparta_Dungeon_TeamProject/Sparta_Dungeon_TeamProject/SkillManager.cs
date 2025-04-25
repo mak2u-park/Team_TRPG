@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,17 @@ namespace Sparta_Dungeon_TeamProject
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
         };
 
+        //===============================[직업별 스킬 분류]=================================
+
+        public static Dictionary<JobType, List<SkillLibrary>> JobSkills = new()
+        {
+            { JobType.전사, AllSkills.GetRange(0, 4) },
+            { JobType.마법사, AllSkills.GetRange(4, 4) },
+            { JobType.과학자, AllSkills.GetRange(8, 4) },
+            { JobType.대장장이, AllSkills.GetRange(12, 4) },
+            { JobType.영매사, AllSkills.GetRange(16, 4) }
+        };
+
         //===============================[스킬명으로 스킬 찾기]=================================
         public static SkillLibrary GetSkillByName(string name)
         {
@@ -73,12 +85,32 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         //===============================[직업별 무작위 스킬 추가]=================================
-        public static void RandomWarriorSkill(Player player)
+        public static void LearnSkill(Player player)
         {
+            if (!JobSkills.TryGetValue(player.Job, out var skillList))
+            {
+                return;
+            }
+
+            var unlearnedSkills = skillList
+                .Where(skill => !player.Skills.Contains(skill))
+                .ToList();
+
+            if (unlearnedSkills.Count == 0)
+            {
+                Console.WriteLine("당신 모든 스킬을 배웠습니다.");
+                return;
+            }
+
             Random random = new Random();
-            int idx = random.Next(1, 4); // 1~3 랜덤
-            player.Skills.Add(AllSkills[idx]);
+            SkillLibrary randomSkill = unlearnedSkills[random.Next(unlearnedSkills.Count)];
+            player.Skills.Add(randomSkill);
+
+            Console.WriteLine($"당신은 {randomSkill.Name} 스킬을 배웠습니다!");
         }
+
+            
+        
         public static void RandomWizzardSkill(Player player)
         {
             Random random = new Random();
