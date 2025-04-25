@@ -143,12 +143,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
             Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
             Console.WriteLine();
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 인벤토리");
-            Console.WriteLine("3. 상점");
-            Console.WriteLine("4. 던전입장");
-            Console.WriteLine("5. 휴식하기");
-            Console.WriteLine("0. 게임종료");
+            Console.WriteLine("[1] 상태 보기");
+            Console.WriteLine("[2] 인벤토리");
+            Console.WriteLine("[3] 상점");
+            Console.WriteLine("[4] 던전입장");
+            Console.WriteLine("[5] 휴식하기");
+            Console.WriteLine("[~`] 게임종료");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
@@ -191,8 +191,8 @@ namespace Sparta_Dungeon_TeamProject
             player.DisplayPlayerInfo(); // # Player.cs
 
             Console.WriteLine();
-            Console.WriteLine("1. 스킬 관리");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("[1] 스킬 관리");
+            Console.WriteLine("[0] 나가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
@@ -209,36 +209,73 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 5. 휴식기능
+        // 5. 휴식기능 - hp, mp 회복
         static void DisplayRestUI()
         {
             Console.Clear();
             Console.WriteLine("** 여관 **");
-            Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.Gold} G)");
-            Console.WriteLine("1. 휴식하기");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine($"보유 골드 : {player.Gold} G\n");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("여관 주인: 안녕하세요, 여관에 오신 것을 환영합니다.");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("[체력 회복 메뉴]");
+            Console.WriteLine("[1] 따뜻한 죽 한 그릇 (300G, +20 HP)");
+            Console.WriteLine("[2] 고기 듬뿍 스튜 (700G, +50 HP)");
+            Console.WriteLine("[3] 푸짐한 정식 (1200G, 전체 회복)");
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.WriteLine("[마나 회복 메뉴]");
+            Console.WriteLine("[1] 1세대 실험약 (300G, +30 MP)");
+            Console.WriteLine("[2] 강화형 실험약 (700G, +80 MP)");
+            Console.WriteLine("[3] 미공개 프로토타입 (1200G, 전체 회복)");
+
+            Console.WriteLine("[1] 체력회복하기");
+            Console.WriteLine("[2] 마나회복하기");
+            Console.WriteLine("[~`] 나가기");
             Console.WriteLine("\n원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(1, 1);
+            int result = CheckInput(1, 2);
             switch (result)
             {
                 case -1:
                     DisplayMainUI();
                     break;
+
                 case 1:
-                    if (player.Gold >= 500)
-                    {
-                        player.Rest(); // 체력 회복
-                        Console.WriteLine("휴식을 완료했습니다. [Enter]");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Gold 가 부족합니다. [Enter]");
-                    }
-                    Console.ReadLine();
-                    DisplayMainUI();
+                    if (player.HealHp(300, 20))
+                        Console.WriteLine("\n죽을 먹고 따뜻해졌다!");
+                    else Console.WriteLine("골드가 부족합니다.");
+                    break;
+                case 2:
+                    if (player.HealHp(700, 50))
+                        Console.WriteLine("\n고기 듬뿍 스튜를 먹고 힘이 솟는다!");
+                    else Console.WriteLine("골드가 부족합니다.");
+                    break;
+                case 3:
+                    if (player.HealHp(1200, player.MaxHp))
+                        Console.WriteLine("\n정식을 먹고 체력이 전부 회복되었다!");
+                    else Console.WriteLine("골드가 부족합니다.");
+                    break;
+                case 4:
+                    if (player.GainMp(300, 30))
+                        Console.WriteLine("\n실험약을 마시고 정신이 또렷해진다.");
+                    else Console.WriteLine("골드가 부족합니다.");
+                    break;
+                case 5:
+                    if (player.GainMp(700, 80))
+                        Console.WriteLine("\n강화형 약물이 효과를 발휘했다!");
+                    else Console.WriteLine("골드가 부족합니다.");
+                    break;
+                case 6:
+                    if (player.GainMp(1200, player.MaxMp))
+                        Console.WriteLine("\nMP가 완전히 회복되었습니다.");
+                    else Console.WriteLine("골드가 부족합니다.");
                     break;
             }
+            WaitForEnter();
+            DisplayRestUI();
         }
 
         // B. 입력값 체크(숫자 입력 후, 엔터)

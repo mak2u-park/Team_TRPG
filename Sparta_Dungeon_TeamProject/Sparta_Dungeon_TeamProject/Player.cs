@@ -47,7 +47,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             Level = level;
             Exp = exp;
-            MaxExp = maxExp; 
+            MaxExp = maxExp;
             Name = name;
             Job = job;
             Atk = atk;
@@ -157,7 +157,7 @@ namespace Sparta_Dungeon_TeamProject
                 if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
                 {
                     SkillManager.LearnSkill(this);
-                }   
+                }
             }
         }
 
@@ -253,7 +253,7 @@ namespace Sparta_Dungeon_TeamProject
                 return Skills.Count;
             }
         }
-        
+
         // 스킬 장착 # Program.cs
         public void EquipSkill(SkillLibrary AllSkills)
         {
@@ -462,5 +462,29 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        // 체력 회복 메서드
+        public bool HealHp(int cost, int amount)
+        {
+            if (Gold >= cost && Hp < MaxHp)
+            {
+                Gold -= cost;
+                Heal(amount);
+                return true;
+            }
+            return false;
+        }
+
+        // 마나 회복 메서드
+        public bool GainMp(int cost, int amount)
+        {
+            if (Gold >= cost && Mp < MaxMp)
+            {
+                Gold -= cost;
+                Mp += amount;
+                if (Mp > MaxMp) Mp = MaxMp; // 최대 마나 초과 방지
+                return true;
+            }
+            return false;
+        }
     }
 }
