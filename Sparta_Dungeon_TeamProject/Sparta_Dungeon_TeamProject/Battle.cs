@@ -504,8 +504,8 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             Console.WriteLine();
-            Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
-            Console.ReadKey();
+            Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+            Program.WaitForEnter();
 
             Playerturn = true; // 플레이어 턴으로 변경
             BattleTurn++; // 전체적인 한 턴이 끝났으니 턴 수 증가
@@ -637,8 +637,8 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine();
                 Console.WriteLine();
-                Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
-                Console.ReadKey();
+                Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                Program.WaitForEnter();
                 Console.Clear();
 
                 if (target.Hp <= 0)
@@ -649,7 +649,7 @@ namespace Sparta_Dungeon_TeamProject
                     player.GainReward(target.DropGold, target.DropExp);
                     ExpGoldCheck();
                     Console.WriteLine();
-                    Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
                     Console.ReadKey();
 
                     if (battleMonsters.All(m => !m.IsAlive))
@@ -809,9 +809,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine($"{"",7}아무 키나 누르면 종료됩니다...");
+            Console.WriteLine($"{"",7}엔터를 누르면 종료됩니다...");
             Console.ResetColor();
-            Console.ReadKey();
+            Program.WaitForEnter();
             Environment.Exit(0);
         }
 
