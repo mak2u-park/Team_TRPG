@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Numerics;
 using System.Threading;
@@ -32,15 +32,15 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine("┃                                               ┃");
-            Console.WriteLine($"┃          Chapter. {Chapter + 1} - Stage {Stage + 1}                 ┃");
-            Console.WriteLine("┃                                               ┃");
+            Console.WriteLine("                                                ");
+            Console.WriteLine($"           Chapter. {Chapter + 1} - Stage {Stage + 1}");
+            Console.WriteLine("                                                ");
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine("┃             <<던전 입장 - " + ChapterInfo.ChapterTitle[Chapter] + ">>               ┃");
+            Console.WriteLine("              <<던전 입장 - " + ChapterInfo.ChapterTitle[Chapter] + ">>               ");
             Console.WriteLine("┛━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
@@ -81,25 +81,36 @@ namespace Sparta_Dungeon_TeamProject
             var m = battleMonsters[0];
 
             Console.Clear();
-            Console.WriteLine($"Chapter. {Chapter + 1} - Stage ({Stage + 1})");
             Console.WriteLine();
-            Console.WriteLine($"**보스 등장 - {ChapterInfo.ChapterTitle[Chapter]}**");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+            Console.WriteLine($"                   Chapter. {Chapter + 1} - Stage {Stage + 1}                  ");
+            Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+            Console.ResetColor();
             Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"                     >> 보스 등장: {ChapterInfo.ChapterTitle[Chapter]} <<");
+            Console.ResetColor();
+            Console.WriteLine();
+
             BossInfo.BossDesc(Chapter);
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"    [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
+            Console.WriteLine($"[Lv.{m.Level}] ▶▶ {m.Name} ◀◀");
             Console.ResetColor();
-
+            Console.WriteLine(GetMonsterStatus(m));
             Console.WriteLine();
-            Console.WriteLine("1. 전투 시작");
-            Console.WriteLine("2. 아이텝 사용");
-            Console.WriteLine("3. 상태 보기");
+
+            Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+            Console.WriteLine("┃         1. 앞으로 나아가기            ┃");
+            Console.WriteLine("┃         2. 상태보기                   ┃");
+            Console.WriteLine("┛━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(1, 3);
+            int result = CheckInput(1, 2);
             switch (result)
             {
                 case 1:
@@ -107,7 +118,16 @@ namespace Sparta_Dungeon_TeamProject
                     // BossBattlechap(Chapter);
                     break;
                 case 2:
-                    break; // 아이템 사용 미구현
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                    break;
                 case 3:
                     Console.WriteLine("\n\n\n");
                     player.DisplayPlayerInfo();
@@ -961,37 +981,94 @@ namespace Sparta_Dungeon_TeamProject
             switch (Chapter)
             {
                 case 0:
-                    Console.WriteLine("숲이 한차례 더 어두워집니다. 짙은 안개와 어둠이 뒤엉킨 공간에서 갑작스레 정적이 찾아옵니다.");
-                    Console.WriteLine("바스락거리는 풀잎 소리마저 멎은 순간, 거대한 형체가 모습을 드러냅니다.");
-                    Console.WriteLine("북슬북슬한 털과 느긋한 기운에도 불구하고, 그 존재를 마주한 순간 당신은 깨닫습니다.");
-                    Console.WriteLine("이 숲을 지나기 위해서는 이 알 수 없는 거대한 존재와 맞서야 한다는 것을 말입니다.");
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("                          숲이 한차례 더 어두워집니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("            짙은 안개와 어둠이 뒤엉킨 공간에서 정적이 찾아옵니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("    바스락거리는 풀잎 소리마저 멎은 순간, 거대한 형체가 모습을 드러냅니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("    북슬북슬한 털과 느긋한 기운. 그러나, 그 존재를 마주한 순간 본능적으로 깨닫습니다.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("          이 숲을 지나기 위해서는, 이 알 수 없는 존재와 맞서야만 합니다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     break;
+
                 case 1:
-                    Console.WriteLine("동굴의 어둠을 뚫고 가장 깊은 곳에 들어서자, 희미한 등불을 조명삼아 한 사람이 웅크리고 있습니다.");
-                    Console.WriteLine("이곳에서, 당신은 또 다른 자신을 마주한 듯한 기분에 사로잡힙니다.");
-                    Console.WriteLine("후회와 두려움에 사로잡힌 모험가.");
-                    Console.WriteLine("그는 이 동굴의 어둠만큼이나 무거운 감정을 짊어진 채, 당신의 앞을 가로막고 있습니다.");
-                    Console.WriteLine("어디선가 고양이의 울음소리가 들리는 듯 합니다.");
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("                 동굴의 어둠을 뚫고 가장 깊은 곳.");
+                    Console.WriteLine();
+                    Console.WriteLine("         희미한 등불 아래, 한 사람이 조용히 웅크리고 있습니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("            그의 실루엣은 마치, 또 다른 '당신' 같습니다.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("         후회와 두려움을 짊어진 모험가가 당신의 앞을 가로막습니다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("          어디선가 고양이의 울음소리가 조용히 들려옵니다.");
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine();
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     break;
+
                 case 2:
-                    Console.WriteLine("머리에 왕관을 쓴 이름 모를 짐승이 다시 등장했습니다.");
-                    Console.WriteLine("어두운 숲에서 만났던 존재와는 달리 조용하지만 결연한 눈빛으로 당신을 바라봅니다.");
-                    Console.WriteLine("그 눈빛에는 흔들림 없는 확신과 사명감이 담겨있는듯 합니다.");
-                    Console.WriteLine("당신은 이유 모를 답답함과 불쾌함에 휩싸입니다.");
-                    Console.WriteLine("결국, 당신은 그 답답함을 긁어 내려는듯 전투 자세를 취합니다.");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("          머리에 왕관을 쓴 이름 모를 짐승이 다시 등장했습니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("     그 눈빛은 조용하지만 결연합니다. 흔들림 없는 사명감이 담겨 있습니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("           당신은 이유 모를 불쾌함과 답답함에 사로잡힙니다.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine();
+                    Console.WriteLine("         그 감정은 칼끝으로 이어지고, 전투는 피할 수 없습니다.");
+                    Console.WriteLine();
+                    Console.ResetColor();
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     break;
+
                 case 3:
-                    Console.WriteLine("어둠이 잡초보다 짙게 깔린 던전의 하층부,");
-                    Console.WriteLine("당신은 마침내 그 존재와 마주합니다.");
-                    Console.WriteLine("");
-                    Console.WriteLine("검은 고양이는 호기심 어린 눈빛으로 당신을 바라봅니다.");
-                    Console.WriteLine("그 눈동자에는 어떠한 적의도, 악의도 없습니다.");
-                    Console.WriteLine("오히려 당신을 새로운 장난감으로 인식하는 듯.");
-                    Console.WriteLine("살랑이는 꼬리와 느긋한 몸짓에서 순수한 기쁨만이 묻어납니다.");
-                    Console.WriteLine("");
-                    Console.WriteLine("바로 그 순수함이 당신의 마음을 천천히, 그러나 확실하게 사로잡습니다.");
-                    Console.WriteLine("당신은 알 수 없는 설렘과 기대, 그리고 벗어날 수 없는 매혹에 휩싸여,");
-                    Console.WriteLine("검은 고양이와의 마지막 놀이를 시작합니다.\r\n");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.WriteLine("            던전의 하층부. 어둠이 잡초보다 짙게 깔린 그곳.");
+                    Console.WriteLine();
+                    Console.WriteLine("           검은 고양이는 느긋한 몸짓으로 당신을 바라봅니다.");
+                    Console.WriteLine();
+                    Console.WriteLine("         그 눈엔 적의도, 악의도 없습니다. 단지, 순수한 호기심.");
+                    Console.WriteLine();
+                    Console.WriteLine("          꼬리를 살랑이며, 그는 장난감을 맞이하듯 기뻐합니다.");
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("    그리고 당신은 알 수 없는 매혹에 사로잡힌 채, 마지막 '놀이'를 시작합니다.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                    Console.WriteLine();
+                    Console.ResetColor();
                     break;
             }
 
