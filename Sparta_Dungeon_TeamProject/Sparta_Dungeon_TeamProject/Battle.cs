@@ -42,7 +42,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}                                                ");
-            Console.WriteLine($"{"",10}Chapter. {Chapter + 1} - Stage {Stage + 1}");
+            Console.WriteLine($"{"",10}Chapter. {Chapter + 1} - Stage {Stage % 3 + 1}");
             Console.WriteLine($"{"",3}                                                ");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
@@ -97,7 +97,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",12}Chapter. {Chapter + 1} - {Stage + 1}");
+            Console.WriteLine($"{"",12}Chapter. {Chapter + 1} - {Stage % 3 + 1}");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
@@ -222,7 +222,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"{"",7}┏━━━━━━━[ Chapter. {Chapter + 1} - {Stage + 1} ]━━━━━━━┓");
+            Console.WriteLine($"{"",7}┏━━━━━━━[ Chapter. {Chapter + 1} - {Stage % 3 + 1} ]━━━━━━━┓");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine($"{"",10}! 당신의 턴입니다 !");
@@ -506,7 +506,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine($"┏━━━━━━━[ Chapter. {Chapter + 1} - {Stage + 1}   ]━━━━━━━┓");
+            Console.WriteLine($"┏━━━━━━━[ Chapter. {Chapter + 1} - {Stage % 3 + 1}   ]━━━━━━━┓");
             Console.ResetColor();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Red;
@@ -725,69 +725,58 @@ namespace Sparta_Dungeon_TeamProject
                 player.PlayerAttack(target, 1);
             }
 
-            if (target.Hp <= 0)
+            if (target.CurrentHp <= 0)
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
+                target.CurrentHp = 0; // 죽은 몬스터의 체력을 0으로 고정
                 DisplayKillMessage(target);
                 player.GainReward(target.DropGold, target.DropExp);
                 ExpGoldCheck();
                 Console.WriteLine();
-                Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+                Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
                 Console.ReadKey();
 
                 if (battleMonsters.All(m => !m.IsAlive))
                 {
                     BattleSuccessUI();
                     return;
-                    KillMon++; // 몬스터 처치 수 증가
-                    target.IsAlive = false;
-
-                    DisplayKillMessage(target);
-                    player.GainReward(target.DropGold, target.DropExp);
-                    ExpGoldCheck();
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                    Console.ReadKey();
-
-                    if (battleMonsters.All(m => !m.IsAlive))
-                    {
-                        BattleSuccessUI();
-                        return;
-                    }
                 }
 
-                Playerturn = false; // 몬스터에게 턴 넘김
-
-                static void DisplayKillMessage(Monster target)
-                {
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
-                    Thread.Sleep(700);
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"{"",10}{target.DropGold} G 를 획득했다.");
-                    Console.ResetColor();
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine($"{"",10}{target.DropExp} 만큼 경험치를 획득했다.");
-                    Console.ResetColor();
-                    Console.WriteLine();
-                }
-
-                static void ExpGoldCheck()
-                {
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
-                    Console.WriteLine($"{"",10}보유 골드 {player.Gold}");
-                    Console.ResetColor();
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine($"{"",10}현재 경험치 {player.Exp}/{player.MaxExp}");
-                    Console.ResetColor();
-                    Console.WriteLine();
-                }
+                
             }
+
+            Playerturn = false; // 몬스터에게 턴 넘김
+
+            static void DisplayKillMessage(Monster target)
+            {
+                Console.WriteLine();
+                Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
+                Thread.Sleep(700);
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"{"",10}{target.DropGold} G 를 획득했다.");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine($"{"",10}{target.DropExp} 만큼 경험치를 획득했다.");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+
+            static void ExpGoldCheck()
+            {
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"{"",10}보유 골드 {player.Gold}");
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine($"{"",10}현재 경험치 {player.Exp}/{player.MaxExp}");
+                Console.ResetColor();
+                Console.WriteLine();
+            }
+
         }
 
 
@@ -817,7 +806,7 @@ namespace Sparta_Dungeon_TeamProject
             // 전투 요약
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine();
-            Console.WriteLine($"{"",7}▶ Chapter. {Chapter + 1} - {Stage + 1}");
+            Console.WriteLine($"{"",7}▶ Chapter. {Chapter + 1} - {Stage % 3 + 1}");
             Console.WriteLine();
             Console.WriteLine($"{"",7}▶ 처치한 몬스터 수 : {KillMon}");
             Console.WriteLine();
@@ -895,7 +884,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine($"{"",7}▶ 마지막 위치 : 스테이지 {Stage + 1}");
+            Console.WriteLine($"{"",7}▶ 마지막 위치 : Chapter. {Chapter + 1} - {Stage % 3 + 1}");
             Console.WriteLine($"{"",7}▶ Lv.{player.Level:D2} [{player.Name}]");
             Console.WriteLine($"{"",10}체력 : {player.Hp}/{player.MaxHp}");
             Console.WriteLine($"{"",10}마나  : {player.Mp}/{player.MaxMp}");
@@ -1028,15 +1017,3 @@ namespace Sparta_Dungeon_TeamProject
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

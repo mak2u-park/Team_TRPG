@@ -74,7 +74,7 @@ namespace Sparta_Dungeon_TeamProject
             Origin = origin;
             /*
             레벨, 공격력, 방어력, 체력, 드랍골드, 드랍경헙치는 일정 범위 이내에서 랜덤한 int값으로 정해진다.
-            최종 공격력, 방어력, 체력은 레벨과 orgin(태생)에 따라 영향을 받으며 좋은 태생을 가지고 있을수록
+            최종 공격력, 방어력, 체력은 레벨과 origin(태생)에 따라 영향을 받으며 좋은 태생을 가지고 있을수록
             레벨이 높을때 더 높은 최종 스탯을 갖는다.
             */
             
@@ -450,7 +450,7 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
+                    minHp: 5000, maxHp: 5000,
                     dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
