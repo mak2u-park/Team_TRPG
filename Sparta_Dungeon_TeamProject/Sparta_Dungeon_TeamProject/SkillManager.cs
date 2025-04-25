@@ -57,15 +57,15 @@ namespace Sparta_Dungeon_TeamProject
         }
         public static void FirstWizzardSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName(""));
+            player.Skills.Add(GetSkillByName("."));
         }
         public static void FirstScientistSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName(""));
+            player.Skills.Add(GetSkillByName("."));
         }
         public static void FirstBlacksmithSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName(""));
+            player.Skills.Add(GetSkillByName("."));
         }
         public static void FirstWhispererSkill(Player player)
         {

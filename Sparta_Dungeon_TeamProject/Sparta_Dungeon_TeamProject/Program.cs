@@ -62,40 +62,25 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             // 직업 선택
-            IJob job = JobDatas[Prompt()];
+            JobType selectType = Prompt();
+            IJob job = JobDatas[selectType];
+
             player = new Player(
                 level: 1,
                 exp: 0,
                 maxExp: 100,
                 name: name,
-                job: JobType,
+                job: selectType,
                 hp: job.BaseHp,
                 mp: job.BaseMp,
                 atk: job.BaseAtk,
                 def: job.BaseDef,
                 maxHp: job.BaseHp,
                 maxMp: job.BaseMp,
-              gold: 10000
+                gold: 10000
             );
 
-            switch (jobType)
-            {
-                case Player.JobType.전사:
-                    SkillManager.FirstWarriorSkill(player);
-                    break;
-                case Player.JobType.마법사:
-                    SkillManager.FirstWizzardSkill(player);
-                    break;
-                case Player.JobType.과학자:
-                    SkillManager.FirstScientistSkill(player);
-                    break;
-                case Player.JobType.대장장이:
-                    SkillManager.FirstBlacksmithSkill(player);
-                    break;
-                case Player.JobType.영매사:
-                    SkillManager.FirstWhispererSkill(player);
-                    break;
-            }
+            //player.GetExclusiveSkill(); // 직업별 기본 스킬 지급 
 
             InitItemDb(); // 아이템 세팅 호출
         }

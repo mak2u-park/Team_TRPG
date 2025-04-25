@@ -35,6 +35,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             ChapterInfo.ChapterDesc(Chapter);
             Console.WriteLine();
+
+            // 최종 보스 만날 시 붉은 글씨 출력
             if (Chapter == 3)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -53,6 +55,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
                 case 1:
                     Battle(Stage);
+
                     break;
             }
 
@@ -500,16 +503,28 @@ namespace Sparta_Dungeon_TeamProject
                     DisplayMainUI();
                     break;
                 case 1:
-                    Stage++; // 다음 층으로 이동하면서 스테이지 값 +1
-                    // 3스테이지마다 다음 챕터로 이동
-                    if (Stage % 3 == 0 && Chapter < 4)
-                    {
-                        DisplayDungeonUI(++Chapter);
-                        return;
-                    }
-                    Battle(Stage); // 이건 임시로 작성해둔 것. 추후 이벤트로 이동
+                    HandleNextStage(++Stage); // 다음 층으로 이동하면서 스테이지 값 +1
                     break;
+            }
+ 
+        }
 
+        // 다음스테이지가 보스스테이지인지 구분하는 메서드
+        private static void HandleNextStage(int stage) 
+        {
+            int num = Stage % 3;
+            switch (num)
+            {
+                case 0:
+                    DisplayDungeonUI(++Chapter);
+                    break;
+                case 1:
+                    Battle(Stage);
+                    break;
+                case 2:
+                    // EnterBossUI();  보스 UI까지 정상적으로 나오는 것을 확인, 보스전이 구현되지 않아 일시정지
+                    Battle(Stage);   // 임시로 일반 몬스터 배틀을 넣어놓았음
+                    break;
             }
         }
 
@@ -589,25 +604,87 @@ namespace Sparta_Dungeon_TeamProject
 
             int monsterCount = Math.Min(1 + Program.Stage / 2, 5); // 몬스터 최대치 결정 (최대 5마리)
 
+
             if (Stage < 3) // 0 ~ 2 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1));
+                if (Stage == 2) 
+                {
+                    monsterCount = 1;
+                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));   // 3 스테이지(보스)
+                }
+                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1)); // 1 ~ 2 스테이지
             else if (Stage < 6) // 3 ~ 5 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2));
+                if (Stage == 5)
+                {
+                    monsterCount = 1;
+                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));   // 6 스테이지(보스)
+                }
+                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2)); // 4 ~ 5 스테이지
             else if (Stage < 9)// 6 ~ 7 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));
+                if (Stage == 8)
+                {
+                    monsterCount = 1;
+                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));    // 9 스테이지(보스)
+                }
+               else  allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));  // 7 ~ 8 스테이지
             else // 9 ~ 스테이지
-                allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));
+                if (Stage == 11)
+                {
+                    monsterCount = 1;
+                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));    // 12 스테이지(보스)
+            }
+                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));  // 10 ~ 11 스테이지
 
-            return Enumerable.Range(0, monsterCount)
-                    .Select(_ =>
-                    {
-                        var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                        return MonsterFactory.CreateMonster(randomType.ToString());
 
-                    }).ToList();
+            switch (Stage)
+            {
+                case 2:    // 3스테이지에서 보스로 카피바라가 등장
+                    return
+                        Enumerable.Range(0, monsterCount)
+                        .Select(_ =>
+                        {
+                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                            return MonsterFactory.CreateMonster("Capybara");
+                        }).ToList(); 
+                case 5:    // 6스테이지에서 보스로 카피바라가 등장
+                    return
+                        Enumerable.Range(0, monsterCount)
+                        .Select(_ =>
+                        {
+                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                            return MonsterFactory.CreateMonster("RegretfulAdventurer");
+                        }).ToList();
+                case 8:    // 9스테이지에서 보스로 카피바라가 등장
+                    return
+                        Enumerable.Range(0, monsterCount)
+                        .Select(_ =>
+                        {
+                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                            return MonsterFactory.CreateMonster("GiantCapybara");
+                        }).ToList();
+                case 11:    // 12스테이지에서 보스로 카피바라가 등장
+                    return
+                        Enumerable.Range(0, monsterCount)
+                        .Select(_ =>
+                        {
+                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                            return MonsterFactory.CreateMonster("BlackCat");
+                        }).ToList();
+                default:
+                    return
+                    Enumerable.Range(0, monsterCount)
+                        .Select(_ =>
+                        {
+                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
+                            return MonsterFactory.CreateMonster(randomType.ToString());
+
+                        }).ToList();
+            }
+            
 
         }
     }
+
+
 
     public class DamageCalculation // 데미지 계산식
     {
