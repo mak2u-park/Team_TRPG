@@ -169,6 +169,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"   ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
             Console.WriteLine($"   ▶ 현재 MP : {player.Mp}/{player.MaxMp}");
+            Console.ResetColor();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("   > 전투가 계속되고 있습니다! <");
@@ -248,6 +249,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"   ▶ 현재 MP : {player.Mp}/{player.MaxMp}");
             Console.ResetColor();
             Console.WriteLine();
+            Console.ResetColor();
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("   > 전투가 계속되고 있습니다! <");
             Console.ResetColor();
@@ -267,7 +270,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     player.EnemyDamage(m.Atk);
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
                     Console.WriteLine($"    ▶ 현재 HP : {player.Hp}/{player.MaxHp}");
                     Console.ResetColor();
                     Console.WriteLine();
@@ -438,10 +441,10 @@ namespace Sparta_Dungeon_TeamProject
                     Thread.Sleep(700);
                     Console.WriteLine();
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine($"    {target.DropGold} G 를 획득했다.");
                     Console.ResetColor();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine($"    {target.DropExp} 만큼 경험치를 획득했다.");
                     Console.ResetColor();
                     Console.WriteLine();
@@ -451,10 +454,10 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     Console.WriteLine();
                     Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.WriteLine($"    보유 골드 {player.Gold}");
                     Console.ResetColor();
-                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine($"    현재 경험치 {player.Exp}/{player.MaxExp}");
                     Console.ResetColor();
                     Console.WriteLine();
@@ -469,11 +472,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("┏━━━━━━━━━━━━━━━<< 전투 결과 >>━━━━━━━━━━━━━━━┓");
             Console.ResetColor();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine("              ★ 전투에 승리하셨습니다! ★");
             Console.ResetColor();
             Console.WriteLine();
@@ -487,7 +490,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"    ▶ 현재 경험치 : {player.Exp}/{player.MaxExp}");
             Console.ResetColor();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
@@ -538,7 +541,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("┏━━━━━━━━━━━━━━━<< 전투 결과 >>━━━━━━━━━━━━━━━┓");
             Console.ResetColor();
             Console.WriteLine();
@@ -552,7 +555,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"    ▶ 현재 경험치 : {player.Exp}/{player.MaxExp}");
             Console.ResetColor();
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
@@ -894,5 +897,5 @@ namespace Sparta_Dungeon_TeamProject
 
         }
     }
-}
+    }
 
