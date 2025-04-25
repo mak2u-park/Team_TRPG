@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
         public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
-        public static int Chapter = Stage / 3; // 챕터 변수
+        public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
         public static int bossAtk;
@@ -632,7 +632,7 @@ namespace Sparta_Dungeon_TeamProject
                         // 방어력이 감소했다면 원상태로 복구, 공격력이 증가했다면 유지, 1회 공격
                         Console.WriteLine("모험가가 방어태세를 취합니다");
                         battleMonsters[0].ChangeStat(StatType.Def,def); // 원래 방어력으로 복구
-                        Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef}(으)로 상승하였다");
+                        Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef:F2}(으)로 상승하였다");
                     }
                     else if (gimmickReady2 % 3 == 1)
                     {
@@ -641,8 +641,8 @@ namespace Sparta_Dungeon_TeamProject
                         // 2턴간 방어력 큰 폭으로 감소, 영구적인 공격력 증가,  다음턴 2회 공격
                         battleMonsters[0].ChangeStat(StatType.Def, 1);
                         battleMonsters[0].ChangeStat(StatType.Atk, atk + 10);
-                        Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef}(으)로 감소하였다");
-                        Console.WriteLine($"모험가의 공격력이 {battleMonsters[0].FinalAtk}(으)로 증가하였다");
+                        Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef:F2}(으)로 감소하였다");
+                        Console.WriteLine($"모험가의 공격력이 {battleMonsters[0].FinalAtk:f2}(으)로 증가하였다");
                     }
                     else
                     {
