@@ -21,6 +21,8 @@ namespace Sparta_Dungeon_TeamProject
 
         public static bool Playerturn = true; // 플레이어의 턴 여부
         public static bool BossStage = false; // 보스스테이지 여부
+        public static bool left = false;      // 맷돼지 기믹 회피 방향
+        public static bool right = false;     // 맷돼지 기믹 회피 방향
 
         public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
 
@@ -318,8 +320,8 @@ namespace Sparta_Dungeon_TeamProject
 
         static void PlayerActionBoss1()
         {
-            bool left = false;
-            bool right = false;
+            left = false;
+            right = false;
 
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -345,12 +347,18 @@ namespace Sparta_Dungeon_TeamProject
                     // 왼쪽 살피기
                     left = true;
                     Playerturn = false;
+                    Console.WriteLine("당신은 왼쪽을 주의깊게 살핍니다");
+                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                    Program.WaitForEnter();
                     // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
                     break;
                 case 4:
                     // 오른쪽 살피기
                     right = true;
                     Playerturn = false;
+                    Console.WriteLine("당신은 오른쪽을 주의깊게 살핍니다");
+                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                    Program.WaitForEnter();
                     // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
                     break;
                 case 5:
@@ -565,17 +573,50 @@ namespace Sparta_Dungeon_TeamProject
             {
                 case 0:
                     // 1스테이지 보스, 카피바라의 기믹 "겁없는 멧돼지"                                      
-                    if (GimmickReady % 2 == 0)
+                    if (GimmickReady++ % 2 == 0)
                     {
                         // 첫턴은 기믹 준비 단계, 주변에서 흥분한 멧돼지의 울음소리가 들린다
-                        Console.WriteLine("기믹이 준비중입니다.");
+                        Console.WriteLine();
+                        Console.WriteLine("어둠 속에서 멧돼지의 울음소리가 들려옵니다.");
+                        Console.WriteLine("멧돼지들은 이따금 알록달록한 버섯을 찾아 먹습니다");
+                        Console.WriteLine("그리고는 보이는 모든 것에 박치기를 하기 시작합니다.");
+                        Console.WriteLine("아마 그날따라 유난히 세상이 말랑해 보여서 그런걸지도 모릅니다.");
                     }
                     else
                     {
-                        // PlayerActionBoss1()에서 왼쪽을 선택한 경우
-                        // PlayerActionBoss1()에서 오른쪽을 선택한 경우
-                        // PlayerActionBoss1()에서 공격을을 선택한 경우
-                        Console.WriteLine("기믹이 준비되었습니다.");
+                        // 멧돼지가 돌진해오는 턴
+                        Random rand = new Random();
+                        bool boarRushLeft = rand.Next(2) == 0;// true면 왼쪽, false면 오른쪽
+
+                        Console.WriteLine();
+                        Console.WriteLine("멧돼지가 겁없는 돌진을 시작합니다.");
+                        Console.WriteLine(boarRushLeft ? "멧돼지가 왼쪽에서 돌진해옵니다!" : "멧돼지가 오른쪽에서 돌진해옵니다.");
+                        
+                        // 멧돼지의 돌진 방향을 맞춘 경우
+                        if ((boarRushLeft && left) || (!boarRushLeft && right))
+                        {
+                            Console.WriteLine();
+
+                            Console.WriteLine("멧돼지의 돌진을 완벽히 피했습니다.");
+                            // 카피바라에게 최대체력의 20%의 데미지를 입힘
+                        }
+                        // 아무런 방향을 선택하지 않은 경우
+                        else if (!left && !right)
+                        {
+                            Console.WriteLine();
+
+                            Console.WriteLine("준비되지 않은 자에게 재앙은 늘 갑작스럽습니다.");
+                            Console.WriteLine("당신은 멧돼지에게 호되게 당했습니다.");
+                            // 플레이어에게 최대체력의 10%의 데미지를 입힘
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("잘못된 확신은 때론 방심보다 잔혹합니다.");
+                            Console.WriteLine("당신은 멧돼지의 돌진을 받아내는 데에 꽤나 재능이 있어 보입니다.");
+                            // 플레이어에게 최대체력의 20%의 데미지를 입힘
+                        }
+
                     }
                     Console.WriteLine();
                     Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
