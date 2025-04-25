@@ -80,7 +80,6 @@ namespace Sparta_Dungeon_TeamProject
             battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
             var m = battleMonsters[0];
 
-
             Console.Clear();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -159,12 +158,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
-                    PlayerTurn();
+                    PlayerTurnUI();
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
                 {
-                    MonsterTurn();
+                    MonsterTurnUI();
                 }
             }
         }
@@ -180,18 +179,18 @@ namespace Sparta_Dungeon_TeamProject
             {
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
-
+                    PlayerTurnUI();
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
                 {
-
+                    MonsterTurnUI();
                 }
             }
 
         }
 
-        static void PlayerTurn()
+        static void PlayerTurnUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -229,6 +228,32 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
 
+            switch (Stage)
+            {
+                case 2:
+                    PlayerActionNormal();
+                    // PlayerActionBoss1(); 구현 X 임시로 일반 선택지 넣어두었음
+                    break;
+                case 5:
+                    PlayerActionNormal();
+                    // PlayerActionBoss2(); 구현 X 임시로 일반 선택지 넣어두었음
+                    break;
+                case 8:
+                    PlayerActionNormal();
+                    // PlayerActionBoss3(); 구현 X 임시로 일반 선택지 넣어두었음
+                    break;
+                case 11:
+                    PlayerActionNormal();
+                    // PlayerActionBoss4(); 구현 X 임시로 일반 선택지 넣어두었음
+                    break;
+                default:
+                    PlayerActionNormal();
+                    break;
+            }
+        }
+
+        static void PlayerActionNormal()
+        {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
@@ -261,13 +286,172 @@ namespace Sparta_Dungeon_TeamProject
                     switch (CheckInput(0, 0))
                     {
                         case 0:
-                            PlayerTurn(); break;
+                            PlayerTurnUI();  break;
+
                     }
                     break;
             }
         }
 
-        static void MonsterTurn()
+        static void PlayerActionBoss1()
+        {
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            switch (CheckInput(1, 3))
+            {
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                    switch (CheckInput(0, 0))
+                    {
+                        case 0:
+                            PlayerTurnUI(); break;
+                    }
+                    break;
+            }
+        }
+        static void PlayerActionBoss2()
+        {
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            switch (CheckInput(1, 3))
+            {
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                    switch (CheckInput(0, 0))
+                    {
+                        case 0:
+                            PlayerTurnUI(); break;
+                    }
+                    break;
+            }
+        }
+        static void PlayerActionBoss3()
+        {
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            switch (CheckInput(1, 3))
+            {
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                    switch (CheckInput(0, 0))
+                    {
+                        case 0:
+                            PlayerTurnUI(); break;
+                    }
+                    break;
+            }
+        }
+        static void PlayerActionBoss4()
+        {
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            switch (CheckInput(1, 3))
+            {
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                    switch (CheckInput(0, 0))
+                    {
+                        case 0:
+                            PlayerTurnUI(); break;
+                    }
+                    break;
+            }
+        }
+
+
+        static void MonsterTurnUI()
         {
             Console.Clear();
             Console.WriteLine();
