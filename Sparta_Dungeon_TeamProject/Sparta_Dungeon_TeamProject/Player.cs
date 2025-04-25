@@ -437,7 +437,6 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Hp += amount;
             }
-
         }
 
         public void DefUP(int num)

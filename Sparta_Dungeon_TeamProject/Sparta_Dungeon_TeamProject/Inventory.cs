@@ -16,17 +16,18 @@ namespace Sparta_Dungeon_TeamProject
             player.InventoryItemList(false);
 
             Console.WriteLine();
-            Console.WriteLine("1. 장착 관리");
-            Console.WriteLine("2. 속죄의 제련소");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("[1] 장착 관리");
+            Console.WriteLine("[2] 속죄의 제련소");
+            Console.WriteLine("[3] 아이템 사용");
+            Console.WriteLine("[~`] 나가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 2);
+            int result = CheckInput(0, 3);
 
             switch (result)
             {
-                case 0:
+                case -1:
                     DisplayMainUI();
                     break;
                 case 1:
@@ -34,6 +35,9 @@ namespace Sparta_Dungeon_TeamProject
                     break;
                 case 2:
                     UpgradeItemUI();
+                    break;
+                case 3:
+                    UseItemUI();
                     break;
             }
         }
@@ -197,6 +201,16 @@ namespace Sparta_Dungeon_TeamProject
                 Thread.Sleep(500);
                 DisplayInventoryUI();
             }
+        }
+
+        static void UseItemUI()
+        {
+            Console.Clear();
+            Console.WriteLine("인벤토리 - 아이템 사용");
+            Console.WriteLine("사용 가능한 아이템 목록입니다.");
+
+            List<Item> inventory = player.GetInventoryItems();
+            var usableItems = inventory.Where(i => i.Type == 2).ToList(); // 소모품만.
         }
     }
 }

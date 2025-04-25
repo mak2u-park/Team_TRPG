@@ -6,13 +6,13 @@ namespace Sparta_Dungeon_TeamProject
         static void InitItemDb()
         {
             itemDb = new Item[]//타입 0: 무기, 1: 방어구, 2: 소모품, 3: 기타
-            {    // 아이템 이름 / 타입 / 능력치 / 설명 / 가격
-            new Item("흙 뭉치", 0, 2,"길바닥의 흙에 마법을 입힌 응급 무기",100),
-            new Item("타버린 마도서", 1, 5,"무쇠로 만들어져 튼튼한 갑옷입니다. ",2000),
-            new Item("스파르타의 갑옷", 1, 15,"스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",3500),
-            new Item("낣은 검", 0, 2,"쉽게 볼 수 있는 낡은 검 입니다. ",600),
-            new Item("청동 도끼", 0, 5,"어디선가 사용됐던거 같은 도끼입니다. ",1500),
-            new Item("스파르타의 창", 0, 100,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500),
+            {
+                // 이름, 타입, 기본atk, 기본def, 기본 hp, 설명, 가격
+                new Item("철검", 0, 5, 0, 5, "기본적인 검입니다.", 100),
+                new Item("철갑옷", 1, 0, 5, 5, "기본적인 갑옷입니다.", 100),
+                new Item("회복약", 2, 0, 0, 10, "체력을 회복하는 약입니다.", 50),
+                new Item("상자", 3, 0, 0, 0, "상자입니다.", 0)
+
             };
         }
     }
@@ -22,6 +22,11 @@ namespace Sparta_Dungeon_TeamProject
     {
         public string Name { get; }
         public int Type { get; }
+        public int BaseAtk { get; } = 0; // 기본 공격력
+        public int BaseDef { get; } = 0; // 기본 공격력
+        public int BaseHp { get; } = 0; // 기본 체력
+        public int BaseMp { get; } = 0; // 기본 마나
+
         public int BaseValue { get; } // 기본 능력치
         public int Value { get; set; } // 총 능력치 / 강화시 set 필요
         public int MaxValue { get; set; } = 50; // 강화 최대치 - 테스트용. 조정 가능.
@@ -49,10 +54,14 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Item(string name, int type, int baseValue, string desc, int price)
+        public Item(string name, int type, int baseAtk, int baseDef, int baseHp, int baseMp, int baseValue, string desc, int price)
         {
             Name = name;
             Type = type;
+            BaseAtk = baseAtk;
+            BaseDef = baseDef;
+            BaseHp = baseHp;
+            BaseAtk = baseMp;
             BaseValue = baseValue;
             Value = baseValue;
             Desc = desc;
