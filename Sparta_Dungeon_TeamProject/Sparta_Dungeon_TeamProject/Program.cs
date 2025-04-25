@@ -108,6 +108,7 @@ namespace Sparta_Dungeon_TeamProject
                     hp: job.BaseHp,
                     mp: job.BaseMp,
                     atk: job.BaseAtk,
+                    cri: job.BaseCri,
                     def: job.BaseDef,
                     maxHp: job.BaseHp,
                     maxMp: job.BaseMp,

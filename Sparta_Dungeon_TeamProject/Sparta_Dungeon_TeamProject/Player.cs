@@ -17,6 +17,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Name { get; private set; }
         public JobType Job { get; private set; }
         public int Atk { get; private set; }
+        public int Cri { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
         public int MaxHp { get; private set; } = 100;
@@ -35,6 +36,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public List<SkillLibrary> Skills = new List<SkillLibrary>();
         public List<SkillLibrary> EquipSkillList = new List<SkillLibrary>();
+
         public int InventoryCount
         {
             get
@@ -43,14 +45,15 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int def, int hp, int maxHp, int mp, int maxMp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int cri, int def, int hp, int maxHp, int mp, int maxMp, int gold)
         {
             Level = level;
             Exp = exp;
-            MaxExp = maxExp; 
+            MaxExp = maxExp;
             Name = name;
             Job = job;
             Atk = atk;
+            Cri = cri;
             Def = def;
             Hp = hp;
             MaxHp = maxHp;
@@ -157,9 +160,37 @@ namespace Sparta_Dungeon_TeamProject
                 if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
                 {
                     SkillManager.LearnSkill(this);
-                }   
+                }
             }
         }
+
+        public void PlayerAttack(Monster target, double power)
+        {
+            bool isCritical = IsCritical();
+            double multiplier = DamageSpread();
+
+            double attackDamage = isCritical ? FinalAtk * power * 1.5: FinalAtk * power;
+            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
+            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
+
+            target.Hp -= finalAttackDamage;
+
+            Console.Clear();
+            Console.WriteLine();
+        }
+
+        private static Random rand = new Random();
+
+        public bool IsCritical() // 플레이어 치명타
+        {
+            return rand.Next(0, 100) < Cri; // 치명타 확률
+        }
+
+        public double DamageSpread() // 공격 시 피해량 0.9 ~ 1.1 랜덤 설정
+        {
+            return rand.NextDouble() * 0.2 + 0.9; 
+        }
+
 
         public void DisplaySkillUI()
         {
@@ -171,12 +202,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(0, 2);
+            int choice = Program.CheckInput(0, 1);
             switch (choice)
             {
-                case 1:
-                    DisplayEquipSkill();
-                    break;
                 case 0:
                     Program.DisplayMainUI();
                     break;
@@ -195,10 +223,6 @@ namespace Sparta_Dungeon_TeamProject
                 $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 
             }
-        }
-        public bool IsEquippedSkill(SkillLibrary skill)
-        {
-            return EquipSkillList.Contains(skill);
         }
 
         // 보유 스킬 카운팅 # Program.cs

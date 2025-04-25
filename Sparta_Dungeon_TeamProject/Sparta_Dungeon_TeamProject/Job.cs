@@ -23,6 +23,7 @@ namespace Sparta_Dungeon_TeamProject
         string Story { get; } // 서사 - 얘만 선택 완료후 출력.
         string Description { get; } // 간단한 설명
         public int BaseAtk { get; }
+        public int BaseCri { get; }
         public int BaseDef { get; }
         public int BaseHp { get; }
         public int BaseMp { get; }
@@ -40,11 +41,12 @@ namespace Sparta_Dungeon_TeamProject
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
-        public int BaseAtk => 5;
+        public int BaseAtk => 10;
+        public int BaseCri => 30;
         public int BaseDef => 2;
         public int BaseHp => 70;
         public int BaseMp => 100;
-        public string Trait => "치명타 확률 +25%";
+        public string Trait => "치명타 확률 +30%";
     }
 
     public class Mage : IJob
@@ -59,6 +61,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "떠돌이 마법사로서 세계를 돌아다니며," +
             "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.";
         public int BaseAtk => 8;
+        public int BaseCri => 5;
         public int BaseDef => 2;
         public int BaseHp => 50;
         public int BaseMp => 0;
@@ -75,6 +78,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "금기된 독성 중심의 스킬을 사용하며," +
             "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.";
         public int BaseAtk => 2;
+        public int BaseCri => 15;
         public int BaseDef => 5;
         public int BaseHp => 50;
         public int BaseMp => 150;
@@ -91,6 +95,7 @@ namespace Sparta_Dungeon_TeamProject
             "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
         public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
         public int BaseAtk => 1;
+        public int BaseCri => 1;
         public int BaseDef => 1;
         public int BaseHp => 70;
         public int BaseMp => 0;
@@ -107,7 +112,8 @@ namespace Sparta_Dungeon_TeamProject
             "\n그녀가 풀어내는 이야기들은 잔혹하지만 어딘가 애잔합니다.";
         public string Description => "저 너머의 존재들과 대화하는 영매사는," +
             "\n      그들의 호의를 받으며, 더 많은 경험치 또한 얻습니다.";
-        public int BaseAtk => 5;
+        public int BaseAtk => 4;
+        public int BaseCri => 44;
         public int BaseDef => 4;
         public int BaseHp => 100;
         public int BaseMp => 75;
