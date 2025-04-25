@@ -14,20 +14,24 @@ namespace Sparta_Dungeon_TeamProject
 
     public interface IJob
     {
-        JobType Type { get; } // 직업 타입-코드작업용
+        JobType Type { get; } // 타입
         string DisplayName { get; } // 출력될 직업명
-        string Story { get; } // 직업 선택 완료후, 서사
-        string Description { get; } // 선택 전 간단한 설명
+        string Story { get; } // 서사 (선택 후 출력)
+        string Description { get; } // 간단설명 (선택 전 출력)
+
+        // 기본 스탯
+        int ExpToLevelUp { get; }
         int Atk { get; }
-        int Cri { get; }
+        int Cri { get; } // 치명타 확률
         int Def { get; }
-        int MaxHp { get; }
-        int MaxMp { get; }
-        int DefaultGold { get; }
+        int MaxHp { get; } // 최대 체력
+        int MaxMp { get; } // 최대 마나
+        int DefaultGold { get; } // 초기 보상 골드
         string Trait { get; } // 직업 특성
+        List<string> InitialSkills { get; } // 초기 보상 스킬
+        List<Item> InitialItems { get; } // 초기 보상 아이템
     };
 
-    // 직업별 베이스 DB / 공격과 스킬은 Skill에서 정의
     public class Warrior : IJob
     {
         public JobType Type => JobType.전사;
@@ -38,18 +42,17 @@ namespace Sparta_Dungeon_TeamProject
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
-        public int BaseAtk => 1000; // 테스트용으로 잠깐 수정
-        public int BaseCri => 30;
-        public int BaseDef => 2;
-        public int BaseHp => 70;
-        public int BaseMp => 100;
-        public int Atk => 10;
-        public int Cri => 30;
-        public int Def => 2;
-        public int MaxHp => 70;
-        public int MaxMp => 100;
-        public int DefaultGold => 10000;
-        public string Trait => "치명타 확률 +30%";
+        public int ExpToLevelUp => 120;
+        public int Atk => 12;
+        public int Cri => 5;
+        public int Def => 8;
+        public int MaxHp => 150;
+        public int MaxMp => 30;
+        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
+        public string Trait => "높은 생존력";
+
+        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.전사]);
     }
 
     public class Mage : IJob
@@ -63,13 +66,17 @@ namespace Sparta_Dungeon_TeamProject
             "\n가벼운 마음을 갖고 전장으로 향합니다.";
         public string Description => "떠돌이 마법사로서 세계를 돌아다니며," +
             "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.";
-        public int Atk => 8;
-        public int Cri => 5;
-        public int Def => 2;
-        public int MaxHp => 50;
-        public int MaxMp => 0;
-        public int DefaultGold => 20000;
-        public string Trait => "마법 스킬 위주의 전투";
+        public int ExpToLevelUp => 100;
+        public int Atk => 18;
+        public int Cri => 8;
+        public int Def => 3;
+        public int MaxHp => 80;
+        public int MaxMp => 120;
+        public int DefaultGold => 20000;      // 구현: 직업별 시작 골드
+        public string Trait => "높은 마나 풀";
+
+        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.마법사]);
     }
 
     public class Scientist : IJob
@@ -81,31 +88,39 @@ namespace Sparta_Dungeon_TeamProject
             "\n자신만의 독특한 기술로 세상에 맞서려 합니다.\n";
         public string Description => "금기된 독성 중심의 스킬을 사용하며," +
             "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.";
-        public int Atk => 2;
-        public int Cri => 15;
+        public int ExpToLevelUp => 110;
+        public int Atk => 10;
+        public int Cri => 7;
         public int Def => 5;
-        public int MaxHp => 50;
-        public int MaxMp => 150;
-        public int DefaultGold => 10000;
-        public string Trait => "버프량 증가";
+        public int MaxHp => 100;
+        public int MaxMp => 100;
+        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
+        public string Trait => "다재다능한 스킬셋";
+
+        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.과학자]);
     }
 
     public class Smith : IJob
     {
         public JobType Type => JobType.대장장이;
-        public string DisplayName => "대장장이";
+        public string DisplayName => "노쇄한 대장장이";
         public string Story => "주변 사람들로부터 죽은 줄 알았던 제자를" +
             "\n던전에서 봤다는 소문을 듣게 되어 제자를 찾아 나섭니다.\n" +
             "\n제자의 비극 이후 제련을 멈췄지만" +
             "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
         public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
-        public int Atk => 1;
-        public int Cri => 1;
-        public int Def => 1;
-        public int MaxHp => 70;
-        public int MaxMp => 0;
-        public int DefaultGold => 15000; // 기본 골드
-        public string Trait => "스킬 슬롯 +1  |  기본 장비 3개 보유";
+        public int ExpToLevelUp => 130;
+        public int Atk => 14;
+        public int Cri => 4;
+        public int Def => 10;
+        public int MaxHp => 130;
+        public int MaxMp => 40;
+        public int DefaultGold => 25000;      // 구현: 직업별 시작 골드
+        public string Trait => "장비 강화 전문가";
+
+        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.대장장이]);
     }
 
     public class Medium : IJob
@@ -118,67 +133,16 @@ namespace Sparta_Dungeon_TeamProject
             "\n그녀가 풀어내는 이야기들은 잔혹하지만 어딘가 애잔합니다.";
         public string Description => "저 너머의 존재들과 대화하는 영매사는," +
             "\n      그들의 호의를 받으며, 더 많은 경험치 또한 얻습니다.";
-        public int Atk => 4;
-        public int Cri => 44;
+        public int ExpToLevelUp => 105;
+        public int Atk => 9;
+        public int Cri => 6;
         public int Def => 4;
-        public int MaxHp => 100;
-        public int MaxMp => 75;
-        public int DefaultGold => 10000; // 기본 골드
-        public string Trait => "얻는 경험치 +20%";
-    }
+        public int MaxHp => 90;
+        public int MaxMp => 110;
+        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
+        public string Trait => "스킬 복제 능력";
 
-    public partial class Program
-    {
-        static JobType Prompt()
-        {
-            var jobs = JobDatas;
-            JobType? current = null; // 처음에 아무것도 선택 X
-
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine("[직업]을 선택하세요.");
-                Console.ForegroundColor = ConsoleColor.DarkCyan;
-                Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
-                Console.ResetColor();
-
-                foreach (var jobk in jobs)
-                {
-                    bool selected = jobk.Key == current;
-                    Console.Write(selected ? "> " : "");
-                    Console.WriteLine($"{(int)jobk.Key}. {jobk.Value.DisplayName}");
-
-                    if (selected)
-                    {
-                        Console.WriteLine($"    └ {jobk.Value.Description}");
-                        Console.WriteLine($"    └ 공격력:{jobk.Value.Atk}  |  " +
-                            $"방어력:{jobk.Value.Def}  |  " +
-                            $"Hp:{jobk.Value.MaxHp}  |  " +
-                            $"Mp:{jobk.Value.MaxMp}");
-                        Console.WriteLine($"    └ 특성: {jobk.Value.Trait}");
-                        Console.WriteLine();
-                    }
-                }
-
-                var key = Console.ReadKey(true);
-                if (key.Key == ConsoleKey.Enter && current.HasValue)
-                {
-                    return current.Value;
-                }
-
-                if ((key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5) ||
-                        (key.Key >= ConsoleKey.NumPad1 && key.Key <= ConsoleKey.NumPad5))
-                {
-                    int num = (key.Key >= ConsoleKey.D1 && key.Key <= ConsoleKey.D5)
-                        ? key.Key - ConsoleKey.D0 : key.Key - ConsoleKey.NumPad0;
-
-                    if (Enum.IsDefined(typeof(JobType), num))
-                    {
-                        current = (JobType)num;
-                    }
-                }
-            }
-        }
+        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.영매사]);
     }
 }
-

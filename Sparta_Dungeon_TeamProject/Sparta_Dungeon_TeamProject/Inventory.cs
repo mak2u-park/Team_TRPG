@@ -1,19 +1,36 @@
-﻿using System.Reflection.Metadata.Ecma335;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sparta_Dungeon_TeamProject;
+using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program
+    // 인벤토리 전용 UI
+    public class Inventory
     {
+        private static List<Item> items = new();
+
+        // 초기화: 직업별 시작 아이템
+        public static void Initialize(Player player, IEnumerable<Item> initialItems)
+        {
+            player = player;
+            items = new List<Item>(initialItems);
+        }
+        public static void AddItem(Item item) => items.Add(item); // 아이템 추가
+        public static void RemoveItem(Item item) => items.Remove(item);
+        public static List<Item> GetItems() => new List<Item>(items); // 아이템 복사본 반환
+
         // 인벤토리
-        static void DisplayInventoryUI()
+        public static void DisplayInventoryUI()
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
-            Console.WriteLine("[아이템 목록]");
+            Console.WriteLine("==아이템 목록==");
 
-            player.InventoryItemList(false);
+            items.PrintEquipStatus(player); // 전체목록 + 장착상태
 
             Console.WriteLine();
             Console.WriteLine("[1] 장착 관리");
@@ -23,12 +40,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 3);
+            int result = Program.CheckInput(0, 3);
 
             switch (result)
             {
                 case -1:
-                    DisplayMainUI();
+                    Messages.ShowMainMenu();
                     break;
                 case 1:
                     DisplayEquipUI();
@@ -43,24 +60,24 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 장착관리
-        static void DisplayEquipUI()
+        public static void DisplayEquipUI()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("인벤토리 - 장착관리");
+            Console.WriteLine("[인벤토리 - 장착관리]");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
-            Console.WriteLine("[아이템 목록]");
+            Console.WriteLine("==아이템 목록==");
 
-            player.InventoryItemList(true);
+            items.Where(i => i.Type == 0 || i.Type == 1 || i.Type == 3).PrintEquipStatus(player); // 무기, 방어구, 장신구
 
             Console.WriteLine();
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("[~`] 나가기");
             Console.WriteLine();
             Console.WriteLine("장착하실 아이템 번호를 입력하세요");
             Console.Write(">>");
 
-            int result = CheckInput(1, player.InventoryCount);
+            int result = Program.CheckInput(1, items.Count);
 
             switch (result)
             {
@@ -69,20 +86,22 @@ namespace Sparta_Dungeon_TeamProject
                     break;
 
                 default:
-
-                    int itemIdx = result - 1;
-
-                    List<Item> inventory = player.GetInventoryItems();
-                    Item targetItem = inventory[itemIdx];
-                    player.EquipItem(targetItem);
-
+                    var target = items[result - 1];
+                    if (player.IsEquipped(target))
+                    {
+                        player.UnequipItem(target);
+                    }
+                    else if (target.Type == 0 || target.Type == 1)
+                    {
+                        player.EquipItem(target);
+                    }
                     DisplayEquipUI();
                     break;
             }
         }
 
         // 강화 제련소
-        static void UpgradeItemUI(bool showTitle = false)
+        public static void UpgradeItemUI(bool showTitle = false)
         {
             // 고정 UI
             Console.Clear();
@@ -97,7 +116,7 @@ namespace Sparta_Dungeon_TeamProject
                 Thread.Sleep(1000);
                 Console.WriteLine("         골드가 좀 들긴 하지만, 능력치는 확실히 올라가지.");
                 Console.WriteLine("         물론… 실패할 때도 있어! 하하하, 내 탓하진 말게나~");
-                firstVisitFlags["강화"] = true;
+                Program.firstVisitFlags["강화"] = true;
             }
             else // 재방문
             {
@@ -107,22 +126,23 @@ namespace Sparta_Dungeon_TeamProject
 
             Thread.Sleep(500);
             Console.WriteLine();
-            Console.WriteLine("[보유 골드]");
-            Console.WriteLine($"{player.Gold} G");
-            Console.WriteLine();
             Console.WriteLine("[아이템 목록]");
 
-            player.InventoryItemList(true);
+            var upgradable = items.Where(i => i.Type == 0 || i.Type == 1).ToList();
+            upgradable.PrintEquipStatus(player); // 무기, 방어구
 
             Console.WriteLine("\n\n");
             int guideLine = Console.CursorTop; // 하단 지우기용, 위치 저장
 
-            Console.WriteLine("0. 다음에 다시 올게요.");
+            Console.WriteLine("[보유 골드]");
+            Console.WriteLine($"{player.Gold} G");
+            Console.WriteLine();
+            Console.WriteLine("[~`] 다음에 다시 올게요.");
             Console.WriteLine();
             Console.WriteLine("대장장이에게 보여줄 아이템 번호를 입력하세요.");
             Console.Write(">>");
 
-            int result = CheckInput(1, player.InventoryCount);
+            int result = CheckInput(1, items.Count);
             if (result == -1)
             {
                 Console.WriteLine("대장장이: 그래 다음에 또 봅세!");
@@ -131,13 +151,13 @@ namespace Sparta_Dungeon_TeamProject
                 return;
             }
 
-            Item targetItem = player.GetInventoryItems()[result - 1]; // 선택한 아이템
-            int cost = player.GetUpgradeCost(targetItem); // 강화 비용
-            int valueUp = player.GetUpgradeValue(targetItem); // 강화 능력치 증가량
+            // 선택한 아이템
+            Item targetItem = items[result - 1];
+            int cost = player.GetUpgradeCost(targetItem);
+            int valueUp = player.GetUpgradeValue(targetItem);
 
-            DisplayUpgradeResult(targetItem, cost, valueUp, guideLine); // 강화 결과 출력
+            DisplayUpgradeResult(targetItem, cost, valueUp, guideLine);
         }
-
 
         // 강화 결과 출력
         static void DisplayUpgradeResult(Item targetItem, int cost, int valueUp, int guidLine)
@@ -148,19 +168,19 @@ namespace Sparta_Dungeon_TeamProject
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"[{targetItem.Name}] 이걸 강화하겠다고?");
             Console.WriteLine($"비용은 {cost} G 면, 충분하네");
-            Console.WriteLine($"잘 되면 {targetItem.DisplayTypeText}이 {valueUp}만큼 올라가고, \n망하면… 뭐, 나도 먹고 살아야하지 않겠나.");
+            Console.WriteLine($"잘 되면 능력치가 {valueUp}만큼 올라가고, \n망하면… 뭐, 나도 먹고 살아야하지 않겠나.");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("1. 강화해주세요!");
-            Console.WriteLine("2. 음... 이거 말고, 다른 거 고를게요.");
-            Console.WriteLine("0. 다음에 다시 올게요.");
+            Console.WriteLine("[1] 강화해주세요!");
+            Console.WriteLine("[2] 음... 이거 말고, 다른 거 고를게요.");
+            Console.WriteLine("[~`] 다음에 다시 올게요.");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력하세요.");
             Console.Write(">>");
 
             int input = CheckInput(-1, 2);
 
-            ClearBottom(guidLine, 10);
+            Program.ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
 
             if (input == 1) // 강화 성공
@@ -171,12 +191,16 @@ namespace Sparta_Dungeon_TeamProject
                 if (isSuccess) // 강화 성공!
                 {
                     Console.WriteLine($"[{targetItem.Name}] 강화 성공! 이야~ 잘 터졌구만!");
-                    Console.WriteLine($"{targetItem.DisplayTypeText}이 {targetItem.Value} 상승했다네!");
+                    Console.WriteLine($"{targetItem.ItemInfoText()}: {targetItem.TotalValue}");
+                    if (player.IsEquipped(targetItem))
+                    {
+                        player.GetUpgradeStat(targetItem, valueUp);
+                    }
                 }
-                else if (targetItem.Value == targetItem.MaxValue) // 강화 실패!
+                else if (targetItem.TotalValue >= targetItem.MaxValue) // 강화 실패!
                 {
                     Console.WriteLine($"[{targetItem.Name}] 아이템은 이미 최대로 강화됐어.");
-                    Console.WriteLine($"현재 능력치 : {targetItem.Value}");
+                    Console.WriteLine($"{targetItem.ItemInfoText()}: {targetItem.TotalValue}");
                 }
                 else
                 {
@@ -209,8 +233,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("인벤토리 - 아이템 사용");
             Console.WriteLine("사용 가능한 아이템 목록입니다.");
 
-            List<Item> inventory = player.GetInventoryItems();
-            var usableItems = inventory.Where(i => i.Type == 2).ToList(); // 소모품만.
+            items.Where(i => i.Type == 2).PrintEquipStatus(player); //소모품
         }
     }
 }

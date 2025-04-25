@@ -11,6 +11,7 @@ using static Sparta_Dungeon_TeamProject.Player;
 
 namespace Sparta_Dungeon_TeamProject
 {
+    // 
 
     public class SkillManager
     {
@@ -153,7 +154,7 @@ namespace Sparta_Dungeon_TeamProject
             }
             else
             {
-                player.Heal(-20); // HP -20, 해당 피해로 사망하지 않음
+                player.Heal(0, -20); // 골드 0 / HP -20, 해당 피해로 사망하지 않음
                 Console.WriteLine("""이런... 나답지 못한 걸.""");
             }
         }

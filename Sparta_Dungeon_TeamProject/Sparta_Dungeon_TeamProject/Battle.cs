@@ -33,7 +33,7 @@ namespace Sparta_Dungeon_TeamProject
 
         // 던전 입장 스크립트
 
-        static void DisplayDungeonUI(int Chapter)
+        public static void DisplayDungeonUI(int Chapter)
         {
             Console.Clear();
             Console.WriteLine();
@@ -73,7 +73,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (result)
             {
                 case 0:
-                    DisplayMainUI();
+                    Messages.ShowMainMenu();
                     break;
                 case 1:
                     Battle(Stage);
@@ -836,7 +836,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 case 0:
                     Stage = 0; // 마을로 복귀하면서 스테이지 값 초기화
-                    DisplayMainUI();
+                    Messages.ShowMainMenu();
                     break;
                 case 1:
                     HandleNextStage(++Stage); // 다음 층으로 이동하면서 스테이지 값 +1

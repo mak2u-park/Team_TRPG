@@ -1,9 +1,15 @@
-﻿namespace Sparta_Dungeon_TeamProject
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sparta_Dungeon_TeamProject;
+using static Sparta_Dungeon_TeamProject.Program;
+
+namespace Sparta_Dungeon_TeamProject
 {
-    partial class Program
+    public class Shop
     {
         // 상점
-        static void DisplayShopUI()
+        public static void DisplayShopUI()
         {
             Console.Clear();
             Console.WriteLine("상점");
@@ -23,18 +29,18 @@
             }
 
             Console.WriteLine();
-            Console.WriteLine("1. 아이템 구매");
-            Console.WriteLine("2. 아이템 판매");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("[1] 아이템 구매");
+            Console.WriteLine("[2] 아이템 판매");
+            Console.WriteLine("[~`] 나가기");
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 2);
+            int result = CheckInput(1, 2);
 
             switch (result)
             {
-                case 0:
-                    DisplayMainUI();
+                case -1:
+                    Messages.ShowMainMenu();
                     break;
                 case 1:
                     DisplayBuyUI();
@@ -66,12 +72,12 @@
             }
 
             Console.WriteLine();
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("[~`] 나가기");
             Console.WriteLine();
             Console.WriteLine("구매하실 아이템 번호를 입력하세요.");
             Console.Write(">>");
 
-            int result = CheckInput(-1, itemDb.Length);
+            int result = CheckInput(1, itemDb.Length);
 
             switch (result)
             {
@@ -136,12 +142,12 @@
                 return;
             }
 
-            Console.WriteLine("\n0. 나가기");
+            Console.WriteLine("\n[~`] 나가기");
             Console.WriteLine("판매하실 아이템 번호를 입력하세요");
             Console.Write(">>");
             int result = CheckInput(0, owned.Count);
 
-            if (result == 0)
+            if (result == -1)
             {
                 DisplayShopUI();
                 return;
