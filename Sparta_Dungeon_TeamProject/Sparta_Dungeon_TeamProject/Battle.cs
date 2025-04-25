@@ -104,7 +104,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 case 1:
                     HandleNextStage(++Stage); // 보스 전투가 아직 미구현이라서 바로 다음 스테이지로 넘어감
-                    // BossBattlechap1();
+                    // BossBattlechap(Chapter);
                     break;
                 case 2:
                     break; // 아이템 사용 미구현
@@ -150,11 +150,28 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        static void BossBattlechap1()
+        static void BossBattlechap(int chapter)
         {
             BattleTurn = 1;
-            // 보스몬스터 초기화
+            battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
             Playerturn = true;
+
+
+            switch (chapter)
+            {
+                case 0:
+                    // 만약 랜덤한 입장 이벤트가 발생시 이 자리에 추가
+                    break;
+                case 1:
+                    // 만약 랜덤한 입장 이벤트가 발생시 이 자리에 추가
+                    break;
+                case 2:
+                    // 만약 랜덤한 입장 이벤트가 발생시 이 자리에 추가
+                    break;
+                default:
+                    // 만약 랜덤한 입장 이벤트가 발생시 이 자리에 추가
+                    break;
+            }
 
             while (true)
             {
@@ -281,7 +298,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("    ▶ 1. 일반 공격");
             Console.WriteLine("    ▶ 2. 스킬 선택");
-            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine("    ▶ 3. 왼쪽 살피기");
+            Console.WriteLine("    ▶ 4. 오른쪽 살피기");
+            Console.WriteLine("    ▶ 5. 상태 보기");
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
