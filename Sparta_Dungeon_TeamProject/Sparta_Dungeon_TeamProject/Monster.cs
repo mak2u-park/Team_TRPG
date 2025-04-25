@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,14 +20,16 @@ namespace Sparta_Dungeon_TeamProject
         public int Level { get; protected set; }
         public int Atk { get; protected set; }
         public int Def { get; protected set; }
-        public int Hp { get; set; }
+        public int Hp { get; protected set; }
 
+        
 
         // 레벨 상승에 따른 최종 스탯 계산을 위한 float값 추가
-        public float FinalAtk { get; protected set; }
-        public float FinalDef { get; protected set; }
-        public float FinalHp { get; protected set; }
-
+        public float FinalAtk => Atk * (1 + Origin * Level);
+        public float FinalDef => Def* (1 + Origin* Level);
+        public float FinalHp => Hp * (1 + Origin * Level);
+        public float Origin { get; protected set; }
+        public float CurrentHp { get; set; }
 
         // 몬스터 드랍 보상 (골드, 경험치)
         public int Gold { get; protected set; }
@@ -38,8 +41,9 @@ namespace Sparta_Dungeon_TeamProject
         // 몬스터 생존 여부
         public bool IsAlive { get; set; }
 
-
         private static Random random = new Random();
+
+        
 
         public Monster(
             string name,
@@ -50,28 +54,59 @@ namespace Sparta_Dungeon_TeamProject
             int minDropGold, int maxDropGold,
             int minDropExp, int maxDropExp,
             bool isAlive,
-            float orgin)
+            float origin)
         {
             Name = name;
             Level = random.Next(minLevel, maxLevel + 1);
             Atk = random.Next(minAtk, maxAtk + 1);
             Def = random.Next(minDef, maxDef + 1);
             Hp = random.Next(minHp, maxHp + 1);
+            CurrentHp = FinalHp;
             Gold = random.Next(minDropGold, maxDropGold + 1);
             Exp = random.Next(minDropExp, maxDropExp + 1);
             IsAlive = isAlive;
-            FinalAtk = Atk * (1 + orgin * Level);
-            FinalDef = Def * (1 + orgin * Level);
-            FinalHp = Hp * (1 + orgin * Level);
-            DropGold = (int)(Gold * (1 + orgin * Level));
-            DropExp = (int)(Exp * (1 + orgin * Level));
+            DropGold = (int)(Gold * (1 + origin * Level));
+            DropExp = (int)(Exp * (1 + origin * Level));
+            Origin = origin;
             /*
             레벨, 공격력, 방어력, 체력, 드랍골드, 드랍경헙치는 일정 범위 이내에서 랜덤한 int값으로 정해진다.
             최종 공격력, 방어력, 체력은 레벨과 orgin(태생)에 따라 영향을 받으며 좋은 태생을 가지고 있을수록
             레벨이 높을때 더 높은 최종 스탯을 갖는다.
             */
-
+            
         }
+        public enum StatType
+        {
+            Level,
+            Atk,
+            Def,
+            Hp,
+            FinalAtk,
+            FinalDef,
+            FinalHp
+        }
+
+        public void ChangeStat(StatType stat, int value)
+        {
+            switch (stat)
+            {
+                case StatType.Level:
+                    Level = value;
+                    break;
+                case StatType.Atk:
+                    Atk = value;
+                    break;
+                case StatType.Def:
+                    Def = value;
+                    break;
+                case StatType.Hp:
+                    Hp = value;
+                    break;
+                default:
+                    throw new ArgumentException("존재하지 않는 스탯입니다.");
+            }
+        }
+
         public static class MonsterFactory
         {
             // 문자열로 몬스터 이름을 받아 해당 몬스터 객체 생성
@@ -126,7 +161,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -144,7 +179,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
                     
                 }
@@ -163,7 +198,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -191,7 +226,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -209,7 +244,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -228,7 +263,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -256,7 +291,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -274,7 +309,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -293,7 +328,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -321,7 +356,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -339,7 +374,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.1f)
+                    origin: 0.1f)
                 {
 
                 }
@@ -358,7 +393,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -385,7 +420,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -398,11 +433,11 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
+                    minHp: 5000, maxHp: 5000,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -419,7 +454,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
@@ -436,7 +471,7 @@ namespace Sparta_Dungeon_TeamProject
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
-                    orgin: 0.15f)
+                    origin: 0.15f)
                 {
 
                 }
