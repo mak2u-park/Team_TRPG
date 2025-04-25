@@ -31,11 +31,11 @@ namespace Sparta_Dungeon_TeamProject
             // 과학자 스킬 ( 8 ~ 11 )
             new SkillLibrary("부식의 바늘", "치명적인 약품을 투약해, 적을 중독 시킵니다.", 20, 4),
             new SkillLibrary("", ".", 20, 4),
-            new SkillLibrary("즉효성 유전자 교란", "적을 실험의 제물로 사용해, 유전자를 재구성 시킵니다.", 20, 4),
+            new SkillLibrary("즉효성 유전자 교란", "적을 피실험체로 사용해 유전자를 재구성 시킵니다.", 20, 4),
             new SkillLibrary("세포 분열 촉진제", "부작용을 감수하고, 병약한 세포를 촉진 시키는 약물을 복용합니다.", 20, 4),
-            // 대장장이 스킬 ( 12 ~ 15)
+            // 대장장이 스킬 ( 12 )
             new SkillLibrary("잃어버린 불꽃", "자신에 체력이 낮을 때, 일정 시간동안 공격력을 크게 상승시킵니다.", 0, 0),
-            // 영매사 스킬 ( 16 ~ 19 )
+            // 영매사 스킬 ( 13 ~ 16 )
             new SkillLibrary("", "이 땅에 쓰러진채 끝맺지 못했던 춤을 재현한다.", 20, 4),
             new SkillLibrary("", ".", 20, 4),
             new SkillLibrary("능숙한 이간질", "시간이 지나도 그녀의 말솜씨는 여전하다.", 20, 4),
@@ -46,11 +46,11 @@ namespace Sparta_Dungeon_TeamProject
 
         public static Dictionary<JobType, List<SkillLibrary>> JobSkills = new()
         {
-            { JobType.전사, AllSkills.GetRange(0, 4) },
-            { JobType.마법사, AllSkills.GetRange(4, 4) },
-            { JobType.과학자, AllSkills.GetRange(8, 4) },
-            { JobType.대장장이, AllSkills.GetRange(12, 4) },
-            { JobType.영매사, AllSkills.GetRange(16, 4) }
+            { JobType.전사, AllSkills.GetRange(1, 4) },
+            { JobType.마법사, AllSkills.GetRange(5, 8) },
+            { JobType.과학자, AllSkills.GetRange(11, 14) },
+            { JobType.대장장이, AllSkills.GetRange(1, 4) },
+            { JobType.영매사, AllSkills.GetRange(13, 16) }
         };
 
         //===============================[스킬명으로 스킬 찾기]=================================
