@@ -28,10 +28,12 @@ namespace Sparta_Dungeon_TeamProject
         {
             Console.Clear();
             Console.WriteLine();
+            Console.WriteLine($"                  Chapter. {Chapter + 1}");
+            Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine("┃                                               ┃");
-            Console.WriteLine($"┃               Chapter. {Chapter + 1}                      ┃");
+            Console.WriteLine($"┃          Chapter. {Chapter + 1} - Stage {Stage + 1}                 ┃");
             Console.WriteLine("┃                                               ┃");
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
@@ -75,8 +77,12 @@ namespace Sparta_Dungeon_TeamProject
         // 보스 등장 스크립트 (3번째 스테이지마다 등장 예정)
         static void EnterBossUI()
         {
+            battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
+            var m = battleMonsters[0];
+
+
             Console.Clear();
-            Console.WriteLine($"Chapter. {Chapter + 1}");
+            Console.WriteLine($"Chapter. {Chapter + 1} - Stage ({Stage + 1})");
             Console.WriteLine();
             Console.WriteLine($"**보스 등장 - {ChapterInfo.ChapterTitle[Chapter]}**");
             Console.WriteLine();
@@ -84,7 +90,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[Lv.10][BOSS][카피바라]"); // 나중에 보스 추가되면 호출해서 내용 채우기
+            Console.WriteLine($"    [Lv.{m.Level}][{m.Name}] {GetMonsterStatus(m)}");
             Console.ResetColor();
 
             Console.WriteLine();
@@ -98,7 +104,8 @@ namespace Sparta_Dungeon_TeamProject
             switch (result)
             {
                 case 1:
-                    BossBattlechap1();
+                    HandleNextStage(++Stage); // 보스 전투가 아직 미구현이라서 바로 다음 스테이지로 넘어감
+                    // BossBattlechap1();
                     break;
                 case 2:
                     break; // 아이템 사용 미구현
@@ -535,11 +542,11 @@ namespace Sparta_Dungeon_TeamProject
                     HandleNextStage(++Stage); // 다음 층으로 이동하면서 스테이지 값 +1
                     break;
             }
- 
+
         }
 
         // 다음스테이지가 보스스테이지인지 구분하는 메서드
-        private static void HandleNextStage(int stage) 
+        private static void HandleNextStage(int stage)
         {
             int num = Stage % 3;
             switch (num)
@@ -551,8 +558,7 @@ namespace Sparta_Dungeon_TeamProject
                     Battle(Stage);
                     break;
                 case 2:
-                    // EnterBossUI();  보스 UI까지 정상적으로 나오는 것을 확인, 보스전이 구현되지 않아 일시정지
-                    Battle(Stage);   // 임시로 일반 몬스터 배틀을 넣어놓았음
+                    EnterBossUI();
                     break;
             }
         }
@@ -629,90 +635,60 @@ namespace Sparta_Dungeon_TeamProject
 
     public static class MonsterSpawner
     {
+        // 보스가 등장하는 스테이지
+        private static readonly Dictionary<int, string> BossStages = new()
+        {
+            {2, "Capybara" },
+            {5, "RegretfulAdventurer" },
+            {8, "GiantCapybara" },
+            {11, "BlackCat" }
+
+        };
+
+        // 챕터별 등장하는 몬스터 분류
+        private static readonly Dictionary<int, Type> ChapterMonsterEnums = new()
+        {
+            {1, typeof(MonsterTypeChap1) },
+            {2, typeof(MonsterTypeChap2) },
+            {3, typeof(MonsterTypeChap3) },
+            {4, typeof(MonsterTypeChap4) }
+        };
+
+        // 스테이지 별 딕셔너리의 Key로 쓰일 int 정의
+        private static int GetChapter(int stage)
+        {
+            if (stage < 3) return 1;
+            if (stage < 6) return 2;
+            if (stage < 9) return 3;
+            return 4;
+        }
+
         // 스테이지에 따른 몬스터 리스트 생성
         public static List<Monster> SpawnMonsters(int Stage)
         {
-            Random rand = new Random();
-            Array allowedTypes;
+            Random random = new Random();
 
-            int monsterCount = Math.Min(1 + Program.Stage / 2, 5); // 몬스터 최대치 결정 (최대 5마리)
-
-
-            if (Stage < 3) // 0 ~ 2 스테이지
-                if (Stage == 2) 
-                {
-                    monsterCount = 1;
-                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));   // 3 스테이지(보스)
-                }
-                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap1)); // 1 ~ 2 스테이지
-            else if (Stage < 6) // 3 ~ 5 스테이지
-                if (Stage == 5)
-                {
-                    monsterCount = 1;
-                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));   // 6 스테이지(보스)
-                }
-                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap2)); // 4 ~ 5 스테이지
-            else if (Stage < 9)// 6 ~ 7 스테이지
-                if (Stage == 8)
-                {
-                    monsterCount = 1;
-                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));    // 9 스테이지(보스)
-                }
-               else  allowedTypes = Enum.GetValues(typeof(MonsterTypeChap3));  // 7 ~ 8 스테이지
-            else // 9 ~ 스테이지
-                if (Stage == 11)
-                {
-                    monsterCount = 1;
-                    allowedTypes = Enum.GetValues(typeof(MonsterTypeBoss));    // 12 스테이지(보스)
-            }
-                else allowedTypes = Enum.GetValues(typeof(MonsterTypeChap4));  // 10 ~ 11 스테이지
-
-
-            switch (Stage)
+            // 먼저 보스스테이지라면 보스를 소환(Guard Clause)
+            // BossStages 딕셔너리의 Key에 int Stage가 포함되어 있을 경우 보스몬스터 생성 메서드 호출
+            if (BossStages.ContainsKey(Stage))
             {
-                case 2:    // 3스테이지에서 보스로 카피바라가 등장
-                    return
-                        Enumerable.Range(0, monsterCount)
-                        .Select(_ =>
-                        {
-                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                            return MonsterFactory.CreateMonster("Capybara");
-                        }).ToList(); 
-                case 5:    // 6스테이지에서 보스로 카피바라가 등장
-                    return
-                        Enumerable.Range(0, monsterCount)
-                        .Select(_ =>
-                        {
-                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                            return MonsterFactory.CreateMonster("RegretfulAdventurer");
-                        }).ToList();
-                case 8:    // 9스테이지에서 보스로 카피바라가 등장
-                    return
-                        Enumerable.Range(0, monsterCount)
-                        .Select(_ =>
-                        {
-                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                            return MonsterFactory.CreateMonster("GiantCapybara");
-                        }).ToList();
-                case 11:    // 12스테이지에서 보스로 카피바라가 등장
-                    return
-                        Enumerable.Range(0, monsterCount)
-                        .Select(_ =>
-                        {
-                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                            return MonsterFactory.CreateMonster("BlackCat");
-                        }).ToList();
-                default:
-                    return
-                    Enumerable.Range(0, monsterCount)
-                        .Select(_ =>
-                        {
-                            var randomType = allowedTypes.GetValue(rand.Next(allowedTypes.Length));
-                            return MonsterFactory.CreateMonster(randomType.ToString());
-
-                        }).ToList();
+                string bossname = BossStages[Stage];
+                return new List<Monster> { MonsterFactory.CreateMonster(bossname) };
             }
-            
+
+            // 일반 스테이지라면 일반 몬스터를 소환
+            int chapter = GetChapter(Stage);
+            Type enumType = ChapterMonsterEnums[chapter];  // 스테이지에 따라 소환되는 몬스터의 Enum
+            Array allowedTypes = Enum.GetValues(enumType); // 정해진 Enum에 포함된 모든 몬스터가 들어가있는 배열
+
+            int monsterCount = Math.Min(1 + Stage / 2, 5);
+
+            return Enumerable.Range(0, monsterCount)
+                .Select(_ =>
+                {
+                    var randomType = allowedTypes.GetValue(random.Next(allowedTypes.Length));
+                    return MonsterFactory.CreateMonster(randomType.ToString());
+                }).ToList();
 
         }
     }
@@ -923,5 +899,5 @@ namespace Sparta_Dungeon_TeamProject
 
         }
     }
-    }
+}
 
