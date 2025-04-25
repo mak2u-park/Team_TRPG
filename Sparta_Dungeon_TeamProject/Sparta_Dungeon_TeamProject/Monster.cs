@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -94,7 +95,12 @@ namespace Sparta_Dungeon_TeamProject
                     "Mage" => new Mage(),
                     "Archer" => new Archer(),
 
-                    _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
+                    "Capybara" => new Capybara(),
+                    "RegretfulAdventurer" => new RegretfulAdventurer(),
+                    "GiantCapybara" => new GiantCapybara(),
+                    "BlackCat" => new BlackCat(),
+
+                     _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
                 };
             }
 
@@ -360,11 +366,69 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             /*======================================[ 보스 몬스터 ]=====================================================*/
+            public enum MonsterTypeBoss
+            {
+                Capybara,
+                RegretfulAdventurer,
+                GiantCapybara,
+                BlackCat
+            }
 
             class Capybara : Monster
             {
                 public Capybara() : base(
                     name: "카피바라",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
+            class RegretfulAdventurer : Monster
+            {
+                public RegretfulAdventurer() : base(
+                    name: "후회하는 모험가",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
+            class GiantCapybara : Monster
+            {
+                public GiantCapybara() : base(
+                    name: "대왕 카피바라",
+                    minLevel: 3, maxLevel: 5,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 20,
+                    minHp: 10, maxHp: 30,
+                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropExp: 50, maxDropExp: 100,
+                    isAlive: true,
+                    orgin: 0.15f)
+                {
+
+                }
+
+            }
+            class BlackCat : Monster
+            {
+                public BlackCat() : base(
+                    name: "검은 고양이",
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
