@@ -20,7 +20,8 @@ namespace Sparta_Dungeon_TeamProject
         public int Level { get; protected set; }
         public int Atk { get; protected set; }
         public int Def { get; protected set; }
-        public int Hp { get; protected set; }
+        public int Hp { get; set; }
+        public int Dodge { get; set; }
 
         
 
@@ -30,6 +31,7 @@ namespace Sparta_Dungeon_TeamProject
         public float FinalHp => Hp * (1 + Origin * Level);
         public float Origin { get; protected set; }
         public float CurrentHp { get; set; }
+
 
         // 몬스터 드랍 보상 (골드, 경험치)
         public int Gold { get; protected set; }
@@ -51,6 +53,7 @@ namespace Sparta_Dungeon_TeamProject
             int minAtk, int maxAtk,
             int minDef, int maxDef,
             int minHp, int maxHp,
+            int dodge,
             int minDropGold, int maxDropGold,
             int minDropExp, int maxDropExp,
             bool isAlive,
@@ -62,6 +65,7 @@ namespace Sparta_Dungeon_TeamProject
             Def = random.Next(minDef, maxDef + 1);
             Hp = random.Next(minHp, maxHp + 1);
             CurrentHp = FinalHp;
+            Dodge = dodge;
             Gold = random.Next(minDropGold, maxDropGold + 1);
             Exp = random.Next(minDropExp, maxDropExp + 1);
             IsAlive = isAlive;
@@ -135,11 +139,11 @@ namespace Sparta_Dungeon_TeamProject
                     "GiantCapybara" => new GiantCapybara(),
                     "BlackCat" => new BlackCat(),
 
-                     _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
+                    _ => throw new ArgumentException($"몬스터 이름 '{monsterName}' 은(는) 존재하지 않습니다.")
                 };
             }
 
- 
+
             /*======================================[ 챕터 1 ]=====================================================*/
 
             public enum MonsterTypeChap1
@@ -158,6 +162,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -176,12 +181,13 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.1f)
                 {
-                    
+
                 }
 
             }
@@ -195,6 +201,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -223,6 +230,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -241,6 +249,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -260,6 +269,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -288,6 +298,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -306,6 +317,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -325,6 +337,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -353,6 +366,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -371,6 +385,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
+                    dodge: 1,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -390,6 +405,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -417,6 +433,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -433,7 +450,8 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 5000, maxHp: 5000,
+                    minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -451,6 +469,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -468,6 +487,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
+                    dodge: 1,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -475,9 +495,10 @@ namespace Sparta_Dungeon_TeamProject
                 {
 
                 }
-
             }
+
         }
-    }
-}
+     }
+ }
+
 

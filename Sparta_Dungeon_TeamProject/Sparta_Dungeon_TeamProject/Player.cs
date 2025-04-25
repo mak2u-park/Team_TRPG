@@ -17,6 +17,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Name { get; private set; }
         public JobType Job { get; private set; }
         public int Atk { get; private set; }
+        public int Cri { get; private set; }
         public int Def { get; private set; }
         public int Hp { get; private set; }
         public int MaxHp { get; private set; } = 100;
@@ -35,6 +36,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public List<SkillLibrary> Skills = new List<SkillLibrary>();
         public List<SkillLibrary> EquipSkillList = new List<SkillLibrary>();
+
         public int InventoryCount
         {
             get
@@ -43,14 +45,15 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int def, int hp, int maxHp, int mp, int maxMp, int gold)
+        public Player(int level, int exp, int maxExp, string name, JobType job, int atk, int cri, int def, int hp, int maxHp, int mp, int maxMp, int gold)
         {
             Level = level;
             Exp = exp;
-            MaxExp = maxExp; 
+            MaxExp = maxExp;
             Name = name;
             Job = job;
             Atk = atk;
+            Cri = cri;
             Def = def;
             Hp = hp;
             MaxHp = maxHp;
@@ -157,92 +160,77 @@ namespace Sparta_Dungeon_TeamProject
                 if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
                 {
                     SkillManager.LearnSkill(this);
-                }   
+                }
             }
+        }
+
+        public void PlayerAttack(Monster target, double power)
+        {
+            bool isCritical = IsCritical();
+            double multiplier = DamageSpread();
+
+            double attackDamage = isCritical ? FinalAtk * power * 1.5: FinalAtk * power;
+            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
+            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
+
+            target.Hp -= finalAttackDamage;
+
+            Console.Clear();
+            Console.WriteLine();
+
+            if (this.IsCritical())
+            {
+                Messages.CriticalMes(this);
+            }
+            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+            Console.WriteLine($"\n\n\n{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        private static Random rand = new Random();
+
+        public bool IsCritical() // 플레이어 치명타
+        {
+            return rand.Next(0, 100) < Cri; // 치명타 확률
+        }
+
+        public double DamageSpread() // 공격 시 피해량 0.9 ~ 1.1 랜덤 설정
+        {
+            return rand.NextDouble() * 0.2 + 0.9; 
         }
 
         public void DisplaySkillUI()
         {
             Console.Clear();
-            Console.WriteLine("스킬 관리");
-            Console.WriteLine("이곳에서 캐릭터의 스킬을 관리할 수 있습니다.\n");
             Console.WriteLine("[스킬 목록]");
 
-            ShowSkillList(false);
+            ShowSkillList();
 
-            Console.WriteLine("\n1. 장착 관리");
-            Console.WriteLine("0. 나가기");
+            Console.WriteLine("\n0. 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(1, 1);
+            int choice = Program.CheckInput(0, 0);
             switch (choice)
             {
-                case 1:
-                    DisplayEquipSkill();
-                    break;
-                case -1:
+                case 0:
                     Program.DisplayMainUI();
                     break;
             }
         }
 
-        public void DisplayEquipSkill()
-        {
-            Console.Clear();
-            Console.WriteLine("스킬관리 - 장착 관리");
-            Console.WriteLine("이곳에서 캐릭터의 스킬을 장착할 수 있습니다.\n");
-            Console.WriteLine("[스킬 목록]");
-
-            ShowSkillList(true);
-
-            Console.WriteLine("\n0. 돌아가기");
-            Console.Write("장착할 스킬 번호를 입력하세요 >> ");
-
-            int input = Program.CheckInput(1, Skills.Count);
-
-            switch (input)
-            {
-
-                case -1:
-                    DisplaySkillUI();
-                    break;
-                default:
-                    SkillLibrary selectedSkill = Skills[input - 1];
-
-                    if (EquipSkillList.Contains(selectedSkill))
-                    {
-                        EquipSkillList.Remove(selectedSkill);
-                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 해제했습니다.");
-                    }
-                    else
-                    {
-                        EquipSkillList.Add(selectedSkill);
-                        Console.WriteLine($"'{selectedSkill.Name}' 스킬을 장착했습니다.");
-                    }
-                    Console.ReadKey();
-                    Console.WriteLine($"'아무 키나 누르세요.");
-                    DisplayEquipSkill();
-                    break;
-            }
-        }
-
         // 스킬 목록 출력 # Program.cs
-        public void ShowSkillList(bool showIdx)
+        public void ShowSkillList()
         {
             for (int i = 0; i < Skills.Count; i++)
             {
                 SkillLibrary targetSkill = Skills[i];
 
-                string displayIdx = showIdx ? $"{i + 1} " : "";
-                string displayEquipped = IsEquippedSkill(targetSkill) ? "[E]" : "";
-                Console.WriteLine($"- {displayIdx} {displayEquipped} {targetSkill.Name}" +
+                string displayIdx = $"{i + 1}";
+                Console.WriteLine($"- {displayIdx} {targetSkill.Name}" +
                 $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 
             }
-        }
-        public bool IsEquippedSkill(SkillLibrary skill)
-        {
-            return EquipSkillList.Contains(skill);
         }
 
         // 보유 스킬 카운팅 # Program.cs
@@ -252,27 +240,6 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return Skills.Count;
             }
-        }
-        
-        // 스킬 장착 # Program.cs
-        public void EquipSkill(SkillLibrary AllSkills)
-        {
-            if (IsEquippedSkill(AllSkills))
-            {
-                EquipSkillList.Remove(AllSkills);
-                Console.WriteLine($"{AllSkills.Name} 스킬 장착 해제");
-            }
-            else
-            {
-                EquipSkillList.Add(AllSkills);
-                Console.WriteLine($"{AllSkills.Name} 스킬 장착 완료");
-            }
-        }
-
-        // 스킬 장착 목록 # Program.cs
-        public List<SkillLibrary> GetListSkill()
-        {
-            return Skills;
         }
 
         public void AddGold(int amount) // 골드를 추가해주는 매서드
