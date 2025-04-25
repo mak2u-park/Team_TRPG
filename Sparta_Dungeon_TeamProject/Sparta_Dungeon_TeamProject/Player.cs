@@ -419,11 +419,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Hp = 0;
 
-                Console.WriteLine();
-                Console.WriteLine("    »ç¸ÁÇÏ¼Ì½À´Ï´Ù.");
-                Console.WriteLine();
-                Thread.Sleep(1000);
-                Environment.Exit(0);
+                Program.BattleFailUI();
             }
         }
 
