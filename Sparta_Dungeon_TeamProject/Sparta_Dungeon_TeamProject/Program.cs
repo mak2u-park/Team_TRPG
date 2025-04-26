@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Principal;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using static Sparta_Dungeon_TeamProject.Player;
 
@@ -7,9 +8,10 @@ namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
-        public static Player player;
-        public static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
-        public static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
+        private Player player;
+        private Inventory inventory;
+
+        private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
         {  //튜토리얼로 사용도 가능
             { "강화", false },
             //{ "상점", false },
@@ -23,9 +25,15 @@ namespace Sparta_Dungeon_TeamProject
         // ** 메인 함수 **
         static void Main(string[] args)
         {
+            Program program = new Program();
+            program.RunGame();
+        }
+
+        private void RunGame()
+        {
             DisplayIntro();
             SetData();
-            Messages.ShowMainMenu();
+            Messages.ShowMainMenu(player, inventory);
         }
 
         // A. 인트로UI
@@ -71,8 +79,7 @@ namespace Sparta_Dungeon_TeamProject
             player = new Player(name, job);
             itemDb = Item.InitializeItemDb(); // 상점 초기화
 
-            var initialItems = new List<Item>(Item.GifttemDb[job.Type]);
-            Inventory.Initialize(player, initialItems); // 아이템보상 인벤에 지급
+            Inventory = new Inventory(player, job.InitialItems);
 
             // 스킬 보상
             switch (selectType)

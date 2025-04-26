@@ -425,13 +425,6 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 여관 휴식 비용
-        public void Rest()
-        {
-            Gold -= 500;
-            Hp = MaxHp;
-        }
-
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
         public int GetUpgradeCost(Item item)
         {
