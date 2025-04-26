@@ -56,37 +56,13 @@ namespace Sparta_Dungeon_TeamProject
         //===============================[스킬명으로 스킬 찾기]=================================
         public static SkillLibrary GetSkillByName(string name)
         {
-            Console.WriteLine($"[DEBUG] 스킬 검색 요청: \"{name}\"");
-
-            foreach (var skill in AllSkills)
-            {
-                Console.WriteLine($"[DEBUG] 보유 스킬: \"{skill.Name}\"");
-            }
-
-            var result = AllSkills.FirstOrDefault(s => s.Name == name);
-            if (result == null)
-            {
-                Console.WriteLine($"[ERROR] \"{name}\" 이름의 스킬을 찾을 수 없습니다!");
-            }
-            return result;
+            return AllSkills.FirstOrDefault(s => s.Name == name);
         }
-
-
 
         //===============================[직업별 기본 스킬 추가]=================================
         public static void FirstWarriorSkill(Player player)
         {
-            Console.WriteLine("[DEBUG] 전사 첫 스킬 추가 중...");
-            var skill = GetSkillByName("불안정한 패링");
-
-            if (skill == null)
-            {
-                Console.WriteLine("[ERROR] 스킬이 null입니다. 추가 실패!");
-                return;
-            }
-
-            player.Skills.Add(skill);
-            Console.WriteLine($"[DEBUG] 스킬 추가 완료: {skill.Name}");
+            player.Skills.Add(GetSkillByName("불안정한 패링"));
         }
         public static void FirstWizardSkill(Player player)
         {
@@ -130,66 +106,68 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"당신은 {randomSkill.Name} 스킬을 배웠습니다!");
         }
 
-        public static void RandomWizzardSkill(Player player)
-        {
-            Random random = new Random();
-            int idx = random.Next(5, 8); // 1~3 랜덤
-            player.Skills.Add(AllSkills[idx]);
-        }
-        public static void RandomScientistSkill(Player player)
-        {
-            Random random = new Random();
-            int idx = random.Next(9, 12); // 1~3 랜덤
-            player.Skills.Add(AllSkills[idx]);
-        }
-        public static void RandomBlacksmithSkill(Player player)
-        {
-            Random random = new Random();
-            int idx = random.Next(13, 16); // 1~3 랜덤
-            player.Skills.Add(AllSkills[idx]);
-        }
-        public static void RandomWhispererSkill(Player player)
-        {
-            Random random = new Random();
-            int idx = random.Next(17, 20); // 1~3 랜덤
-            player.Skills.Add(AllSkills[idx]);
-        }
+        //public static void RandomWizzardSkill(Player player)
+        //{
+        //    Random random = new Random();
+        //    int idx = random.Next(5, 8); // 1~3 랜덤
+        //    player.Skills.Add(AllSkills[idx]);
+        //}
+        //public static void RandomScientistSkill(Player player)
+        //{
+        //    Random random = new Random();
+        //    int idx = random.Next(9, 12); // 1~3 랜덤
+        //    player.Skills.Add(AllSkills[idx]);
+        //}
+        ////public static void RandomBlacksmithSkill(Player player)
+        ////{
+        ////    Random random = new Random();
+        ////    int idx = random.Next(13, 16); // 1~3 랜덤
+        ////    player.Skills.Add(AllSkills[idx]);
+        ////}
+        //public static void RandomWhispererSkill(Player player)
+        //{
+        //    Random random = new Random();
+        //    int idx = random.Next(17, 20); // 1~3 랜덤
+        //    player.Skills.Add(AllSkills[idx]);
+        //}
 
         //===============================[전사 스킬 사용]=================================
 
-        public void UnsteadyParry(Player player) // 기본 - 불안정한 패링
+        public void UnsteadyParry(Player player, Monster target) // 기본 - 불안정한 패링
         {
             Random random = new Random();
             int chance = random.Next(0, 2); // 50% 확률
 
             if (chance == 1)
             {
+                player.PlayerAttack(target, 1.2);
                 player.DefUP(5); // 방어력 +5
-
-                // 반격 데미지 추가? ( 공격,방어력 계수? )
 
                 Console.WriteLine("""그리운 감각이네.""");
             }
             else
             {
+                player.PlayerAttack(target, 0.8);
                 player.Heal(-20); // HP -20, 해당 피해로 사망하지 않음
-                Console.WriteLine("""이런... 나답지 못한 걸.""");
+
+                Console.WriteLine("""발목이 꺾인 것 같은데...""");
             }
         }
-        public void UnsteadyStrike(Player player) // 1 - 어렴풋이 기억나는 동작
+
+        public void UnsteadyStrike(Player player, Monster target) // 1 - 어렴풋이 기억나는 동작
         {
             Random random = new Random();
             int Count = random.Next(1, 4); // 1~3회 타격
 
             for (int i = 1; i <= Count; i++)
             {
-                Console.WriteLine($"공격이 {Count}번 적중했습니다.");
-                //int damage = player.Atk / i;
-                //damage = Math.Max(damage, 10); // 최소 데미지
+                Console.WriteLine($"{Count}번 공격했습니다.");
+
+                player.PlayerAttack(target, i * 0.5); // 첫번째 타격 50% -> 두번째 타격 100% -> 세번째 타격 150% (최대 300%)
 
                 if (Count == 1)
                 {
-                    Console.WriteLine("""나도 참 녹슬었군.""");
+                    Console.WriteLine("""...!""");
                 }
                 if (Count == 2)
                 {
@@ -201,14 +179,21 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
-        public void TongueTwister() // 2 - 능숙한 이간질
+
+        public void TongueTwister(Monster target) // 2 - 능숙한 이간질
         {
 
         }
 
+        public void PeacePlease() // 3 - 그녀의 전투 철학
+        {
+            Console.WriteLine("꼭 싸워야 하는 건 아니니까.");
+            Program.BattleSuccessUI();
+        }
+
         //===============================[영매사 스킬 사용]=================================
 
-        public void BorrowedGrace(Player player)
+        public void BorrowedGrace(Player player, Monster target)
         {
             Random random = new Random();
             int skillIndex = random.Next(0, 3); // 전체 스킬 중 하나
@@ -216,13 +201,16 @@ namespace Sparta_Dungeon_TeamProject
             switch (skillIndex)
             {
                 case 0:
-                    UnsteadyParry(player);
+                    UnsteadyParry(player, target);
                     break;
                 case 1:
-                    UnsteadyStrike(player);
+                    UnsteadyStrike(player, target);
                     break;
                 case 2:
                     TongueTwister();
+                    break;
+                case 3:
+                    PeacePlease();
                     break;
             }
         }
