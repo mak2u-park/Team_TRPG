@@ -9,7 +9,7 @@ using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public class Messages
+    public static class Messages
     {
         public static bool Skip = false; // 메시지 스킵 기능
         public static Thread inputThread; // 메시지 스킵 기능
@@ -38,7 +38,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // **메인메뉴**
-        public static void ShowMainMenu()
+        public static void ShowMainMenu(Player player, Inventory inventory)
         {
             Console.Clear();
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");

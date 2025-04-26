@@ -9,20 +9,20 @@ namespace Sparta_Dungeon_TeamProject
     // 인벤토리 전용 UI
     public class Inventory
     {
-        private static List<Item> items = new();
+        private List<Item> items = new();
 
         // 초기화: 직업별 시작 아이템
-        public static void Initialize(Player player, IEnumerable<Item> initialItems)
+        public void Initialize(Player player, IEnumerable<Item> initialItems)
         {
             player = player;
             items = new List<Item>(initialItems);
         }
-        public static void AddItem(Item item) => items.Add(item); // 아이템 추가
-        public static void RemoveItem(Item item) => items.Remove(item);
-        public static List<Item> GetItems() => new List<Item>(items); // 아이템 복사본 반환
+        public void AddItem(Item item) => items.Add(item); // 아이템 추가
+        public void RemoveItem(Item item) => items.Remove(item);
+        public List<Item> GetItems() => new List<Item>(items); // 아이템 복사본 반환
 
         // 인벤토리
-        public static void DisplayInventoryUI()
+        public void DisplayInventoryUI()
         {
             Console.Clear();
             Console.WriteLine("인벤토리");
@@ -60,11 +60,11 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 장착관리
-        public static void DisplayEquipUI()
+        public void DisplayEquipUI()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("[인벤토리 - 장착관리]");
+            Console.WriteLine("[장착관리]");
             Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
             Console.WriteLine();
             Console.WriteLine("==아이템 목록==");
@@ -101,7 +101,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 강화 제련소
-        public static void UpgradeItemUI(bool showTitle = false)
+        public void UpgradeItemUI(bool showTitle = false)
         {
             // 고정 UI
             Console.Clear();
@@ -160,7 +160,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 강화 결과 출력
-        static void DisplayUpgradeResult(Item targetItem, int cost, int valueUp, int guidLine)
+        void DisplayUpgradeResult(Item targetItem, int cost, int valueUp, int guidLine)
         {
             ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
@@ -227,7 +227,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        static void UseItemUI()
+        void UseItemUI()
         {
             Console.Clear();
             Console.WriteLine("인벤토리 - 아이템 사용");

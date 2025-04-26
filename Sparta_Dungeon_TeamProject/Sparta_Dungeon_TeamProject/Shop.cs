@@ -133,7 +133,7 @@ namespace Sparta_Dungeon_TeamProject
                 owned.Add(item);
                 Console.WriteLine($"- {i + 1} {item.ItemInfoText()} | {sellPrice} G");
             }
-
+ 
             if (owned.Count == 0)
             {
                 Console.WriteLine("\n판매 가능한 아이템이 없습니다. [Enter]");

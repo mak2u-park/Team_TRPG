@@ -36,83 +36,10 @@ namespace Sparta_Dungeon_TeamProject
             Price = price;
         }
 
-        // 1. 직업별 초기 보상 아이템
-        public void JobStartItem()
-        {
-           Dictionary<JobType, Item[]> GifttemDb = new()
-            {           // 이름, type, atk, def, hp, mp, 설명, price
-            { JobType.전사, new[] {
-                new Item("pp", 0, 0, 0, 0, 0, "1", 0),
-            }},
-            { JobType.마법사, new[] {
-                new Item("mm", 0, 0, 0, 0, 00, "3", 0),
-            }},
-            { JobType.과학자, new[] {
-                new Item("zz", 0, 0, 0, 0, 15, "5", 0),
-            }},
-            { JobType.대장장이, new[] {
-                new Item("dd", 0, 5, 0, 0, 0, "7", 0),
-                new Item("ss", 1, 0, 3, 5, 0, "8", 0),
-                new Item("ee", 1, 0, 3, 5, 0, "9", 0),
-            }},
-            { JobType.영매사, new[] {
-                new Item("bb", 3, 0, 0, 0, 0, "9", 0),
-            }}
-            };
-        }
-        
-
-        // 2. 이벤트/전투 획득용 아이템 <Type == 5>
-        public void EventItemDb()
-        {
-            Item[] EventItemDb = new Item[]
-            {           // 이름, type, atk, def, hp, mp, 설명, price     // index
-            new Item("부러진 검", 5, 5, 0, 0, 0, "세월의 흔적이 보이는 부러진 검 입니다.", 0), // 0
-            new Item("옛 영웅의 검", 5, 20, 0, 0, 0, "옛 영웅의 검", 0),  // 1
-            new Item("저주받은 검", 5, 15, 0, 0, 0, "기분나쁜 검 입니다.", 0),
-            new Item("물고기", 5, 0, 0, 2, 0, "아주 싱싱해보이는 물고기이다.", 0),
-            };
-        }
-        
-
-        // 3. 상점용 아이템 <Type: 0=무기, 1=방어구, 2=회복아이템, 3=기타>
-        public void ShopItemDb()
-        {
-            Item[] InitializeItemDb() => new Item[]
-            {           // 이름, type, atk, def, hp, mp, 설명, price
-            new Item("철검",   0, 5, 0, 5, 0, "기본적인 철검입니다.", 100),
-            new Item("철방패", 1, 0, 5, 0, 0, "기본적인 철제 방패입니다.", 120),
-            new Item("HP 포션",2, 0, 0, 20, 0, "최대 체력을 20 회복합니다.", 50),
-            new Item("MP 포션",2, 0, 0, 0, 20, "최대 마나를 20 회복합니다.", 50),
-            };
-
-        }
-        
-
-        //// 타입별 그룹화
-        //public void GroupBuType()
-        //{
-        //    public static readonly Dictionary<int, List<Item>> ItemTypeD
-        //    = InitializeItemDb().GroupBy(item => item.Type).ToDictionary(g => g.Key, g => g.ToList());
-
-        //}
-        
-
-        //타입별 아이템 가져오기
-        //public void TypeSelecter(int type)
-        //{
-        //    Item[] GetItemTypeD(int type)
-        //    {
-        //        return ItemTypeD.TryGetValue(type, out var list) ? list.ToArray()
-        //            : Array.Empty<Item>();
-        //    }
-        //}
-        
-
-        // 0 아닌 능력치 표시된것만 출력
         public string ItemInfoText()
         {
             var parts = new List<string>();
+
             if (AtkBonus != 0) parts.Add($"공격력 +{AtkBonus}");
             if (DefBonus != 0) parts.Add($"방어력 +{DefBonus}");
             if (HpBonus != 0) parts.Add($"체력 +{HpBonus}");
@@ -125,18 +52,67 @@ namespace Sparta_Dungeon_TeamProject
             return Name + statInfo;
         }
 
-        // 회복 아이템 사용
+        // 아이템 사용 (소모품, 회복아이템 전용)
         public void UseItem(Player player)
         {
             if (Type != 2) return;
 
-            player.Heal(0, HpBonus);
-            player.GainMp(0, MpBonus);
+            player.Heal(0, HpBonus); // HP 회복
+            player.GainMp(0, MpBonus); // MP 회복
             Inventory.RemoveItem(this);
         }
 
-        // 아이템 인덱스, 장착 상태 포함 출력
-        public void PrintEquipStatus(this IEnumerable<Item> items, Player player)
+
+        // --- 아래부터 static 데이터베이스 --- //
+        // 1. 직업별 초기 보상 아이템
+        public static readonly Dictionary<JobType, Item[]> GiftItemsDb = new()
+        {
+            { JobType.전사, new[] { new Item("pp", 0, 0, 0, 0, 0, "1", 0) } },
+            { JobType.마법사, new[] { new Item("mm", 0, 0, 0, 0, 0, "3", 0) } },
+            { JobType.과학자, new[] { new Item("zz", 0, 0, 0, 0, 15, "5", 0) } },
+            { JobType.대장장이, new[] { new Item("dd", 0, 5, 0, 0, 0, "7", 0),
+                                                 new Item("ss", 1, 0, 3, 5, 0, "8", 0),
+                                                 new Item("ee", 1, 0, 3, 5, 0, "9", 0) } },
+            { JobType.영매사, new[] { new Item("bb", 3, 0, 0, 0, 0, "9", 0) } }
+        };
+
+        // 2. 이벤트/전투 획득용 아이템 <Type == 5>
+        public static readonly Item[] EventItemsDb = new Item[]
+        {
+            new Item("부러진 검", 5, 5, 0, 0, 0, "세월의 흔적이 보이는 부러진 검 입니다.", 0),
+            new Item("옛 영웅의 검", 5, 20, 0, 0, 0, "옛 영웅의 검", 0),
+            new Item("저주받은 검", 5, 15, 0, 0, 0, "기분나쁜 검 입니다.", 0),
+            new Item("물고기", 5, 0, 0, 2, 0, "아주 싱싱해보이는 물고기이다.", 0)
+        };
+
+        // 3. 상점용 아이템 <Type: 0=무기, 1=방어구, 2=회복아이템, 3=기타>
+        public static Item[] ShopItemsDb()
+        {
+            return new Item[]
+            {
+                new Item("철검",   0, 5, 0, 0, 0, "기본적인 철검입니다.", 100),
+                new Item("철방패", 1, 0, 5, 0, 0, "기본적인 철제 방패입니다.", 120),
+                new Item("HP 포션",2, 0, 0, 20, 0, "체력을 20 회복합니다.", 50),
+                new Item("MP 포션",2, 0, 0, 0, 20, "마나를 20 회복합니다.", 50)
+            };
+        }
+
+        // 타입별 그룹화 (상점, 인벤 필터링)
+        public static readonly Dictionary<int, List<Item>> ItemTypeD
+        = ShopItemsDb().GroupBy(item => item.Type).ToDictionary(g => g.Key, g => g.ToList());
+
+        public static Item[] GetItemTypeD(int type)
+        {
+            return ItemTypeD.TryGetValue(type, out var list) ? list.ToArray() : Array.Empty<Item>();
+        }
+    }
+
+
+    // 아이템 출력 관련 기능 클래스
+    public static class ItemExt
+    {
+        // 장착표시
+        public static void PrintEquipStatus(this IEnumerable<Item> items, Player player)
         {
             int idx = 1;
             foreach (var item in items)
@@ -147,8 +123,8 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 기본 아이템 인덱스 출력
-        public void PrintBasicList(this IEnumerable<Item> items)
+        // 장착 미표시
+        public static void PrintBasicList(this IEnumerable<Item> items)
         {
             int idx = 1;
             foreach (var item in items)
