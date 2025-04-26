@@ -226,7 +226,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 SkillLibrary targetSkill = Skills[i];
 
-                string displayIdx = $"{i + 1}";
+                string displayIdx = $"{i + 1}"; 
                 Console.WriteLine($"- {displayIdx} {targetSkill.Name}" +
                 $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 

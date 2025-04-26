@@ -46,39 +46,63 @@ namespace Sparta_Dungeon_TeamProject
 
         public static Dictionary<JobType, List<SkillLibrary>> JobSkills = new()
         {
-            { JobType.전사, AllSkills.GetRange(0, 3) },
-            { JobType.마법사, AllSkills.GetRange(4, 7) },
-            { JobType.과학자, AllSkills.GetRange(8, 11) },
-            { JobType.대장장이, AllSkills.GetRange(12,12) },
-            { JobType.영매사, AllSkills.GetRange(13, 16) }
+            { JobType.전사, AllSkills.GetRange(0, 4) },
+            { JobType.마법사, AllSkills.GetRange(4, 4) },
+            { JobType.과학자, AllSkills.GetRange(8, 4) },
+            { JobType.대장장이, AllSkills.GetRange(12,1) },
+            { JobType.영매사, AllSkills.GetRange(13, 4) }
         };
 
         //===============================[스킬명으로 스킬 찾기]=================================
         public static SkillLibrary GetSkillByName(string name)
         {
-            return AllSkills.FirstOrDefault(s => s.Name == name);
+            Console.WriteLine($"[DEBUG] 스킬 검색 요청: \"{name}\"");
+
+            foreach (var skill in AllSkills)
+            {
+                Console.WriteLine($"[DEBUG] 보유 스킬: \"{skill.Name}\"");
+            }
+
+            var result = AllSkills.FirstOrDefault(s => s.Name == name);
+            if (result == null)
+            {
+                Console.WriteLine($"[ERROR] \"{name}\" 이름의 스킬을 찾을 수 없습니다!");
+            }
+            return result;
         }
+
+
 
         //===============================[직업별 기본 스킬 추가]=================================
         public static void FirstWarriorSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("불안정한 패링"));
+            Console.WriteLine("[DEBUG] 전사 첫 스킬 추가 중...");
+            var skill = GetSkillByName("불안정한 패링");
+
+            if (skill == null)
+            {
+                Console.WriteLine("[ERROR] 스킬이 null입니다. 추가 실패!");
+                return;
+            }
+
+            player.Skills.Add(skill);
+            Console.WriteLine($"[DEBUG] 스킬 추가 완료: {skill.Name}");
         }
         public static void FirstWizardSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("."));
+            player.Skills.Add(GetSkillByName("기초적인 화염 마법"));
         }
         public static void FirstScientistSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("부식의 바늘."));
+            player.Skills.Add(GetSkillByName("부식의 바늘"));
         }
         public static void FirstBlacksmithSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("잃어버린 불꽃."));
+            player.Skills.Add(GetSkillByName("잃어버린 불꽃"));
         }
         public static void FirstWhispererSkill(Player player)
         {
-            player.Skills.Add(GetSkillByName("영혼에 스민"));
+            player.Skills.Add(GetSkillByName("전하고 싶었던 말"));
         }
 
         //===============================[직업별 무작위 스킬 추가]=================================
