@@ -5,11 +5,13 @@ using static Sparta_Dungeon_TeamProject.Player;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program
+    public partial class Program // battle.cs
     {
-        public static Player player;
-        public static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
-        public static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
+        // 초기화
+        private Player player; // 삭제후, Player.instance 로도 접근 가능 - 나중에..
+        private Item[] itemDb = Array.Empty<Item>();
+
+        private Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
         {  //튜토리얼로 사용도 가능
             { "강화", false },
             //{ "상점", false },
@@ -20,16 +22,30 @@ namespace Sparta_Dungeon_TeamProject
             //{ "상태", false },
         };
 
+        private Dictionary<JobType, IJob> JobDatas = new()
+        {
+            { JobType.전사, new Warrior() },
+            { JobType.마법사, new Mage() },
+            { JobType.과학자, new Scientist() },
+            { JobType.대장장이, new Smith() },
+            { JobType.영매사, new Medium() }
+        };
+
         // ** 메인 함수 **
         static void Main(string[] args)
         {
-            DisplayIntro();
-            SetData();
-            Messages.ShowMainMenu();
+            Program game = new Program();
+            game.GameStart();
+        }
+        private void GameStart()
+        {
+            DisplayIntro(); // 인트로 UI
+            SetData(); // 플레이어 / 아이템 / 스킬 초기 세팅
+            Messages.ShowMainMenu(); // 메인 메뉴 UI
         }
 
         // A. 인트로UI
-        private static void DisplayIntro()
+        private void DisplayIntro()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -55,11 +71,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("Enter를 눌러, 여정을 시작하세요.");
             Console.ResetColor();
 
-            WaitForEnter();
+            Utils.WaitForEnter();
         }
 
         // B. 플레이어 / 아이템 / 스킬 초기 세팅
-        static void SetData()
+        private void SetData()
         {
             JobType selectType = Prompt();
             IJob job = JobDatas[selectType];
@@ -69,10 +85,11 @@ namespace Sparta_Dungeon_TeamProject
 
             // 플레이어 생성
             player = new Player(name, job);
-            itemDb = Item.InitializeItemDb(); // 상점 초기화
+            itemDb = Item.ItemDb; // 아이템 DB 초기화
 
-            var initialItems = new List<Item>(Item.GifttemDb[job.Type]);
-            Inventory.Initialize(player, initialItems); // 아이템보상 인벤에 지급
+            // 아이템보상
+            List<Item> initialItems = new List<Item>(Item.GifttemDb[job.Type]);
+            Inventory.Initialize(player, initialItems);
 
             // 스킬 보상
             switch (selectType)
@@ -96,7 +113,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // B-1. 직업 선택 프롬프트 (1~5 숫자키로 정보보기)
-        private static JobType Prompt()
+        private JobType Prompt()
         {
             JobType? current = null; // 처음에 아무것도 선택 X
 
@@ -128,17 +145,10 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static readonly Dictionary<JobType, IJob> JobDatas = new()
-        {
-            { JobType.전사, new Warrior() },
-            { JobType.마법사, new Mage() },
-            { JobType.과학자, new Scientist() },
-            { JobType.대장장이, new Smith() },
-            { JobType.영매사, new Medium() }
-        };
+        
 
         // B-2. 이름 입력UI
-        private static string ReadName(IJob job)
+        private string ReadName(IJob job)
         {
             while (true)
             {
@@ -158,7 +168,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // B-3. 직업 서사 / 초기 보상 UI
-        private static void DisplayStory(string name, IJob job)
+        private void DisplayStory(string name, IJob job)
         {
             Console.Clear();
             Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
@@ -183,9 +193,13 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("Enter키를 눌러, 마을로 입장합니다.");
             Console.ResetColor();
 
-            WaitForEnter();
+            Utils.WaitForEnter();
         }
+    }
 
+
+    public class Utils
+    {
         // Z. 입력값 체크(숫자 입력 후, 엔터)
         public static int CheckInput(int min, int max)
         {
@@ -198,7 +212,7 @@ namespace Sparta_Dungeon_TeamProject
 
                 string input = Console.ReadLine()!;
 
-                if (input == "`")
+                if (input == "`" || input == "~")
                 {
                     return -1;
                 }
@@ -208,7 +222,7 @@ namespace Sparta_Dungeon_TeamProject
                 if (isNumber)
                 {
                     if (result >= min && result <= max)
-                        return result;
+                    return result;
                 }
 
                 int error = Console.CursorTop;
@@ -245,6 +259,31 @@ namespace Sparta_Dungeon_TeamProject
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                 Console.Write(new string(' ', Console.WindowWidth));
                 Console.SetCursorPosition(0, Console.CursorTop);
+            }
+        }
+
+        // Z-2. 번호 입력 받기 (ex: 장착할 아이템 번호 입력)
+        public static int CheckNumberInput(int min, int max)
+        {
+            while (true)
+            {
+                string input = Console.ReadLine();
+
+                if (input == "~" || input == "`")
+                {
+                    return -1; // ~` 키 입력시 나가기
+                }
+
+                if (int.TryParse(input, out int number))
+                {
+                    if (number >= min && number <= max)
+                    {
+                        return number;
+                    }
+                }
+
+                Console.WriteLine("잘못된 입력입니다. 다시 입력해주세요.");
+                Console.Write(">> ");
             }
         }
 

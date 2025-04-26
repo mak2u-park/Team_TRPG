@@ -9,19 +9,41 @@ namespace Sparta_Dungeon_TeamProject
     // 인벤토리 전용 UI
     public class Inventory
     {
-        private static List<Item> items = new();
+        private Player player;
+        private List<Item> items;
+        private List<Item> equippedItems; // 장착된 아이템 목록
 
         // 초기화: 직업별 시작 아이템
-        public static void Initialize(Player player, IEnumerable<Item> initialItems)
+        public Inventory(Player player, IEnumerable<Item> initialItems)
         {
-            player = player;
-            items = new List<Item>(initialItems);
+            this.player = player;
+            this.items = new List<Item>(initialItems);
+            this.equippedItems = new List<Item>();
         }
-        public static void AddItem(Item item) => items.Add(item); // 아이템 추가
-        public static void RemoveItem(Item item) => items.Remove(item);
-        public static List<Item> GetItems() => new List<Item>(items); // 아이템 복사본 반환
 
-        // 인벤토리
+        public void AddItem(Item item) => items.Add(item); // 아이템 추가
+        public void RemoveItem(Item item) => items.Remove(item);
+        public List<Item> GetItems() => new List<Item>(items); // 아이템 복사본 반환
+
+
+        public bool IsEquipped(Item item) => equippedItems.Contains(item); // 장착 여부 확인
+        public void EquipItem(Item item)
+        {
+            if (!items.Contains(item))
+            {
+                return;
+            }
+            if (IsEquipped(item))
+            {
+                return;
+            }
+
+            equippedItems.Add(item);
+            
+        }
+
+
+        // 인벤토리 UI
         public static void DisplayInventoryUI()
         {
             Console.Clear();

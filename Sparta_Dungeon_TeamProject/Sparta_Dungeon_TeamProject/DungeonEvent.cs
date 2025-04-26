@@ -2,10 +2,11 @@
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program // 클래스 안에 클래스가 있어용 ㅠㅠ
+    public partial class Program
     {
         public class DungeonEvent
         {
+            private Player player = Player.Instance;
             public List<Item> eventitemlist = new List<Item>();
             Random random = new Random();
             int eventNum;

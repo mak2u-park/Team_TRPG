@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
@@ -7,8 +8,10 @@ namespace Sparta_Dungeon_TeamProject
     // 플레이어 클래스
     public class Player
     {
-        public string Name { get; }
-        public JobType Job { get; }
+        public Player Instance { get; private set; }
+
+        public string Name { get; private set; }
+        public JobType Job { get; private set; }
         public int Level { get; private set; }
         public int Exp { get; private set; }
         public int MaxExp { get; private set; }
@@ -24,18 +27,21 @@ namespace Sparta_Dungeon_TeamProject
         public int Gold { get; private set; }
 
         // 장비에 따라 추가되는 스탯
-        public int ExtraAtk { get; set; }
-        public int ExtraDef { get; set; }
+        public int ExtraAtk { get; private set; }
+        public int ExtraDef { get; private set; }
 
         // 최종 계산된 스탯
         public int FinalAtk => Atk + ExtraAtk;
         public int FinalDef => Def + ExtraDef;
 
         // 보유 스킬 목록 (초기보상스킬은 Job에서)
-        public List<SkillLibrary> Skills { get; private set; } = new();
+        public List<SkillLibrary> Skills { get; private set; } = new List<SkillLibrary>();
+
+        private static Random rand = new Random();
 
         public Player(string name, IJob job)
         {
+            Instance = this;
             Name = name;
             Job = job.Type;
             Level = 1;
@@ -55,7 +61,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 1. 상태보기
-        public void DisplayPlayerInfo()
+        public void DisplayPlayerInfo(Program program)
         {
             Console.Clear();
             Console.WriteLine();
@@ -105,20 +111,20 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
             Console.WriteLine();
 
-            int choice = Program.CheckInput(1, 1);
+            int choice = Utils.CheckInput(1, 1);
             switch (choice)
             {
                 case -1:
                     Messages.ShowMainMenu();
                     break;
                 case 1:
-                    DisplaySkillUI();
+                    DisplaySkillUI(program);
                     break;
             }
         }
 
         // 2. 스킬 UI
-        public void DisplaySkillUI()
+        public void DisplaySkillUI(Program program)
         {
             Console.Clear();
             Console.WriteLine("[스킬 목록]");
@@ -129,7 +135,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("[~`] 나가기");
             Console.Write("\n원하시는 행동을 입력해주세요 >> ");
 
-            int choice = Program.CheckInput(1, 1);
+            int choice = Utils.CheckInput(1, 1);
             switch (choice)
             {
                 case -1:
@@ -171,7 +177,7 @@ namespace Sparta_Dungeon_TeamProject
             while (Exp >= MaxExp) // 레벨업
             {
                 Exp -= MaxExp;
-                MaxExp = JobDatas[Job].ExpToLevelUp;
+                MaxExp += 50;
                 Level++;
 
                 Console.Clear();
@@ -231,11 +237,9 @@ namespace Sparta_Dungeon_TeamProject
             }
             Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
-            Program.WaitForEnter();
+            Utils.WaitForEnter();
             Console.Clear();
         }
-
-        private static Random rand = new Random();
 
         public bool IsCritical() // 플레이어 치명타
         {
@@ -314,159 +318,17 @@ namespace Sparta_Dungeon_TeamProject
             return false;
         }
 
-        // 인벤토리 아이템 목록 출력
-        private readonly List<Item> _equippedItems = new();
-
-        public bool IsEquipped(Item item)
+        // 보유한 인벤토리 아이템 리스트 반환
+        public List<Item> GetInventoryItems()
         {
-            return _equippedItems.Contains(item);
+            return new List<Item>(Inventory.GetItems());
         }
 
-        // 장착 장비 기준, 스탯 재계산
-        public void RefreshEquipStats()
-        {
-            ExtraAtk = 0;
-            ExtraDef = 0;
 
-            foreach (var item in _equippedItems)
-            {
-                ExtraAtk += item.AtkBonus;
-                ExtraDef += item.DefBonus;
-            }
-        }
-
-        // 장비 착용 + 효과 적용
-        public void EquipItem(Item item)
-        {
-            if (_equippedItems.Contains(item))
-                return;
-
-            _equippedItems.Add(item);
-            RefreshEquipStats();
-        }
-
-        // 장비 해제 + 효과 제거
-        public void UnequipItem(Item item)
-        {
-            if (!_equippedItems.Contains(item))
-                return;
-
-            _equippedItems.Remove(item);
-            RefreshEquipStats();
-        }
-
-        // 소모품 사용
-        public void UseItem(Item item)
-        {
-            if (item.Type == 2 && item.HpBonus > 0) // 소모품
-            {
-                Heal(item.Price, item.HpBonus);
-            }
-            if (item.Type == 2 && item.MpBonus > 0) // 소모품
-            {
-                Heal(item.Price, item.MpBonus);
-            }
-
-            Inventory.RemoveItem(item);
-        }
-
-        // 인벤토리 아이템 목록 반환
-        public List<Item> GetInventoryItems() => new List<Item>(Inventory.GetItems());
-
-        // 구매/판매/보유 아이템 확인
-        public void BuyItem(Item item)
-        {
-            Gold -= item.Price;
-            Inventory.AddItem(item);
-        }
-
-        // 구매 아이템
+        // 아이템 보유 여부 확인
         public bool HasItem(Item item)
         {
             return GetInventoryItems().Contains(item);
-        }
-
-        // 판매 아이템
-        public void SellItem(Item item)
-        {
-            if (IsEquipped(item))
-            {
-                UnequipItem(item); // 장착 해제
-            }
-
-            int gainGold = (int)(item.Price * 0.85);
-            Gold += gainGold;
-            Inventory.RemoveItem(item); // 인벤토리에서 제거
-            
-            ExtraAtk -= item.AtkBonus; // 능력치 감소
-            ExtraDef -= item.DefBonus;
-            if (ExtraAtk < 0) ExtraAtk = 0;
-            if (ExtraDef < 0) ExtraDef = 0;
-        }
-
-        // 강화 시 장착 아이템 능력치 반영
-        public void GetUpgradeStat(Item item, int valueUp)
-        {
-            if (!IsEquipped(item))
-                return;
-
-            switch (item.Type)
-            {
-                case 0: // 무기
-                    ExtraAtk += valueUp;
-                    break;
-                case 1: // 방어구
-                    ExtraDef += valueUp;
-                    break;
-                case 2: // 소모품 (스탯X)
-                    break;
-                case 3: // 장신구 등 (미정)
-                    break;
-            }
-        }
-
-        // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
-        public int GetUpgradeCost(Item item)
-        {
-            return item.TotalValue < 20 ? 100 : 200;
-        }
-        public int GetUpgradeValue(Item item)
-        {
-            return item.TotalValue < 20 ? 5 : 10;
-        }
-
-        // 아이템 강화 # Inventory.cs
-        public bool UpgradeItem(Item item)
-        {
-            int cost = GetUpgradeCost(item);
-            int valueUp = GetUpgradeValue(item);
-
-            if (item.TotalValue >= item.MaxValue) // 최대치 이상
-            {
-                return false;
-            }
-
-            if (Gold < cost) // 골드 부족
-            {
-                return false;
-            }
-
-            Gold -= cost; // 골드 차감
-            item.TotalValue += valueUp; // 아이템 능력치 증가
-
-            //장착 스탯 반영
-            if (IsEquipped(item))
-            {
-                if (item.Type == 0)
-                {
-                    ExtraAtk += valueUp;
-                }
-                else
-                {
-                    ExtraDef += valueUp;
-                }
-            }
-            return true;
         }
 
     }

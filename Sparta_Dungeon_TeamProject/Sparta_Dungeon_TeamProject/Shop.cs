@@ -8,6 +8,7 @@ namespace Sparta_Dungeon_TeamProject
 {
     public class Shop
     {
+        private Player player;
         // 상점
         public static void DisplayShopUI()
         {
