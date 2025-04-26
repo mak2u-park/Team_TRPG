@@ -9,13 +9,13 @@ using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public static class Messages
+    public class Messages
     {
-        public static bool Skip = false; // 메시지 스킵 기능
-        public static Thread inputThread; // 메시지 스킵 기능
+        public bool Skip = false; // 메시지 스킵 기능
+        public Thread inputThread; // 메시지 스킵 기능
 
         // 직업 선택 UI
-        public static void StartSelectJob(JobType? selectedJob)
+        public void StartSelectJob(JobType? selectedJob)
         {
             Console.WriteLine("[직업]을 선택하세요.");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -28,7 +28,7 @@ namespace Sparta_Dungeon_TeamProject
 
                 if (selectedJob == job)
                 {
-                    IJob jobData = Program.JobDatas[job];
+                    IJob jobData = JobDatas[job];
                     Console.WriteLine($"  └ {jobData.Description}");
                     Console.WriteLine($"  └ 공격력: {jobData.Atk}  |  방어력: {jobData.Def}  |  HP: {jobData.MaxHp}  |  MP: {jobData.MaxMp}");
                     Console.WriteLine($"  └ 특성: {jobData.Trait}");
@@ -38,7 +38,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // **메인메뉴**
-        public static void ShowMainMenu(Player player, Inventory inventory)
+        public void ShowMainMenu(Player player, Inventory inventory)
         {
             Console.Clear();
             Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
@@ -53,7 +53,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = Program.CheckInput(1, 5);
+            int result = Utils.CheckInput(1, 5);
 
             switch (result)
             {
@@ -61,7 +61,7 @@ namespace Sparta_Dungeon_TeamProject
                     player.DisplayPlayerInfo();
                     break;
                 case 2:
-                    Inventory.DisplayInventoryUI();
+                    inventory.DisplayInventoryUI();
                     break;
                 case 3:
                     Shop.DisplayShopUI();
@@ -81,7 +81,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void BossDesc(int Chapter)
+        public void BossDesc(int Chapter)
         {
             switch (Chapter)
             {
@@ -184,9 +184,9 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-        public static string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
+        public string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
 
-        public static void ChapterDesc(int Chapter)
+        public void ChapterDesc(int Chapter)
         {
             switch (Chapter)
             {
@@ -240,7 +240,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void CriticalMes(Player player)
+        public void CriticalMes(Player player)
         {
             JobType job = player.Job;
 
@@ -286,7 +286,7 @@ namespace Sparta_Dungeon_TeamProject
 
         // 직업별 크리티컬 데미지 메시지
 
-        public static Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
+        public Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
 {
     { JobType.전사, new[]
     {   "\n\n\n\n\n\n\n\n    고요한 전장의 메아리.",
@@ -310,7 +310,7 @@ namespace Sparta_Dungeon_TeamProject
     };
 
 
-        public static Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
+        public Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
 { 
     // 직업별 크리티컬 데미지 마지막 메시지
     
@@ -330,7 +330,7 @@ namespace Sparta_Dungeon_TeamProject
     {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
     };
 
-        public static void StartSkipListener()
+        public void StartSkipListener()
         {
             Skip = false;
             inputThread = new Thread(() =>
@@ -342,7 +342,7 @@ namespace Sparta_Dungeon_TeamProject
             inputThread.Start();
         }
 
-        public static void PrintMessageWithSkip(string message, int delay = 100)
+        public void PrintMessageWithSkip(string message, int delay = 100)
         {
             foreach (char c in message)
             {
@@ -359,7 +359,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void PrintLinesWithSkip(string[] lines, int charDelay = 30, int lineDelay = 800)
+        public void PrintLinesWithSkip(string[] lines, int charDelay = 30, int lineDelay = 800)
         {
             StartSkipListener();
 
@@ -381,7 +381,7 @@ namespace Sparta_Dungeon_TeamProject
             Skip = false; // 다음 출력을 위해 초기화
         }
 
-        public static void EvasionMess(Monster target, Program Playerturn)
+        public void EvasionMess(Monster target, Program Playerturn)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -396,7 +396,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         //여관
-        public static void DisplayRestUI()
+        public void DisplayRestUI()
         {
             Console.Clear();
             Console.WriteLine("** 여관 **");
@@ -427,9 +427,9 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.SetCursorPosition(0, guideLine);
-                Program.ClearBottom(guideLine, 10);
+                Utils.ClearBottom(guideLine, 10);
                 Console.Write(">> ");
-                int result = Program.CheckInput(1, 6);
+                int result = Utils.CheckInput(1, 6);
 
                 switch (result)
                 {
@@ -472,7 +472,7 @@ namespace Sparta_Dungeon_TeamProject
                         else Console.WriteLine("골드가 부족합니다.");
                         break;
                 }
-                Program.WaitForEnter();
+                Utils.WaitForEnter();
                 DisplayRestUI();
             }
         }

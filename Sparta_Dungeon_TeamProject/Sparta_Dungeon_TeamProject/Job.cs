@@ -125,7 +125,7 @@ namespace Sparta_Dungeon_TeamProject
 
     public class Medium : IJob
     {
-        public JobType Type => JobType.영매사;
+        public JobType Type => JobType.영매사; 
         public string DisplayName => "저주받은 영매사";
         public string Story => "영매사는 선천적으로 말을 할 수 없지만," +
             "\n그녀의 특별한 능력으로 죽은 이들의 이야기를" +

@@ -10,12 +10,13 @@ namespace Sparta_Dungeon_TeamProject
     public class Inventory
     {
         private List<Item> items = new();
+        private Player player;
 
         // 초기화: 직업별 시작 아이템
-        public void Initialize(Player player, IEnumerable<Item> initialItems)
+        public Inventory(Starter starter, Player player, IEnumerable<Item> initialItems)
         {
-            player = player;
-            items = new List<Item>(initialItems);
+            this.player = player;
+            this.items = new List<Item>(initialItems);
         }
         public void AddItem(Item item) => items.Add(item); // 아이템 추가
         public void RemoveItem(Item item) => items.Remove(item);
@@ -40,12 +41,12 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-            int result = Program.CheckInput(0, 3);
+            int result = Program.CheckInput(1, 3);
 
             switch (result)
             {
                 case -1:
-                    Messages.ShowMainMenu();
+                    Messages.ShowMainMenu(player, this);
                     break;
                 case 1:
                     DisplayEquipUI();
@@ -69,7 +70,8 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("==아이템 목록==");
 
-            items.Where(i => i.Type == 0 || i.Type == 1 || i.Type == 3).PrintEquipStatus(player); // 무기, 방어구, 장신구
+            var equItems = items.Where(i => i.Type == 0 || i.Type == 1 || i.Type == 3).ToList();
+            equItems.PrintEquipStatus(player); // 무기, 방어구, 장신구
 
             Console.WriteLine();
             Console.WriteLine("[~`] 나가기");
@@ -79,25 +81,22 @@ namespace Sparta_Dungeon_TeamProject
 
             int result = Program.CheckInput(1, items.Count);
 
-            switch (result)
+            if (result == -1)
             {
-                case -1:
-                    DisplayInventoryUI();
-                    break;
-
-                default:
-                    var target = items[result - 1];
-                    if (player.IsEquipped(target))
-                    {
-                        player.UnequipItem(target);
-                    }
-                    else if (target.Type == 0 || target.Type == 1)
-                    {
-                        player.EquipItem(target);
-                    }
-                    DisplayEquipUI();
-                    break;
+                DisplayInventoryUI();
+                return;
             }
+
+            var target = equItems[result - 1];
+            if (player.IsEquipped(target))
+            {
+                player.UnequipItem(target);
+            }
+            else
+            {
+                player.EquipItem(target);
+            }
+            DisplayEquipUI();
         }
 
         // 강화 제련소
@@ -122,6 +121,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Console.WriteLine("대장장이: 이번엔 어떤걸 강화해줄까?");
             }
+
             showTitle = true; //UI 고정/ 아래는 변경 값으로 재반영
 
             Thread.Sleep(500);
@@ -142,7 +142,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("대장장이에게 보여줄 아이템 번호를 입력하세요.");
             Console.Write(">>");
 
-            int result = CheckInput(1, items.Count);
+            int result = Program.CheckInput(1, upgradable.Count);
             if (result == -1)
             {
                 Console.WriteLine("대장장이: 그래 다음에 또 봅세!");
@@ -152,7 +152,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             // 선택한 아이템
-            Item targetItem = items[result - 1];
+            var targetItem = upgradable[result - 1];
             int cost = player.GetUpgradeCost(targetItem);
             int valueUp = player.GetUpgradeValue(targetItem);
 
@@ -162,7 +162,7 @@ namespace Sparta_Dungeon_TeamProject
         // 강화 결과 출력
         void DisplayUpgradeResult(Item targetItem, int cost, int valueUp, int guidLine)
         {
-            ClearBottom(guidLine, 10);
+            Program.ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -178,7 +178,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력하세요.");
             Console.Write(">>");
 
-            int input = CheckInput(-1, 2);
+            int input = Program.CheckInput(1, 2);
 
             Program.ClearBottom(guidLine, 10);
             Console.SetCursorPosition(0, guidLine);
@@ -233,7 +233,28 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("인벤토리 - 아이템 사용");
             Console.WriteLine("사용 가능한 아이템 목록입니다.");
 
-            items.Where(i => i.Type == 2).PrintEquipStatus(player); //소모품
+            var usable = items.Where(i => i.Type == 2).ToList();
+            usable.PrintEquipStatus(player);
+
+            Console.WriteLine();
+            Console.WriteLine("[~`] 나가기\n");
+            Console.Write("사용할 아이템 번호를 입력하세요: ");
+
+            int result = Program.CheckInput(1, usable.Count);
+
+            if (result == -1)
+            {
+                DisplayInventoryUI();
+                return;
+            }
+
+            var targetItem = usable[result - 1];
+            targetItem.UseItem(player);
+
+            Console.WriteLine($"{targetItem.Name}을(를) 사용했습니다!");
+
+            Program.WaitForEnter();
+            UseItemUI();
         }
     }
 }
