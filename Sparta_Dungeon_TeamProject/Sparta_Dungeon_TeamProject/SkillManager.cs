@@ -207,7 +207,7 @@ namespace Sparta_Dungeon_TeamProject
                     UnsteadyStrike(player, target);
                     break;
                 case 2:
-                    TongueTwister();
+                    TongueTwister(target);
                     break;
                 case 3:
                     PeacePlease();
