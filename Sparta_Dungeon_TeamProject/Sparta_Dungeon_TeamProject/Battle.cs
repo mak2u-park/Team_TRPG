@@ -9,12 +9,12 @@ using static Sparta_Dungeon_TeamProject.Monster.MonsterFactory;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program
+    public class BattleManager
     {
-        public static string GetMonsterStatus(Monster mon) => mon.IsAlive ? $"[HP:{mon.CurrentHp}]" : "[사망]";
+        public string GetMonsterStatus(Monster mon) => mon.IsAlive ? $"[HP:{mon.CurrentHp}]" : "[사망]";
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
-        public static int BattleTurn = 1; // 전투 턴 변수
+        public sic int BattleTurn = 1; // 전투 턴 변수
         public static int Stage = 0; // 스테이지 변수
         public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
@@ -33,7 +33,7 @@ namespace Sparta_Dungeon_TeamProject
 
         // 던전 입장 스크립트
 
-        public static void DisplayDungeonUI(int Chapter)
+        public void DisplayDungeonUI(int Chapter)
         {
             Console.Clear();
             Console.WriteLine();
@@ -69,7 +69,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 1);
+            int result = Utils.CheckInput(0, 1);
             switch (result)
             {
                 case 0:
@@ -84,7 +84,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 보스 등장 스크립트 (3번째 스테이지마다 등장 예정)
-        static void EnterBossUI()
+        void EnterBossUI()
         {
             battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
             var m = battleMonsters[0];
@@ -123,7 +123,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(1, 2);
+            int result = Utils.CheckInput(1, 2);
             switch (result)
             {
                 case 1:
@@ -148,7 +148,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
-                    switch (CheckInput(0, 0))
+                    switch (Utils.CheckInput(0, 0))
                     {
                         case 0:
                             EnterBossUI();
@@ -157,7 +157,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-        static void Battle(int stage)
+        void Battle(int stage)
         {
             KillMon = 0; // 몬스터 킬 수 초기화
             BattleTurn = 1; // 전투 턴 수 초기화
@@ -177,7 +177,7 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
-        static void BossBattlechap(int chapter)
+        void BossBattlechap(int chapter)
         {
             KillMon = 0;
             BattleTurn = 1;
@@ -215,7 +215,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-        static void PlayerTurnUI()
+        void PlayerTurnUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -275,7 +275,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        static void PlayerActionNormal()
+        void PlayerActionNormal()
         {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -289,7 +289,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (Utils.CheckInput(1, 3))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
@@ -316,7 +316,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        static void PlayerActionBoss1()
+        void PlayerActionBoss1()
         {
             left = false;
             right = false;
@@ -336,7 +336,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 5))
+            switch (Utils.CheckInput(1, 5))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
@@ -379,7 +379,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-        static void PlayerActionBoss2()
+        void PlayerActionBoss2()
         {
             
 
@@ -395,7 +395,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (Utils.CheckInput(1, 3))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
@@ -420,7 +420,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-        static void PlayerActionBoss3()
+        void PlayerActionBoss3()
         {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -434,7 +434,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (Utils.CheckInput(1, 3))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
@@ -459,7 +459,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-        static void PlayerActionBoss4()
+        void PlayerActionBoss4()
         {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -473,7 +473,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (Utils.CheckInput(1, 3))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
@@ -499,7 +499,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        static void MonsterTurnUI()
+        void MonsterTurnUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -553,7 +553,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Console.WriteLine();
             Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-            Program.WaitForEnter();
+            Utils.WaitForEnter();
 
             // 보스 스테이지일 경우 기믹 추가
             if (BossStage)
@@ -567,7 +567,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 보스 기믹 모음(보스 스테이지일 경우에만 실행)
-        public static void BossGimmick(int chapter)
+        public void BossGimmick(int chapter)
         {
             switch (chapter)
             {
@@ -661,7 +661,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        static void PlayerAttack()
+        void PlayerAttack()
         {
             Console.Clear();
             Console.WriteLine();
@@ -692,7 +692,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}대상을 선택해주세요.");
 
-            int result = CheckInput(0, battleMonsters.Count);
+            int result = Utils.CheckInput(0, battleMonsters.Count);
 
             if (result == 0) return;
 
@@ -748,7 +748,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Playerturn = false; // 몬스터에게 턴 넘김
 
-            static void DisplayKillMessage(Monster target)
+            void DisplayKillMessage(Monster target)
             {
                 Console.WriteLine();
                 Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
@@ -764,7 +764,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
             }
 
-            static void ExpGoldCheck()
+            void ExpGoldCheck()
             {
                 Console.WriteLine();
                 Console.WriteLine();
@@ -781,7 +781,7 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-        public static void BattleSuccessUI()
+        public void BattleSuccessUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -832,7 +832,7 @@ namespace Sparta_Dungeon_TeamProject
 
             BossStage = false;
 
-            switch (CheckInput(0, 1))
+            switch (Utils.CheckInput(0, 1))
             {
                 case 0:
                     Stage = 0; // 마을로 복귀하면서 스테이지 값 초기화
@@ -846,7 +846,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 다음스테이지가 보스스테이지인지 구분하는 메서드
-        private static void HandleNextStage(int stage)
+        private void HandleNextStage(int stage)
         {
             int num = Stage % 3;
             switch (num)
@@ -863,7 +863,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void BattleFailUI()
+        public void BattleFailUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -901,11 +901,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine($"{"",7}엔터를 누르면 종료됩니다...");
             Console.ResetColor();
-            Program.WaitForEnter();
+            Utils.WaitForEnter();
             Environment.Exit(0);
         }
 
-        static void PrintMonsters()
+        void PrintMonsters()
         {
             for (int i = 0; i < battleMonsters.Count; i++)
             {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sparta_Dungeon_TeamProject;
+using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
 {

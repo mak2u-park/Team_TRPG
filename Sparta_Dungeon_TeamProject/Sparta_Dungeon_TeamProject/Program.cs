@@ -2,7 +2,7 @@
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public class Program
+    public partial class Program
     {
         // ** 메인 함수 **
         static void Main(string[] args)
@@ -14,6 +14,7 @@ namespace Sparta_Dungeon_TeamProject
     public class Starter
     {
         public Player player;
+        public Inventory inventory;
         public Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
         public Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
             {  //튜토리얼로 사용도 가능
@@ -39,11 +40,11 @@ namespace Sparta_Dungeon_TeamProject
         {
             DisplayIntro();
             SetData();
-            Messages.ShowMainMenu(this); // 메시지 -> Starter
+            Messages.ShowMainMenu(this);
         }
 
         // A. 인트로UI
-        public void DisplayIntro()
+        void DisplayIntro()
         {
 
             Console.Clear();
@@ -70,11 +71,11 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("Enter를 눌러, 여정을 시작하세요.");
             Console.ResetColor();
 
-            WaitForEnter();
+            Utils.WaitForEnter();
         }
 
         // B. 플레이어 / 아이템 / 스킬 초기 세팅
-        public void SetData()
+        void SetData()
         {
             JobType selectType = Prompt();
             IJob job = JobDatas[selectType];
@@ -83,10 +84,7 @@ namespace Sparta_Dungeon_TeamProject
 
             // 플레이어 생성
             player = new Player(name, job);
-
-            itemDb = Item.InitializeItemDb(); // 상점 초기화
-
-            Inventory.Initialize(player, Item.GifttemDb[job.Type]); // 아이템보상 인벤에 지급
+            inventory = new Inventory(player, Item.GiftItemsDb[selectedJob]); // 아이템보상 인벤에 지급
 
             // 스킬 보상
             SkillManager.GrantFirstSkill(player, selectedJob);
@@ -172,11 +170,15 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("Enter키를 눌러, 마을로 입장합니다.");
             Console.ResetColor();
 
-            WaitForEnter();
+            Utils.WaitForEnter();
         }
+    }
 
+    // 입력 및 상단 고정 UI 관련
+    public static class Utils
+    {
         // Z. 입력값 체크(숫자 입력 후, 엔터)
-        public int CheckInput(int min, int max)
+        public static int CheckInput(int min, int max)
         {
             int result;
 
@@ -216,7 +218,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // Z-1. 입력값 체크 (Enter만!)
-        public void WaitForEnter()
+        public static void WaitForEnter()
         {
             while (true)
             {
@@ -238,7 +240,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // Z-2. UI 일부 지우기 (제련소 참고하여 가능)
-        public void ClearBottom(int fromLine, int lineCount)
+        public static void ClearBottom(int fromLine, int lineCount)
         {
             for (int i = 0; i < lineCount; i++)
             {
@@ -247,6 +249,4 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
     }
-
-}
 }
