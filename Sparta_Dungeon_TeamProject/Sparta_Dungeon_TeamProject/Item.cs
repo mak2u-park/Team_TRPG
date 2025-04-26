@@ -6,6 +6,31 @@ namespace Sparta_Dungeon_TeamProject
 {
     public class Item
     {
+        public Dictionary<JobType, List<Item>> GiftItemDb { get; private set; }
+        public List<Item> EventItemDb { get; private set; }
+        public List<Item> ShopItemDb { get; private set; }
+
+        public ItemManager()
+        {
+            GiftItemDb = InitializeGiftItems();
+            EventItemDb = InitializeEventItems();
+            ShopItemDb = InitializeShopItems();
+        }
+
+        private Dictionaty<JobType, List<Item>> InitializeGiftItems()
+        {
+            return new Dictionary<JobType, List<Item>>
+            {
+                { JobType.전사, new List<Item> { new Item("pp", 0, 0, 0, 0, 0, "1", 0) } },
+                { JobType.마법사, new List<Item> { new Item("mm", 0, 0, 0, 0, 00, "3", 0) } },
+                { JobType.과학자, new List<Item> { new Item("zz", 0, 0, 0, 0, 15, "5", 0) } },
+                { JobType.대장장이, new List<Item> { new Item("dd", 0, 5, 0, 0, 0, "7", 0),
+                                                     new Item("ss", 1, 0, 3, 5, 0, "8", 0),
+                                                     new Item("ee", 1, 0, 3, 5, 0, "9", 0) } },
+                { JobType.영매사, new List<Item> { new Item("bb", 3, 0, 0, 0, 0,"9", 0) } }
+            };
+        }
+
         public string Name { get; }
         public int Type { get; }
 
