@@ -41,9 +41,34 @@ namespace Sparta_Dungeon_TeamProject
             Price = price;
         }
 
-        // 정보 출력 기능 ( 0 인 값은 출력 X )
-        public string ItemInfoText()
+        // 이벤트용 출력 폼 = 수정가능.
+        public string GetSimpleInfo()
         {
+            return $"{Name}  |  {Desc}";
+        }
+
+        // 상세 정보 출력 (장비/소모품)
+        public string ItemTypeTextInfo()
+        {
+            List<string> stats = new List<string>();
+
+            if (AtkBonus != 0)
+            {
+                string atkText = $"공격력 {(AtkBonus > 0 ? "+" : "")}{AtkBonus}";
+                if (TotalValue > 0) atkText += $" (▲{TotalValue})";
+                stats.Add(atkText);
+            }
+            if (DefBonus != 0)
+            {
+                string defText = $"방어력 {(DefBonus > 0 ? "+" : "")}{DefBonus}";
+                if (TotalValue > 0) defText += $" (▲{TotalValue})";
+                stats.Add(defText);
+            }
+            if (HpBonus != 0) stats.Add($"체력 {(HpBonus > 0 ? "+" : "")}{HpBonus}");
+            if (MpBonus != 0) stats.Add($"마나 {(MpBonus > 0 ? "+" : "")}{MpBonus}");
+
+            string statInfo = stats.Count > 0 ? $" | {string.Join("  |  ", stats)}" : "";
+
             string typeText = Type switch
             {
                 0 => "무기",
@@ -51,18 +76,11 @@ namespace Sparta_Dungeon_TeamProject
                 2 => "소모품",
                 3 => "장신구",
                 4 => "기타",
-                5 => "이벤트"
+                5 => "이벤트",
+                _ => "알수없음",
             };
 
-            List<string> stats = new List<string>();
-            if (AtkBonus > 0) stats.Add($"공격력 +{AtkBonus}");
-            if (DefBonus > 0) stats.Add($"방어력 +{DefBonus}");
-            if (HpBonus > 0) stats.Add($"체력 +{HpBonus}");
-            if (MpBonus > 0) stats.Add($"마나 +{MpBonus}");
-
-            string statInfo = stats.Count > 0 ? $" ({string.Join("  |  ", stats)})" : string.Empty;
-
-            return $"{typeText} {Name} - {Desc}{statInfo}";
+            return $"{typeText} {Name}{statInfo}  |  {Desc}";
         }
 
         // 회복 아이템 사용
@@ -77,55 +95,62 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
+    // 아이템 목록 출력용
     public static class ItemExt
     {
-        // 보유한 아이템 + 장착여부 : 인벤토리 (All Type)
-        public static void HasItemList(List<Item> items, Player player)
+        // 인벤토리 출력
+        public static void PrintInventory(List<Item> items, Player player)
         {
-            int idx = 1;
-            foreach (var item in items)
+            for (int i = 0; i < items.Count; i++)
             {
-                Console.WriteLine($"-{idx}. {item.ItemInfoText()}");
-                idx++;
+                Item item = items[i];
+                string equipMark = player.IsEquipped(item) ? "[E]" : "[ ]";
+                Console.WriteLine($"- {i + 1}. {equipMark} {item.ItemTypeTextInfo()}");
             }
         }
 
-        // 장착 및 강화 가능 : 장착관리, 대장간 (Type 0, 1, 3)
-        public static void EquipItemList(List<Item> items, Player player)
+        // 장착관리, 대장간 출력 (Type == 0,1,3만)
+        public static void PrintEquipable(List<Item> items, Player player)
         {
-            var inType = items.Where(Item => Item.Type == 2! || Item.Type == 5!);
-            int idx = 1;
-            foreach (var item in inType)
+            var filtered = items.Where(item => item.Type == 0 || item.Type == 1 || item.Type == 3).ToList();
+            for (int i = 0; i < filtered.Count; i++)
             {
-                bool euipped = Inventory.IsEquipped()
+                Item item = filtered[i];
+                string equipMark = player.IsEquipped(item) ? "[E]" : "[ ]";
+                Console.WriteLine($"- {i + 1}. {equipMark} {item.ItemTypeTextInfo()}");
             }
         }
 
-        // 상점 아이템 (Type 1~4)
-        public static void ShopItemList(this IEnumerable<Item> items, Player player)
+        // 상점 구매용 출력
+        public static void PrintShop(List<Item> items, Player player, Inventory inventory)
         {
-            var shopItems = items.Where(i => i.Type >= 1 && i.Type <= 4);
-            int idx = 1;
-
-            foreach (var item in shopItems)
+            for (int i = 0; i < items.Count; i++)
             {
-                string displayPrice;
+                Item item = items[i];
+                string equipMark = "[ ]";
 
-                if (item.Type == 2) // 소모품 무한 구매 가능
+                string priceText;
+                if (item.Type == 2) // 소모품은 무한구매
                 {
-                    displayPrice = $"{item.Price} G";
-                }
-                else if (player.HasItem(item)) // 이미 구매한 장비
-                {
-                    displayPrice = "구매완료";
+                    priceText = $"{item.Price} G";
                 }
                 else
                 {
-                    displayPrice = $"{item.Price} G";
+                    priceText = inventory.HasItem(item) ? "구매 완료" : $"{item.Price} G";
                 }
-                Console.WriteLine($"- {idx}. {displayPrice}");
+
+                Console.WriteLine($"- {i + 1}. {equipMark} {item.ItemTypeTextInfo()}  |  {priceText}");
             }
         }
 
+        // 이벤트용 간단 출력 - 수정가능
+        public static void PrintSimple(List<Item> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                Item item = items[i];
+                Console.WriteLine($"- {i + 1}. {item.GetSimpleInfo()}");
+            }
+        }
     }
 }

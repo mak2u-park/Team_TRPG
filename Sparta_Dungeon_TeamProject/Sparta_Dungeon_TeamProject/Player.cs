@@ -8,8 +8,6 @@ namespace Sparta_Dungeon_TeamProject
     // 플레이어 클래스
     public class Player
     {
-        public Player Instance { get; private set; }
-
         public string Name { get; private set; }
         public JobType Job { get; private set; }
         public int Level { get; private set; }
@@ -24,15 +22,19 @@ namespace Sparta_Dungeon_TeamProject
         public int Hp { get; private set; }
         public int MaxMp { get; private set; }
         public int Mp { get; private set; }
-        public int Gold { get; private set; }
+        public int Gold { get; set; }
 
-        // 장비에 따라 추가되는 스탯
+        // 장착여부에 따른 추가스탯
         public int ExtraAtk { get; private set; }
         public int ExtraDef { get; private set; }
 
-        // 최종 계산된 스탯
+        // 총 스탯 합계
         public int FinalAtk => Atk + ExtraAtk;
         public int FinalDef => Def + ExtraDef;
+
+        // 인벤토리
+        private List<Item> inventory = new List<Item>();
+        private readonly List<Item> equippedItems = new();
 
         // 보유 스킬 목록 (초기보상스킬은 Job에서)
         public List<SkillLibrary> Skills { get; private set; } = new List<SkillLibrary>();
@@ -41,7 +43,6 @@ namespace Sparta_Dungeon_TeamProject
 
         public Player(string name, IJob job)
         {
-            Instance = this;
             Name = name;
             Job = job.Type;
             Level = 1;
@@ -60,7 +61,200 @@ namespace Sparta_Dungeon_TeamProject
             Gold = job.DefaultGold;
         }
 
-        // 1. 상태보기
+        // 장비 착용
+        public void EquipItem(Item item)
+        {
+            if (IsEquipped(item))
+                return;
+
+            equippedItems.Add(item);
+            RetrunEquipStats();
+        }
+
+        // 장비 해제
+        public void UnequipItem(Item item)
+        {
+            if (!IsEquipped(item))
+                return;
+
+            equippedItems.Remove(item);
+            RetrunEquipStats();
+        }
+
+        // 장비 착용 여부 확인
+        public bool IsEquipped(Item item)
+        {
+            return equippedItems.Contains(item);
+        }
+
+        // 장착 확인 후, 스탯 반영
+        public void RetrunEquipStats()
+        {
+            ExtraAtk = 0;
+            ExtraDef = 0;
+
+            foreach (var item in equippedItems)
+            {
+                ExtraAtk += item.AtkBonus;
+                ExtraDef += item.DefBonus;
+            }
+        }
+
+        // 레벨업 로직
+        public void GainExp()
+        {
+            while (Exp >= MaxExp) // 레벨업
+            {
+                Exp -= MaxExp;
+                MaxExp += 50;
+                Level++;
+
+                Console.Clear();
+                Console.WriteLine();
+                string levelUpMessage = "\n\n\n\n\n    쌓여온 경험이 당신을 한층 더 성장시켰습니다.\n\n\n\n\n";
+
+                Messages.StartSkipListener(); // 스킵 감지 시작
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Messages.PrintMessageWithSkip(levelUpMessage, 80); // 스킵 가능한 출력
+                if (Messages.Skip)
+                {
+                    Console.Clear(); // 스킵되었을 경우 화면 정리
+                }
+                Console.ResetColor();
+
+                if (!Messages.Skip)
+                {
+                    Thread.Sleep(800); // 스킵되지 않은 경우에만 약간 멈춤
+                }
+
+                Messages.Skip = false; // 초기화
+                Console.WriteLine();
+                Console.WriteLine();
+
+                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
+                {
+                    SkillManager.LearnSkill(this);
+                }
+            }
+        }
+
+        // 경험치 획득 - 전투/이벤트 보상 받는용
+        public void GainReward(int gold, int exp)
+        {
+            Gold += gold;
+            Exp += exp;
+            GainExp();
+        }
+
+        // 체력 회복 (여관, 포션, 이벤트 등)
+        public bool Heal(int cost, int amount)
+        {
+            if (cost > 0)
+            {
+                if (Gold < cost || Hp >= MaxHp) return false;
+                Gold -= cost;
+            }
+
+            int newHp = Hp + amount;
+
+            if (newHp <= 0)
+            {
+                newHp = 10;
+            }
+            else if (newHp > MaxHp)
+            {
+                newHp = MaxHp;
+            }
+
+            Hp = newHp;
+            return true;
+        }
+
+        // 마나 회복 (여관, 포션, 이벤트 등)
+        public bool GainMp(int cost, int amount)
+        {
+            if (Gold >= cost && Mp < MaxMp)
+            {
+                Gold -= cost;
+                Mp += amount;
+                if (Mp > MaxMp) Mp = MaxMp; // 최대 마나 초과 방지
+                return true;
+            }
+            return false;
+        }
+
+
+
+
+        // 전투 기능-일반 공격
+        public void PlayerAttack(Monster target, double power)
+        {
+            bool isCritical = IsCritical();
+            double multiplier = DamageSpread();
+
+            double attackDamage = isCritical ? FinalAtk * power * 1.5 : FinalAtk * power;
+            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
+            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
+
+            target.CurrentHp -= finalAttackDamage;
+
+            Console.Clear();
+            Console.WriteLine();
+
+            if (this.IsCritical())
+            {
+                Messages.CriticalMes(this);
+            }
+            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+            Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
+            Utils.WaitForEnter();
+            Console.Clear();
+        }
+
+        public bool IsCritical() // 플레이어 치명타 여부
+        {
+            return rand.Next(0, 100) < Cri; // 치명타 확률
+        }
+
+        public double DamageSpread() // 공격 시 피해량 0.9 ~ 1.1 랜덤 설정
+        {
+            return rand.NextDouble() * 0.2 + 0.9;
+        }
+
+        //피격 피해량 계산
+        public void EnemyDamage(int amount)
+        {
+            int damage = amount - Def;
+            damage = damage < 0 ? 1 : damage;
+            Hp -= damage;
+
+            Console.WriteLine();
+            Console.WriteLine($"    {damage}의 데미지를 받았습니다!");
+            Console.WriteLine();
+
+            if (Hp <= 0)
+            {
+                Hp = 0;
+                Program.BattleFailUI();
+            }
+        }
+
+
+
+        // 스탯 강화 스킬 (활용예시:   player.AtkUP(5);   // 공격력 +5)
+        public void AtkUP(int value)
+        {
+            ExtraAtk += value;
+        }
+        public void DefUP(int value)
+        {
+            ExtraDef += value;
+        }
+
+
+
+        // 1. 상태보기 UI
         public void DisplayPlayerInfo(Program program)
         {
             Console.Clear();
@@ -115,7 +309,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (choice)
             {
                 case -1:
-                    Messages.ShowMainMenu();
+                    return;
                     break;
                 case 1:
                     DisplaySkillUI(program);
@@ -139,7 +333,7 @@ namespace Sparta_Dungeon_TeamProject
             switch (choice)
             {
                 case -1:
-                    Messages.ShowMainMenu();
+                    return;
                     break;
                 case 1:
                     Console.Clear();
@@ -162,7 +356,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 스킬 수 반환
+        // 2-2. 스킬 수 반환
         public int SkillListCount
         {
             get
@@ -171,165 +365,53 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // 경험치 획득
-        public void GainExp()
+        // 강화 비용 계산 - 플레이어 정보 반영 문제로 player에서 사용
+        public int UpgradeCost(Item item)
         {
-            while (Exp >= MaxExp) // 레벨업
+            return item.TotalValue < 20 ? 100 : 200;
+        }
+
+        // 강화 성공 시 능력치 증가량
+        public int UpgradeValue(Item item)
+        {
+            return item.TotalValue < 20 ? 5 : 10;
+        }
+
+        // 최대치 초과시 골드 차감 방지
+        public bool UpgradeItem(Item item)
+        {
+            if (Gold < UpgradeCost(item) || item.TotalValue >= item.MaxValue)
             {
-                Exp -= MaxExp;
-                MaxExp += 50;
-                Level++;
-
-                Console.Clear();
-                Console.WriteLine();
-                string levelUpMessage = "\n\n\n\n\n    쌓여온 경험이 당신을 한층 더 성장시켰습니다.\n\n\n\n\n";
-
-                Messages.StartSkipListener(); // 스킵 감지 시작
-
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Messages.PrintMessageWithSkip(levelUpMessage, 80); // 스킵 가능한 출력
-                if (Messages.Skip)
-                {
-                    Console.Clear(); // 스킵되었을 경우 화면 정리
-                }
-                Console.ResetColor();
-
-                if (!Messages.Skip)
-                {
-                    Thread.Sleep(800); // 스킵되지 않은 경우에만 약간 멈춤
-                }
-
-                Messages.Skip = false; // 초기화
-                Console.WriteLine();
-                Console.WriteLine();
-
-                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
-                {
-                    SkillManager.LearnSkill(this);
-                }
-            }
-        }
-
-        public void GainReward(int gold, int exp)
-        {
-            Gold += gold;
-            Exp += exp;
-            GainExp();
-        }
-
-        public void PlayerAttack(Monster target, double power)
-        {
-            bool isCritical = IsCritical();
-            double multiplier = DamageSpread();
-
-            double attackDamage = isCritical ? FinalAtk * power * 1.5 : FinalAtk * power;
-            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
-            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
-
-            target.CurrentHp -= finalAttackDamage;
-
-            Console.Clear();
-            Console.WriteLine();
-
-            if (this.IsCritical())
-            {
-                Messages.CriticalMes(this);
-            }
-            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
-            Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
-            Utils.WaitForEnter();
-            Console.Clear();
-        }
-
-        public bool IsCritical() // 플레이어 치명타
-        {
-            return rand.Next(0, 100) < Cri; // 치명타 확률
-        }
-
-        public double DamageSpread() // 공격 시 피해량 0.9 ~ 1.1 랜덤 설정
-        {
-            return rand.NextDouble() * 0.2 + 0.9;
-        }
-
-        //피격 피해량 계산
-        public void EnemyDamage(int amount)
-        {
-            int damage = amount - Def;
-            damage = damage < 0 ? 1 : damage;
-            Hp -= damage;
-
-            Console.WriteLine();
-            Console.WriteLine($"    {damage}의 데미지를 받았습니다!");
-            Console.WriteLine();
-
-            if (Hp <= 0)
-            {
-                Hp = 0;
-                Program.BattleFailUI();
-            }
-        }
-
-        // 방어력 증가 - 스킬 사용 코드 (활용예시:   player.DefUP(5);   // 방어력 +5)
-        public void DefUP(int value)
-        {
-            ExtraDef += value;
-        }
-
-        // 공격력 증가 - 스킬 사용 코드 (활용예시:   player.AtkUP(5);   // 공격력 +5)
-        public void AtkUP(int value)
-        {
-            ExtraAtk += value;
-        }
-
-        // 체력 회복
-        public bool Heal(int cost, int amount)
-        {
-            if (cost > 0)
-            {
-                if (Gold < cost || Hp >= MaxHp) return false;
-                Gold -= cost;
+                return false;
             }
 
-            int newHp = Hp + amount;
+            Gold -= UpgradeCost(item);
+            item.TotalValue += UpgradeValue(item);
 
-            if (newHp <= 0)
+            if (item.TotalValue > item.MaxValue)
             {
-                newHp = 10;
-            }
-            else if (newHp > MaxHp)
-            {
-                newHp = MaxHp;
+                item.TotalValue = item.MaxValue;
             }
 
-            Hp = newHp;
+            if (IsEquipped(item))
+            {
+                ExtraAtk += item.Type == 0 ? UpgradeValue(item) : 0;
+                ExtraDef += item.Type == 1 ? UpgradeValue(item) : 0;
+            }
+
             return true;
         }
 
-        // 마나 회복
-        public bool GainMp(int cost, int amount)
+        // 강화 시 스탯 반영 (호출용)
+        public void UpgradeStat(Item item, int valueUp)
         {
-            if (Gold >= cost && Mp < MaxMp)
-            {
-                Gold -= cost;
-                Mp += amount;
-                if (Mp > MaxMp) Mp = MaxMp; // 최대 마나 초과 방지
-                return true;
-            }
-            return false;
+            if (!IsEquipped(item))
+                return;
+
+            if (item.Type == 0)
+                ExtraAtk += valueUp;
+            else if (item.Type == 1)
+                ExtraDef += valueUp;
         }
-
-        // 보유한 인벤토리 아이템 리스트 반환
-        public List<Item> GetInventoryItems()
-        {
-            return new List<Item>(Inventory.GetItems());
-        }
-
-
-        // 아이템 보유 여부 확인
-        public bool HasItem(Item item)
-        {
-            return GetInventoryItems().Contains(item);
-        }
-
     }
 }

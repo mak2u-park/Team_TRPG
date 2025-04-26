@@ -8,7 +8,9 @@ namespace Sparta_Dungeon_TeamProject
     public partial class Program // battle.cs
     {
         // 초기화
-        private Player player; // 삭제후, Player.instance 로도 접근 가능 - 나중에..
+        private Player player;
+        private Inventory inventory;
+        private Shop shop;
         private Item[] itemDb = Array.Empty<Item>();
 
         private Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
@@ -41,6 +43,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             DisplayIntro(); // 인트로 UI
             SetData(); // 플레이어 / 아이템 / 스킬 초기 세팅
+            
             Messages.ShowMainMenu(); // 메인 메뉴 UI
         }
 
@@ -86,10 +89,8 @@ namespace Sparta_Dungeon_TeamProject
             // 플레이어 생성
             player = new Player(name, job);
             itemDb = Item.ItemDb; // 아이템 DB 초기화
-
-            // 아이템보상
-            List<Item> initialItems = new List<Item>(Item.GifttemDb[job.Type]);
-            Inventory.Initialize(player, initialItems);
+            inventory = new Inventory(player, Item.GifttemDb[selectType]); // 인벤토리 초기화(템보상)
+            shop = new Shop(player, inventory, itemDb); // 상점 초기화
 
             // 스킬 보상
             switch (selectType)
