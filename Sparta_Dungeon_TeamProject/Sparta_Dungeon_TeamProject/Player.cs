@@ -287,9 +287,6 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             int newHp = Hp + amount;
-                string displayIdx = $"{i + 1}"; 
-                Console.WriteLine($"- {displayIdx} {targetSkill.Name}" +
-                $" : {targetSkill.Desc} (소모 값: {targetSkill.Cost} / 쿨타임: {targetSkill.Cool})");
 
             if (newHp <= 0)
             {
@@ -426,13 +423,6 @@ namespace Sparta_Dungeon_TeamProject
                 case 3: // 장신구 등 (미정)
                     break;
             }
-        }
-
-        // 여관 휴식 비용
-        public void Rest()
-        {
-            Gold -= 500;
-            Hp = MaxHp;
         }
 
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리

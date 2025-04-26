@@ -148,7 +148,7 @@ namespace Sparta_Dungeon_TeamProject
             else
             {
                 player.PlayerAttack(target, 0.8);
-                player.Heal(-20); // HP -20, 해당 피해로 사망하지 않음
+                player.Heal(0, -20); // HP -20, 해당 피해로 사망하지 않음
 
                 Console.WriteLine("""발목이 꺾인 것 같은데...""");
             }
