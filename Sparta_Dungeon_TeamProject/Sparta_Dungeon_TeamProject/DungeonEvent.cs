@@ -2,7 +2,7 @@
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program
+    public partial class Program // 클래스 안에 클래스가 있어용 ㅠㅠ
     {
         public class DungeonEvent
         {
@@ -13,7 +13,6 @@ namespace Sparta_Dungeon_TeamProject
             int result;
             public void Start()
             {
-                EventItemList();
                 Console.WriteLine("주변을 살펴봅니다.");
                 eventNum = random.Next(0, 9);
                 switch (eventNum)
@@ -40,7 +39,7 @@ namespace Sparta_Dungeon_TeamProject
                         wanderingMage();// 떠돌이 마법사 조우
                         break;
                     case 7:
-                        if (player.HasItem(eventitemlist[3]))
+                        if (player.HasItem(Item.EventItemDb[3]))
                         {
                             cat();// 고양이 조우 이벤트
                         }
@@ -50,7 +49,7 @@ namespace Sparta_Dungeon_TeamProject
                         }
                         break;
                     case 8:
-                        if (player.HasItem(eventitemlist[0]))
+                        if (player.HasItem(Item.EventItemDb[0]))
                         {
                             smith();//검복구 이벤트
                         }
@@ -78,12 +77,12 @@ namespace Sparta_Dungeon_TeamProject
                         if (eventNum == 1)
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 회복되었습니다.");
-                            player.Heal(eventValue);
+                            player.Heal(0, eventValue);
                         }
                         else
                         {
                             Console.WriteLine($"신전에서 체력이 {eventValue} 감소하였습니다.");
-                            player.Heal(-eventValue);
+                            player.Heal(0, -eventValue);
 
                         }
                         break;
@@ -170,7 +169,7 @@ namespace Sparta_Dungeon_TeamProject
                         else
                         {
                             Console.WriteLine("수레를 만지자 누군가 남겨놓은 함정에 데미지를 받았습니다.");
-                            player.Heal(-random.Next(1, 6));
+                            player.Heal(0,-random.Next(1, 6));
 
                         }
                         break;
@@ -362,7 +361,7 @@ namespace Sparta_Dungeon_TeamProject
                 switch (result)
                 {
                     case 1:
-                        if (player.HasItem(eventitemlist[3]))
+                        if (player.HasItem(Item.EventItemDb[3]))
                         {
                             //player.SelectRemove(eventitemlist[3].Name);
                             Console.WriteLine("고양이에게 물고기를 주었습니다.");
@@ -378,18 +377,6 @@ namespace Sparta_Dungeon_TeamProject
                         break;
                 }
             }
-
-
-            //이벤트용 아이템 리스트
-            public void EventItemList()
-            {                           // 아이템 이름 / 타입 / 능력치 / 설명 / 가격
-                eventitemlist.Add(new Item("부러진 검", 5, 5, "세월의 흔적이 보이는 부러진 검 입니다.", 0));
-                eventitemlist.Add(new Item("옛 영웅의 검", 5, 20, "옛 영웅의 검", 0));
-                eventitemlist.Add(new Item("저주받은 검", 5, 15, "기분나쁜 검 입니다.", 0));
-                eventitemlist.Add(new Item("물고기", 5, 2, "아주 싱싱해보이는 물고기이다.", 0));
-            }
-
-
         }
 
         //이벤트 몬스터 추가
@@ -405,7 +392,7 @@ namespace Sparta_Dungeon_TeamProject
                 minDropGold: 2000, maxDropGold: 5000,
                 minDropExp: 50, maxDropExp: 100,
                 isAlive: true,
-                orgin: 0.15f)
+                origin: 0.15f)
             {
             }
 
@@ -422,7 +409,7 @@ namespace Sparta_Dungeon_TeamProject
                 minDropGold: 2000, maxDropGold: 5000,
                 minDropExp: 50, maxDropExp: 100,
                 isAlive: true,
-                orgin: 0.15f)
+                origin: 0.15f)
             {
             }
 

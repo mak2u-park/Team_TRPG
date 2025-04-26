@@ -1,82 +1,149 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Program
-    {
-        // 아이템DB
-        static void InitItemDb()
-        {
-            itemDb = new Item[]//타입 0: 무기, 1: 방어구, 2: 소모품, 3: 기타
-            {    // 아이템 이름 / 타입 / 능력치 / 설명 / 가격
-            new Item("수련자의 갑옷", 1, 5,"수련에 도움을 주는 갑옷입니다. ",1000),
-            new Item("무쇠갑옷", 1, 9,"무쇠로 만들어져 튼튼한 갑옷입니다. ",2000),
-            new Item("스파르타의 갑옷", 1, 15,"스파르타의 전사들이 사용했다는 전설의 갑옷입니다. ",3500),
-            new Item("낣은 검", 0, 2,"쉽게 볼 수 있는 낡은 검 입니다. ",600),
-            new Item("청동 도끼", 0, 5,"어디선가 사용됐던거 같은 도끼입니다. ",1500),
-            new Item("스파르타의 창", 0, 100,"스파르타의 전사들이 사용했다는 전설의 창입니다. ",2500),
-            new Item("체력 포션", 2, 0,"체력을 회복하는 포션입니다. ",100),
-            new Item("마나 포션", 2, 0,"마나를 회복하는 포션입니다. ",100),
-            new Item("독 포션", 3, 0,"독이 가득담겨있는 병이다.",0),
-            };
-        }
-    }
-
-    // 아이템 클래스
     public class Item
     {
         public string Name { get; }
         public int Type { get; }
-        public int BaseValue { get; } // 기본 능력치
-        public int Value { get; set; } // 총 능력치 / 강화시 set 필요
-        public int MaxValue { get; set; } = 50; // 강화 최대치 - 테스트용. 조정 가능.
+
+        // 두가지 이상 능력치가 있는 아이템은 기본 능력치로 설정.
+        public int AtkBonus { get; }
+        public int DefBonus { get; }
+        public int HpBonus { get; }
+        public int MpBonus { get; }
+
+        // 강화 시스템
+        public int TotalValue { get; set; } = 0; // 강화 수치
+        public int MaxValue { get; set; } = 50; // 최대 강화 수치
+
+        // 아이템 설명, 가격
         public string Desc { get; }
         public int Price { get; }
 
-        public string DisplayTypeText
-        {
-            get
-            {
-                switch(Type)
-                {
-                    case 0:
-                        return "공격력";
-                    case 1:
-                        return "방어력";
-                    case 2:
-                        return "회복력";
-                    case 3:
-                        return "기타";
-                    default:
-                        return "알 수 없음";
-                }
-                //return Type == 0 ? "공격력" : "방어력";
-            }
-        }
-
-        public Item(string name, int type, int baseValue, string desc, int price)
+        public Item(string name, int type, int atkBonus, int defBonus,
+            int hpBonus, int mpBonus, string desc, int price)
         {
             Name = name;
             Type = type;
-            BaseValue = baseValue;
-            Value = baseValue;
+            AtkBonus = atkBonus;
+            DefBonus = defBonus;
+            HpBonus = hpBonus;
+            MpBonus = mpBonus;
             Desc = desc;
             Price = price;
         }
 
-        public string ItemInfoText() // 장착여부 무관 / shop 아이템
-        {
-            string enhanceText = Value == MaxValue ? " (최대치)" : "";
+        // 1. 직업별 초기 보상 아이템
+        public static readonly Dictionary<JobType, Item[]> GifttemDb = new()
+        {           // 이름, type, atk, def, hp, mp, 설명, price
+            { JobType.전사, new[] {
+                new Item("pp", 0, 0, 0, 0, 0, "1", 0),
+            }},
+            { JobType.마법사, new[] {
+                new Item("mm", 0, 0, 0, 0, 00, "3", 0),
+            }},
+            { JobType.과학자, new[] {
+                new Item("zz", 0, 0, 0, 0, 15, "5", 0),
+            }},
+            { JobType.대장장이, new[] {
+                new Item("dd", 0, 5, 0, 0, 0, "7", 0),
+                new Item("ss", 1, 0, 3, 5, 0, "8", 0),
+                new Item("ee", 1, 0, 3, 5, 0, "9", 0),
+            }},
+            { JobType.영매사, new[] {
+                new Item("bb", 3, 0, 0, 0, 0, "9", 0),
+            }}
+        };
 
-            return $"{Name}  |  {DisplayTypeText} +{BaseValue}  |  {Desc}";
+        // 2. 이벤트/전투 획득용 아이템 <Type == 5>
+        public static readonly Item[] EventItemDb = new Item[]
+        {           // 이름, type, atk, def, hp, mp, 설명, price     // index
+            new Item("부러진 검", 5, 5, 0, 0, 0, "세월의 흔적이 보이는 부러진 검 입니다.", 0), // 0
+            new Item("옛 영웅의 검", 5, 20, 0, 0, 0, "옛 영웅의 검", 0),  // 1
+            new Item("저주받은 검", 5, 15, 0, 0, 0, "기분나쁜 검 입니다.", 0),
+            new Item("물고기", 5, 0, 0, 2, 0, "아주 싱싱해보이는 물고기이다.", 0),
+        };
+
+        // 3. 상점용 아이템 <Type: 0=무기, 1=방어구, 2=회복아이템, 3=기타>
+        public static Item[] InitializeItemDb() => new Item[]
+        {           // 이름, type, atk, def, hp, mp, 설명, price
+            new Item("철검",   0, 5, 0, 5, 0, "기본적인 철검입니다.", 100),
+            new Item("철방패", 1, 0, 5, 0, 0, "기본적인 철제 방패입니다.", 120),
+            new Item("HP 포션",2, 0, 0, 20, 0, "최대 체력을 20 회복합니다.", 50),
+            new Item("MP 포션",2, 0, 0, 0, 20, "최대 마나를 20 회복합니다.", 50),
+        };
+
+        // 타입별 그룹화
+        public static readonly Dictionary<int, List<Item>> ItemTypeD
+            = InitializeItemDb().GroupBy(item => item.Type).ToDictionary(g => g.Key, g => g.ToList());
+
+
+        //타입별 아이템 가져오기
+        public static Item[] GetItemTypeD(int type)
+        {
+            return ItemTypeD.TryGetValue(type, out var list) ? list.ToArray()
+                : Array.Empty<Item>();
         }
 
-        public string ItemEnhanceText() // 장착여부 포함 / 강화 O 아이템
+        // 0 아닌 능력치 표시된것만 출력
+        public string ItemInfoText()
         {
-            int enhanceValue = Value - BaseValue;
-            string enhanceText = Value >= MaxValue ? " (최대치)" : "";
-            string valueText = enhanceValue > 0 ? $"+({enhanceValue})" : "";
-            string typeText = Type == 0 ? "공격력" : "방어력";
+            var parts = new List<string>();
+            if (AtkBonus != 0) parts.Add($"공격력 +{AtkBonus}");
+            if (DefBonus != 0) parts.Add($"방어력 +{DefBonus}");
+            if (HpBonus != 0) parts.Add($"체력 +{HpBonus}");
+            if (MpBonus != 0) parts.Add($"마나 +{MpBonus}");
 
-            return $"{Name}  |  {typeText} {BaseValue} {valueText}{enhanceText}  |  {Desc}";
+            string statInfo = parts.Any()
+                ? " (" + string.Join(" ", parts) + ")"
+                : string.Empty;
+
+            return Name + statInfo;
+        }
+
+        // 회복 아이템 사용
+        public void UseItem(Player player)
+        {
+            if (Type != 2) return;
+
+            player.Heal(0, HpBonus);
+            player.GainMp(0, MpBonus);
+            Inventory.RemoveItem(this);
+        }
+    }
+
+    public static class ItemExt
+    {
+        // 아이템 인덱스, 장착 상태 포함 출력
+        public static void PrintEquipStatus(this IEnumerable<Item> items, Player player)
+        {
+            int idx = 1;
+            foreach (var item in items)
+            {
+                bool equipped = player.IsEquipped(item);
+                Console.WriteLine($"-{idx}. {(equipped ? "(E)" : string.Empty)} {item.ItemInfoText()}");
+                idx++;
+            }
+        }
+
+        // 기본 아이템 인덱스 출력
+        public static void PrintBasicList(this IEnumerable<Item> items)
+        {
+            int idx = 1;
+            foreach (var item in items)
+            {
+                Console.WriteLine($"-{idx}. {item.ItemInfoText()}");
+                idx++;
+            }
+        }
+
+        // 목록에서 아이템 삭제
+        public static void RemoveItem(this List<Item> items, Item item)
+        {
+            items.Remove(item);
         }
     }
 }

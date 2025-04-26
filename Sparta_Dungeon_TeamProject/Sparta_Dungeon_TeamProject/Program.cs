@@ -1,23 +1,36 @@
 ﻿using System;
 using System.Security.Principal;
+using System.Xml.Linq;
 using static Sparta_Dungeon_TeamProject.Player;
 
 namespace Sparta_Dungeon_TeamProject
 {
     public partial class Program
     {
-        private static Player player;
-        private static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
-        private static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
-        {
-            //강화하기에서 true
+        public static Player player;
+        public static Item[] itemDb = Array.Empty<Item>(); // 임시초기값. 이후 덮어씌워짐ok
+        public static Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
+        {  //튜토리얼로 사용도 가능
             { "강화", false },
+            //{ "상점", false },
+            //{ "인벤토리", false },
+            //{ "던전", false },
+            //{ "휴식", false },
+            //{ "스킬", false },
+            //{ "상태", false },
         };
 
-        // ** 실제 구동되는 메인함수 **
+        // ** 메인 함수 **
         static void Main(string[] args)
         {
-            // 인트로
+            DisplayIntro();
+            SetData();
+            Messages.ShowMainMenu();
+        }
+
+        // A. 인트로UI
+        private static void DisplayIntro()
+        {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -43,79 +56,26 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
 
             WaitForEnter();
-
-            // 게임 시작
-            SetData();
-            DisplayMainUI();
         }
 
-        // 직업 데이터
-        public static readonly Dictionary<JobType, IJob> JobDatas = new()
-        {
-            { JobType.전사, new Warrior() },
-            { JobType.마법사, new Mage() },
-            { JobType.과학자, new Scientist() },
-            { JobType.대장장이, new Smith() },
-            { JobType.영매사, new Medium() }
-        };
-
-        // A. 기본 세팅
+        // B. 플레이어 / 아이템 / 스킬 초기 세팅
         static void SetData()
         {
-            // 직업 선택
             JobType selectType = Prompt();
             IJob job = JobDatas[selectType];
+            string name = ReadName(job);
+            DisplayStory(name, job);
 
 
-            // 이름 입력
-            string name;
-            while (true)
-            {
-                Console.Clear();
-                Console.WriteLine($"직업이 [{job.DisplayName}]로 정해졌습니다.");
-                Console.WriteLine($"[{job.DisplayName}]의 이름을 정해주세요.");
-                Console.Write("이름: ");
-                name = Console.ReadLine()!;
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Thread.Sleep(500);
-                    continue;
-                }
-                break;
-            }
+            // 플레이어 생성
+            player = new Player(name, job);
+            itemDb = Item.InitializeItemDb(); // 상점 초기화
 
-            // 스토리 출력
-            Console.Clear();
-            Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
-            Console.WriteLine($"{job.Story}\n\n");
-            Console.WriteLine($"{job.Description}\n");
-            Console.WriteLine($"공격력: {job.BaseAtk}  |  방어력: {job.BaseDef}  |  Hp: {job.BaseHp}  |  Mp: {job.BaseMp}  |  특성: {job.Trait}");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("Enter키를 눌러, 마을로 입장합니다.");
-            Console.ResetColor();
+            var initialItems = new List<Item>(Item.GifttemDb[job.Type]);
+            Inventory.Initialize(player, initialItems); // 아이템보상 인벤에 지급
 
-            WaitForEnter();
-
-            // 플레이어 정보 세팅
-            player = new Player(
-                    level: 1,
-                    exp: 0,
-                    maxExp: 100,
-                    name: name,
-                    job: job.Type,
-                    hp: job.BaseHp,
-                    mp: job.BaseMp,
-                    atk: job.BaseAtk,
-                    cri: job.BaseCri,
-                    def: job.BaseDef,
-                    maxHp: job.BaseHp,
-                    maxMp: job.BaseMp,
-                    gold: 10000
-                );
-
-            switch (player.Job) // 기본 스킬 지급
+            // 스킬 보상
+            switch (selectType)
             {
                 case JobType.전사:
                     SkillManager.FirstWarriorSkill(player);
@@ -133,116 +93,100 @@ namespace Sparta_Dungeon_TeamProject
                     SkillManager.FirstWhispererSkill(player);
                     break;
             }
-
-            InitItemDb(); // 아이템 세팅 호출
         }
 
-        // 0. 메인메뉴
-        public static void DisplayMainUI()
+        // B-1. 직업 선택 프롬프트 (1~5 숫자키로 정보보기)
+        private static JobType Prompt()
         {
-            Console.Clear();
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
-            Console.WriteLine();
-            Console.WriteLine("1. 상태 보기");
-            Console.WriteLine("2. 인벤토리");
-            Console.WriteLine("3. 상점");
-            Console.WriteLine("4. 던전입장");
-            Console.WriteLine("5. 휴식하기");
-            Console.WriteLine("0. 게임종료");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            JobType? current = null; // 처음에 아무것도 선택 X
 
-            int result = CheckInput(1, 5);
-
-            switch (result)
+            while (true)
             {
-                case 1:
-                    DisplayStatUI();
-                    break;
-                case 2:
-                    DisplayInventoryUI();
-                    break;
-                case 3:
-                    DisplayShopUI();
-                    break;
-                case 4:
-                    DisplayDungeonUI(Chapter);
-                    break;
-                case 5:
-                    DisplayRestUI();
-                    break;
-                case -1:
-                    Console.WriteLine("게임을 종료합니다.");
-                    Thread.Sleep(1000);
-                    // `키를 눌러 종료
-                    Environment.Exit(0);
-                    break;
+                Console.Clear();
+                Messages.StartSelectJob(current);
+
+                var keyInfo = Console.ReadKey(true);
+
+                if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D5)
+                {
+                    current = (JobType)(keyInfo.Key - ConsoleKey.D0);
+                }
+                else if (keyInfo.Key >= ConsoleKey.NumPad1 && keyInfo.Key <= ConsoleKey.NumPad5)
+                {
+                    current = (JobType)(keyInfo.Key - ConsoleKey.NumPad0);
+                }
+
+                // 선택 직업 간략한 정보 출력
+                if (current.HasValue)
+                {
+                    Console.SetCursorPosition(0, (int)current - 1);
+                }
+                if (keyInfo.Key == ConsoleKey.Enter && current.HasValue)
+                {
+                    return current.Value;
+                }
             }
         }
 
-        // 1. 상태보기 # Player.cs
-        static void DisplayStatUI()
+        public static readonly Dictionary<JobType, IJob> JobDatas = new()
         {
-            Console.Clear();
-            Console.WriteLine("상태 보기");
-            Console.WriteLine("캐릭터의 정보가 표시됩니다.");
-            Console.WriteLine();
+            { JobType.전사, new Warrior() },
+            { JobType.마법사, new Mage() },
+            { JobType.과학자, new Scientist() },
+            { JobType.대장장이, new Smith() },
+            { JobType.영매사, new Medium() }
+        };
 
-            player.DisplayPlayerInfo(); // # Player.cs
-
-            Console.WriteLine();
-            Console.WriteLine("1. 스킬 관리");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-
-            int result = CheckInput(1, 1);
-
-            switch (result)
+        // B-2. 이름 입력UI
+        private static string ReadName(IJob job)
+        {
+            while (true)
             {
-                case -1:
-                    DisplayMainUI();
-                    break;
-                case 1: // 스킬 관리
-                    player.DisplaySkillUI();
-                    break;
+                Console.Clear();
+                Console.WriteLine($"직업이 [{job.DisplayName}]로 정해졌습니다.");
+                Console.WriteLine($"[{job.DisplayName}]의 이름을 정해주세요.");
+                Console.Write("이름: ");
+                string input = Console.ReadLine()!;
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("올바른 이름을 입력해주세요.");
+                    Thread.Sleep(500);
+                    continue;
+                }
+                return input;
             }
         }
 
-        // 5. 휴식기능
-        static void DisplayRestUI()
+        // B-3. 직업 서사 / 초기 보상 UI
+        private static void DisplayStory(string name, IJob job)
         {
             Console.Clear();
-            Console.WriteLine("** 여관 **");
-            Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.Gold} G)");
-            Console.WriteLine("1. 휴식하기");
-            Console.WriteLine("0. 나가기");
-            Console.WriteLine("\n원하시는 행동을 입력해주세요.");
+            Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
+            Console.WriteLine($"{job.Story}\n\n");
+            Console.WriteLine($"공격력: {job.Atk}  |  방어력: {job.Def}  |  Hp: {job.MaxHp}  |  Mp: {job.MaxMp}  |  특성: {job.Trait}");
 
-            int result = CheckInput(1, 1);
-            switch (result)
+            Console.WriteLine($"====[The Hollowed 입성 기념 보상 지급]====");
+            Console.WriteLine($"골드: {job.DefaultGold} G");
+            // 초기 스킬 지급 내역이 있을 때만 출력
+            if (job.InitialSkills != null && job.InitialSkills.Count > 0)
             {
-                case -1:
-                    DisplayMainUI();
-                    break;
-                case 1:
-                    if (player.Gold >= 500)
-                    {
-                        player.Rest(); // 체력 회복
-                        Console.WriteLine("휴식을 완료했습니다. [Enter]");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Gold 가 부족합니다. [Enter]");
-                    }
-                    Console.ReadLine();
-                    DisplayMainUI();
-                    break;
+                Console.WriteLine($"스킬: {string.Join(", ", job.InitialSkills)}");
             }
+            // 초기 아이템 지급 내역이 있을 때만 출력
+            if (job.InitialItems != null && job.InitialItems.Count > 0)
+            {
+                Console.WriteLine($"아이템: {string.Join(", ", job.InitialItems.Select(i => i.Name))}");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("Enter키를 눌러, 마을로 입장합니다.");
+            Console.ResetColor();
+
+            WaitForEnter();
         }
 
-        // B. 입력값 체크(숫자 입력 후, 엔터)
+        // Z. 입력값 체크(숫자 입력 후, 엔터)
         public static int CheckInput(int min, int max)
         {
             int result;
@@ -282,17 +226,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        // B-1. 입력값 받고 하단 지워 일부만 새로운 UI 덮어 씌우기 용
-        static void ClearBottom(int fromLine, int lineCount)
-        {
-            for (int i = 0; i < lineCount; i++)
-            {
-                Console.SetCursorPosition(0, fromLine + i);
-                Console.Write(new string(' ', Console.WindowWidth));
-            }
-        }
-
-        // B-2. 입력값 체크 (Enter만!)
+        // Z-1. 입력값 체크 (Enter만!)
         public static void WaitForEnter()
         {
             while (true)
@@ -311,6 +245,16 @@ namespace Sparta_Dungeon_TeamProject
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                 Console.Write(new string(' ', Console.WindowWidth));
                 Console.SetCursorPosition(0, Console.CursorTop);
+            }
+        }
+
+        // Z-2. UI 일부 지우기 (제련소 참고하여 가능)
+        public static void ClearBottom(int fromLine, int lineCount)
+        {
+            for (int i = 0; i < lineCount; i++)
+            {
+                Console.SetCursorPosition(0, fromLine + i);
+                Console.Write(new string(' ', Console.WindowWidth));
             }
         }
     }
