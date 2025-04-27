@@ -105,30 +105,30 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"당신은 {randomSkill.Name} 스킬을 배웠습니다!");
         }
 
-        //public static void RandomWizzardSkill(Player player)
-        //{
-        //    Random random = new Random();
-        //    int idx = random.Next(5, 8); // 1~3 랜덤
-        //    player.Skills.Add(AllSkills[idx]);
-        //}
-        //public static void RandomScientistSkill(Player player)
-        //{
-        //    Random random = new Random();
-        //    int idx = random.Next(9, 12); // 1~3 랜덤
-        //    player.Skills.Add(AllSkills[idx]);
-        //}
-        ////public static void RandomBlacksmithSkill(Player player)
-        ////{
-        ////    Random random = new Random();
-        ////    int idx = random.Next(13, 16); // 1~3 랜덤
-        ////    player.Skills.Add(AllSkills[idx]);
-        ////}
-        //public static void RandomWhispererSkill(Player player)
-        //{
-        //    Random random = new Random();
-        //    int idx = random.Next(17, 20); // 1~3 랜덤
-        //    player.Skills.Add(AllSkills[idx]);
-        //}
+        public static void RandomWizzardSkill(Player player)
+        {
+            Random random = new Random();
+            int idx = random.Next(5, 8); // 1~3 랜덤
+            player.Skills.Add(AllSkills[idx]);
+        }
+        public static void RandomScientistSkill(Player player)
+        {
+            Random random = new Random();
+            int idx = random.Next(9, 12); // 1~3 랜덤
+            player.Skills.Add(AllSkills[idx]);
+        }
+        public static void RandomBlacksmithSkill(Player player)
+        {
+            Random random = new Random();
+            int idx = random.Next(13, 16); // 1~3 랜덤
+            player.Skills.Add(AllSkills[idx]);
+        }
+        public static void RandomWhispererSkill(Player player)
+        {
+            Random random = new Random();
+            int idx = random.Next(17, 20); // 1~3 랜덤
+            player.Skills.Add(AllSkills[idx]);
+        }
 
         //===============================[전사 스킬 사용]=================================
 

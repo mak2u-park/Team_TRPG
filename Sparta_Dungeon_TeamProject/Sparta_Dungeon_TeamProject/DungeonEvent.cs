@@ -39,7 +39,7 @@ namespace Sparta_Dungeon_TeamProject
                     wanderingMage();// 떠돌이 마법사 조우
                     break;
                 case 7:
-                    if (player.HasItem(Item.EventItemsDb[3]))
+                    if (Inventory.HasItem(Item.EventItemsDb[3]))
                     {
                         cat();// 고양이 조우 이벤트
                     }
@@ -49,7 +49,7 @@ namespace Sparta_Dungeon_TeamProject
                     }
                     break;
                 case 8:
-                    if (player.HasItem(Item.EventItemsDb[0]))
+                    if (Inventory.HasItem(Item.EventItemsDb[0]))
                     {
                         smith();//검복구 이벤트
                     }

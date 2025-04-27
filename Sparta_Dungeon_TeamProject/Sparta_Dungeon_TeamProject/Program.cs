@@ -114,6 +114,29 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        // B-1. 직업 선택 UI
+        public void StartSelectJob(JobType? selectedJob)
+        {
+            Console.WriteLine("[직업]을 선택하세요.");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
+            Console.ResetColor();
+
+            foreach (JobType job in Enum.GetValues(typeof(JobType)))
+            {
+                Console.WriteLine($"{(int)job}. {job}");
+
+                if (selectedJob == job)
+                {
+                    IJob jobData = JobDatas[job];
+                    Console.WriteLine($"  └ {jobData.Description}");
+                    Console.WriteLine($"  └ 공격력: {jobData.Atk}  |  방어력: {jobData.Def}  |  HP: {jobData.MaxHp}  |  MP: {jobData.MaxMp}");
+                    Console.WriteLine($"  └ 특성: {jobData.Trait}");
+                    Console.WriteLine();
+                }
+            }
+        }
+
         // B-1. 직업 선택 프롬프트 (1~5 숫자키로 정보보기)
         private JobType Prompt()
         {
@@ -122,7 +145,7 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.Clear();
-                Messages.StartSelectJob(current);
+                StartSelectJob(current);
 
                 var keyInfo = Console.ReadKey(true);
 

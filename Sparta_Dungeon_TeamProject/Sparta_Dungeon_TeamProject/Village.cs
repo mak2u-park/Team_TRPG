@@ -40,7 +40,7 @@ namespace Sparta_Dungeon_TeamProject
                     player.DisplayPlayerInfo();
                     break;
                 case 2:
-                    inventory.DisplayInventoryUI();
+                    BlackSmithShop.DisplayInventoryUI();
                     break;
                 case 3:
                     shop.DisplayShopUI();

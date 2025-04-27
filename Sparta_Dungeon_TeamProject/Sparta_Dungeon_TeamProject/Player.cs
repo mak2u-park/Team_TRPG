@@ -269,7 +269,7 @@ namespace Sparta_Dungeon_TeamProject
 
 
         // 1. 상태보기 UI
-        public void DisplayPlayerInfo(Program program)
+        public void DisplayPlayerInfo()
         {
             Console.Clear();
             Console.WriteLine();
