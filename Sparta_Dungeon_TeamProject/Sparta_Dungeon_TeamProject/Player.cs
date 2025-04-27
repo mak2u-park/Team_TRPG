@@ -21,6 +21,8 @@ namespace Sparta_Dungeon_TeamProject
                 return _instance;
             }
         }
+        Messages messages = new Messages();
+        Battles battles = new Battles();
 
         public string Name { get; private set; }
         public JobType Job { get; private set; }
@@ -127,22 +129,22 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 string levelUpMessage = "\n\n\n\n\n    쌓여온 경험이 당신을 한층 더 성장시켰습니다.\n\n\n\n\n";
 
-                Messages.StartSkipListener(); // 스킵 감지 시작
+                messages.StartSkipListener(); // 스킵 감지 시작
 
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Messages.PrintMessageWithSkip(levelUpMessage, 80); // 스킵 가능한 출력
-                if (Messages.Skip)
+                messages.PrintMessageWithSkip(levelUpMessage, 80); // 스킵 가능한 출력
+                if (messages.Skip)
                 {
                     Console.Clear(); // 스킵되었을 경우 화면 정리
                 }
                 Console.ResetColor();
 
-                if (!Messages.Skip)
+                if (!messages.Skip)
                 {
                     Thread.Sleep(800); // 스킵되지 않은 경우에만 약간 멈춤
                 }
 
-                Messages.Skip = false; // 초기화
+                messages.Skip = false; // 초기화
                 Console.WriteLine();
                 Console.WriteLine();
 
@@ -218,7 +220,7 @@ namespace Sparta_Dungeon_TeamProject
 
             if (this.IsCritical())
             {
-                Messages.CriticalMes(this);
+                messages.CriticalMes(this);
             }
             Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
@@ -250,10 +252,18 @@ namespace Sparta_Dungeon_TeamProject
             if (Hp <= 0)
             {
                 Hp = 0;
-                Program.BattleFailUI();
+                CheckPlayerDead();
             }
         }
 
+        public void CheckPlayerDead()
+        {
+            if (Hp <= 0)
+            {
+                Battles battles = new Battles();
+                battles.BattleFailUI(); // Battles 클래스의 BattleFailUI 호출
+            }
+        }
 
 
         // 스탯 강화 스킬 (활용예시:   player.AtkUP(5);   // 공격력 +5)
@@ -326,13 +336,13 @@ namespace Sparta_Dungeon_TeamProject
                     return;
                     break;
                 case 1:
-                    DisplaySkillUI(program);
+                    DisplaySkillUI();
                     break;
             }
         }
 
         // 2. 스킬 UI
-        public void DisplaySkillUI(Program program)
+        public void DisplaySkillUI()
         {
             Console.Clear();
             Console.WriteLine("[스킬 목록]");

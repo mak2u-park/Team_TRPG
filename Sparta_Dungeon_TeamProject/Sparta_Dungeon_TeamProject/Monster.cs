@@ -116,7 +116,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static class MonsterFactory
+        public class MonsterFactory
         {
             // 문자열로 몬스터 이름을 받아 해당 몬스터 객체 생성
             public static Monster CreateMonster(string monsterName)

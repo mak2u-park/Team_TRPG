@@ -8,7 +8,7 @@ using Sparta_Dungeon_TeamProject;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public partial class Messages
+    public class Messages
     {
         public bool Skip = false; // 메시지 스킵 기능
         public Thread inputThread; // 메시지 스킵 기능
@@ -115,8 +115,10 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-
-        public string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
+        public string[] ChapterTitle = new string[]
+        {
+            "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층"
+        };
 
         public void ChapterDesc(int Chapter)
         {
@@ -313,7 +315,7 @@ namespace Sparta_Dungeon_TeamProject
             Skip = false; // 다음 출력을 위해 초기화
         }
 
-        public void EvasionMess(Monster target, Program Playerturn)
+        public void EvasionMess(Monster target, ref bool playerTurn)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -323,7 +325,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
             Console.ResetColor();
             Thread.Sleep(700);
-            Playerturn = false;
+            playerTurn = false;
             return;
         }
        
