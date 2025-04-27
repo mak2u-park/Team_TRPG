@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 8; // 스테이지 변수
+        public static int Stage = 0; // 스테이지 변수
         public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
@@ -872,7 +872,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("카피바라의 털이 축축해졌습니다");
                     Console.WriteLine("대왕 카피바라가 당신을 묘한 눈으로 쳐다봅니다.");
                     Console.WriteLine("이상할 정도로 무방비해보입니다...");
-                    Console.WriteLine("대왕 카피바라의 방어력이 대폭 감소했다.");
+                    Console.WriteLine("대왕 카피바라의 방어력이 대폭 감소했습니다.");
                     battleMonsters[0].ChangeStat(StatType.Def, 1);
                     break;
                 case 4:
