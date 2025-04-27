@@ -16,6 +16,8 @@ namespace Sparta_Dungeon_TeamProject
         private Inventory inventory;
         private Village village;
         Messages messages = new Messages();
+        private MonsterSpawner monsterSpawner = new MonsterSpawner();
+        private BattleManager battleManager = new BattleManager();
 
         private List<Monster> monsters = new List<Monster>(); // 몬스터 리스트
         private List<Monster> bossMonsters = new List<Monster>(); // 보스 몬스터 리스트
@@ -30,14 +32,14 @@ namespace Sparta_Dungeon_TeamProject
         public int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
-        public  int bossAtk;
-        public  int bossDef;
-        public  int bossDodge;
+        public int bossAtk;
+        public int bossDef;
+        public int bossDodge;
 
-         bool chapter1BossAlive = true;
-         bool chapter2BossAlive = true;
-         bool chapter3BossAlive = true;
-         bool chapter4BossAlive = true;
+        bool chapter1BossAlive = true;
+        bool chapter2BossAlive = true;
+        bool chapter3BossAlive = true;
+        bool chapter4BossAlive = true;
 
         public bool Playerturn = true; // 플레이어의 턴 여부
         public bool BossStage = false; // 보스스테이지 여부
@@ -102,9 +104,9 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 보스 등장 스크립트 (3번째 스테이지마다 등장 예정)
-         void EnterBossUI()
+        private void EnterBossUI()
         {
-            battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
+            battleMonsters = monsterSpawner.SpawnMonsters(Stage);
             var m = battleMonsters[0];
             bossAtk = m.Atk;
             bossDef = m.Def;
@@ -175,11 +177,11 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-         void Battle(int stage)
+        public void Battle(int stage)
         {
             KillMon = 0; // 몬스터 킬 수 초기화
             BattleTurn = 1; // 전투 턴 수 초기화
-            battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
+            battleMonsters = monsterSpawner.SpawnMonsters(Stage);
             Playerturn = true;
 
             while (true)
@@ -195,11 +197,11 @@ namespace Sparta_Dungeon_TeamProject
                 }
             }
         }
-         void BossBattlechap(int chapter)
+        private void BossBattlechap(int chapter)
         {
             KillMon = 0;
             BattleTurn = 1;
-            battleMonsters = MonsterSpawner.SpawnMonsters(Stage);
+            battleMonsters = monsterSpawner.SpawnMonsters(Stage);
             Playerturn = true;
 
 
@@ -233,7 +235,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-         void PlayerTurnUI()
+        private void PlayerTurnUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -291,7 +293,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-         void PlayerActionNormal()
+        private void PlayerActionNormal()
         {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -332,7 +334,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-         void PlayerActionBoss1()
+        private void PlayerActionBoss1()
         {
             left = false;
             right = false;
@@ -395,7 +397,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-         void PlayerActionBoss2()
+        private void PlayerActionBoss2()
         {
 
 
@@ -436,7 +438,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-         void PlayerActionBoss3()
+        private void PlayerActionBoss3()
         {
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -475,7 +477,7 @@ namespace Sparta_Dungeon_TeamProject
                     break;
             }
         }
-         void PlayerActionBoss4()
+        private void PlayerActionBoss4()
         {
             int bossdodge = bossDodge;
 
@@ -639,7 +641,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-         void MonsterTurnUI()
+        private void MonsterTurnUI()
         {
             doubleAttack = false;
 
@@ -725,7 +727,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 보스 기믹 모음(보스 스테이지일 경우에만 실행)
-        public  void BossGimmick(int chapter)
+        private void BossGimmick(int chapter)
         {
             switch (chapter)
             {
@@ -752,7 +754,7 @@ namespace Sparta_Dungeon_TeamProject
 
 
         // 플레이어 공격 시 UI
-         void PlayerAttack()
+        private void PlayerAttack()
         {
             Console.Clear();
             Console.WriteLine();
@@ -802,9 +804,9 @@ namespace Sparta_Dungeon_TeamProject
                 return;
             }
             // 몬스터가 회피했을 때
-            if (BattleManager.MonEvasion(target) == true)
+            if (battleManager.MonEvasion(target) == true)
             {
-                BattleManager.MonEvasionMes(target);
+                battleManager.MonEvasionMes(target);
                 Playerturn = false;
                 return;
             }
@@ -839,7 +841,7 @@ namespace Sparta_Dungeon_TeamProject
 
             Playerturn = false; // 몬스터에게 턴 넘김
 
-             void DisplayKillMessage(Monster target)
+            void DisplayKillMessage(Monster target)
             {
                 Console.WriteLine();
                 Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 일격을 맞고 사망했다!");
@@ -855,7 +857,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
             }
 
-             void ExpGoldCheck()
+            void ExpGoldCheck()
             {
                 Console.WriteLine();
                 Console.WriteLine();
@@ -870,7 +872,7 @@ namespace Sparta_Dungeon_TeamProject
 
         }
 
-        public  void BattleSuccessUI()
+        private void BattleSuccessUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -935,7 +937,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 다음스테이지가 보스스테이지인지 구분하는 메서드
-        private  void HandleNextStage(int stage)
+        private void HandleNextStage(int stage)
         {
             int num = Stage % 3;
             switch (num)
@@ -954,7 +956,7 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-        public  void BossGimmick1()
+        private void BossGimmick1()
         {
             if (GimmickReady++ % 2 == 0)
             {
@@ -1019,7 +1021,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        public  void BossGimmick2()
+        private void BossGimmick2()
         {
             int def = bossDef;
             int atk = bossAtk;
@@ -1056,7 +1058,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.ReadKey();
         }
 
-        public  void BossGimmick3()
+        private void BossGimmick3()
         {
             // 3스테이지 보스 대왕 카피바라는 검은 고양이 기믹에 대한 힌트를 주는 기믹으로 설계
             // 검은 고양이와의 조우시 출력되는 선택지와 유사한 행동을 하며, 긍정적, 부정적 효과를 얻음
@@ -1119,7 +1121,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        public  void BattleFailUI()
+        private void BattleFailUI()
         {
             Console.Clear();
             Console.WriteLine();
@@ -1161,7 +1163,7 @@ namespace Sparta_Dungeon_TeamProject
             Environment.Exit(0);
         }
 
-         void PrintMonsters()
+        private void PrintMonsters()
         {
             for (int i = 0; i < battleMonsters.Count; i++)
             {
@@ -1191,10 +1193,10 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-    public  class MonsterSpawner
+    public class MonsterSpawner
     {
         // 보스가 등장하는 스테이지
-        private  readonly Dictionary<int, string> BossStages = new()
+        private readonly Dictionary<int, string> BossStages = new()
         {
             {2, "Capybara" },
             {5, "RegretfulAdventurer" },
@@ -1204,7 +1206,7 @@ namespace Sparta_Dungeon_TeamProject
         };
 
         // 챕터별 등장하는 몬스터 분류
-        private  readonly Dictionary<int, Type> ChapterMonsterEnums = new()
+        private readonly Dictionary<int, Type> ChapterMonsterEnums = new()
         {
             {1, typeof(MonsterTypeChap1) },
             {2, typeof(MonsterTypeChap2) },
@@ -1213,7 +1215,7 @@ namespace Sparta_Dungeon_TeamProject
         };
 
         // 스테이지 별 딕셔너리의 Key로 쓰일 int 정의
-        private  int GetChapter(int stage)
+        private int GetChapter(int stage)
         {
             if (stage < 3) return 1;
             if (stage < 6) return 2;
@@ -1222,7 +1224,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 스테이지에 따른 몬스터 리스트 생성
-        public  List<Monster> SpawnMonsters(int Stage)
+        public List<Monster> SpawnMonsters(int Stage)
         {
             Random random = new Random();
 
@@ -1250,16 +1252,16 @@ namespace Sparta_Dungeon_TeamProject
         }
     }
 
-    public  class BattleManager
+    public class BattleManager
     {
-        public  Random rand = new Random();
+        public Random rand = new Random();
 
-        public  bool MonEvasion(Monster target)
+        public bool MonEvasion(Monster target)
         {
             return rand.Next(0, 100) < target.Dodge; // 몬스터 회피 확률
         }
 
-        public  void MonEvasionMes(Monster target) // 몬스터가 회피했다면
+        public void MonEvasionMes(Monster target) // 몬스터가 회피했다면
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;

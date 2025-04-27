@@ -265,6 +265,22 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        public void boarDamage(bool choice)
+        {
+            if (choice)
+            {
+                // 멧돼지의 돌진 방향을 틀린 경우
+                Hp -= MaxHp / 5;
+                Console.WriteLine(MaxHp);
+            }
+            else
+            {
+                // 아무런 방향을 선택하지 않은 경우
+                Hp -= MaxHp / 10;
+                Console.WriteLine(MaxHp);
+            }
+        }
+
 
         // 스탯 강화 스킬 (활용예시:   player.AtkUP(5);   // 공격력 +5)
         public void AtkUP(int value)

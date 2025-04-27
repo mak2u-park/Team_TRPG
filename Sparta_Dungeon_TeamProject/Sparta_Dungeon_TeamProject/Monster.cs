@@ -9,7 +9,33 @@ using System.Threading.Tasks;
 
 namespace Sparta_Dungeon_TeamProject
 {
+    public enum MonsterTypeChap1
+    {
+        Wolf,
+        Goblin,
+        Orc
+    }
 
+    public enum MonsterTypeChap2
+    {
+        Cavebat,
+        Ghost,
+        Skeleton
+    }
+
+    public enum MonsterTypeChap3
+    {
+        Adventurer,
+        SmilingSlime,
+        HeadlessSkeletion
+    }
+
+    public enum MonsterTypeChap4
+    {
+        Swordsman,
+        Mage,
+        Archer
+    }
 
     public class Monster
     {
@@ -151,12 +177,6 @@ namespace Sparta_Dungeon_TeamProject
 
             /*======================================[ 챕터 1 ]=====================================================*/
 
-            public enum MonsterTypeChap1
-            {
-                Wolf,
-                Goblin,
-                Orc
-            }
 
             // 아직 스탯은 변경하지 않음
             class Wolf : Monster
@@ -219,12 +239,6 @@ namespace Sparta_Dungeon_TeamProject
 
             /*======================================[ 챕터 2 ]=====================================================*/
 
-            public enum MonsterTypeChap2
-            {
-                Cavebat,
-                Ghost,
-                Skeleton
-            }
 
             // 아직 스탯은 변경하지 않음
             class Cavebat : Monster
@@ -287,12 +301,6 @@ namespace Sparta_Dungeon_TeamProject
 
             /*======================================[ 챕터 3 ]=====================================================*/
 
-            public enum MonsterTypeChap3
-            {
-                Adventurer,
-                SmilingSlime,
-                HeadlessSkeletion
-            }
 
             // 아직 스탯은 변경하지 않음
             class Adventurer : Monster
@@ -355,12 +363,6 @@ namespace Sparta_Dungeon_TeamProject
 
             /*======================================[ 챕터 4 ]=====================================================*/
 
-            public enum MonsterTypeChap4
-            {
-                Swordsman,
-                Mage,
-                Archer
-            }
 
             // 아직 스탯은 변경하지 않음
             class Swordsman : Monster
@@ -422,13 +424,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
             /*======================================[ 보스 몬스터 ]=====================================================*/
-            public enum MonsterTypeBoss
-            {
-                Capybara,
-                RegretfulAdventurer,
-                GiantCapybara,
-                BlackCat
-            }
+            
 
             class Capybara : Monster
             {
