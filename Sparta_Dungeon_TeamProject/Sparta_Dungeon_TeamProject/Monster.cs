@@ -163,12 +163,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Wolf() : base(
                     name: "늑대",
-                    minLevel: 1, maxLevel: 5,
-                    minAtk: 3, maxAtk: 5,
-                    minDef: 5, maxDef: 10,
+                    minLevel: 1, maxLevel: 3,
+                    minAtk: 1, maxAtk: 3,
+                    minDef: 5, maxDef: 5,
                     minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
+                    dodge: 20,
+                    minDropGold: 300, maxDropGold: 500,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.1f)
@@ -186,13 +186,13 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
+                    dodge: 10,
+                    minDropGold: 500, maxDropGold: 1000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.1f)
                 {
-
+                     
                 }
 
             }
@@ -206,8 +206,8 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
-                    dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    dodge: 0,
+                    minDropGold: 0, maxDropGold: 2000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
