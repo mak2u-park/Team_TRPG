@@ -175,9 +175,14 @@ namespace Sparta_Dungeon_TeamProject
         {
             while (Exp >= MaxExp) // 레벨업
             {
+
                 Exp -= MaxExp;
                 MaxExp = JobDatas[Job].ExpToLevelUp;
+                MaxExp += 25;
                 Level++;
+                Hp = MaxHp + 5; // 레벨업 시 체력 증가
+                ExtraAtk += 1;
+                ExtraDef += 1;
 
                 Console.Clear();
                 Console.WriteLine();
@@ -216,30 +221,64 @@ namespace Sparta_Dungeon_TeamProject
             GainExp();
         }
 
-
-        public void PlayerAttack(Monster target, double power) // 플레이어 공격
+        //==========================================[플레이어 공격 관련]============================================
+        public void PlayerAttack(Monster target, double power) 
         {
             if (IsHit(target))
             {
                 bool isCritical = IsCritical();
                 double multiplier = DamageSpread();
 
-                double attackDamage = isCritical ? FinalAtk * power * (CriDmg / 100.0) : FinalAtk * power;
+                double attackDamage = isCritical ? FinalAtk * power * (CriDmg / 100.0) : FinalAtk * power; 
                 int finalAttackDamage;
 
                 if (Job == JobType.마법사) // 마법사는 방어력 절반 무시
                 {
-                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - (target.Def / 2.0));
-                }
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - (target.Def / 2));
+                }       
                 else
                 {
                     finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def);
                 }
 
+                if (Job == JobType.대장장이) // 대장장이의 공격이 명중할 때마다 적의 방어력 감소
+                {
+                    Random random = new Random();
+                    int armorBreak = random.Next(0, 6); // 0 ~ 5
+
+                    if (armorBreak > 0)
+                    {
+                        int beforeDef = target.Def;
+                        target.Def -= armorBreak;
+
+                        if (target.Def < 0)
+                        {
+                            target.Def = 0; // 방어력은 0 밑으로 떨어지지 않게
+                        }
+
+                        int decreasedAmount = beforeDef - target.Def;
+
+                        Console.WriteLine($"\n\n\n{"",10}대장장이가 [Lv.{target.Level}][{target.Name}]에 방어력을 {armorBreak}만큼 감소 시켰습니다!");
+                        Console.WriteLine($"\n\n\n{"",10}현재  [Lv.{target.Level}][{target.Name}]의 방어력은 {target.Def}입니다!");
+                    }
+                }
+
+                if (Job == JobType.전사) // 전사는 보스 몬스터에게 추가피해
+                {
+                    if (target.Name == "카피바라" || target.Name == "후회하는 모험가" || target.Name == "대왕 카피바라" || target.Name == "검은 고양이")
+                    {
+                        int originalDamage = finalAttackDamage;
+
+                        finalAttackDamage = (int)(finalAttackDamage * 1.3);
+
+                        int addedDamage = finalAttackDamage - originalDamage; // 추가된 피해량 계산
+
+                        Console.WriteLine($"\n\n\n{"",10}전사의 강공격! 추가 피해 {addedDamage}가 적용되었습니다!");
+                    }
+                }
                 finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1 보장
                 target.CurrentHp -= finalAttackDamage;
 
-                Console.Clear();
                 Console.WriteLine();
 
                 if (isCritical)
@@ -261,18 +300,30 @@ namespace Sparta_Dungeon_TeamProject
 
         public void SplitAttack(Monster target) // 영매사 유령 공격
         {
-            int SplitDamage = Level * 3;
+            Random random = new Random();
+            int SplitCount = random.Next(1, 4); // 1 ~ 3명의 유령 소환
 
-            SplitDamage = Math.Max(1, SplitDamage); // 최소 데미지 1 보장
+            Console.WriteLine($"\n\n\n{"",10}{SplitCount}명의 영혼이 당신을 돕습니다.");
 
-            if (target.CurrentHp - SplitDamage <= 0)
+            int totalDamage = 0; // 전체 누적 데미지
+
+            for (int i = 0; i < SplitCount; i++)
             {
-                SplitDamage = target.CurrentHp - 1;
-                if (SplitDamage < 0) SplitDamage = 0; // 혹시 체력이 1 이하였던 경우를 방지
+                int SplitDamage = Level * 2;
+
+                if (target.CurrentHp - SplitDamage <= 0)
+                {
+                    SplitDamage = (int)target.CurrentHp - 1;
+                    if (SplitDamage < 0) SplitDamage = 0; // 체력이 1 이하면 0 데미지
+                }
+
+                target.CurrentHp -= SplitDamage;
+                totalDamage += SplitDamage; // 누적
+                if (target.CurrentHp <= 1) break; // 체력 1 이하면 추가 공격 금지
             }
 
-            Console.WriteLine();
-            Console.WriteLine($"\n\n\n{"",10}의문의 영혼이 [Lv.{target.Level}][{target.Name}] 에게 {SplitDamage}만큼 피해를 주었다!");
+            Console.WriteLine($"\n{"",10}의문의 영혼 {SplitCount}명이 [Lv.{target.Level}][{target.Name}] 에게 총 {totalDamage}만큼 피해를 주었다!");
+
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
             Program.WaitForEnter();
             Console.Clear();
@@ -327,6 +378,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
+        //==========================================[플레이어 상태 관련]============================================
         public void CheckPlayerDead()
         {
             if (Hp <= 0)
@@ -357,18 +409,23 @@ namespace Sparta_Dungeon_TeamProject
                 Gold -= cost;
             }
 
-            int newHp = Hp + amount;
+            int healAmount = amount;
 
-            if (newHp <= 0)
+            if (Job == JobType.영매사) // 영매사는 회복량 절반
             {
-                newHp = 10;
-            }
-            else if (newHp > MaxHp)
-            {
-                newHp = MaxHp;
+                healAmount /= 2;
             }
 
-            Hp = newHp;
+            Hp += healAmount;
+
+            if (Hp <= 0)
+            {
+                Hp = 10;
+            }
+            else if (Hp > MaxHp)
+            {
+                Hp = MaxHp;
+            }
             return true;
         }
 

@@ -671,11 +671,28 @@ namespace Sparta_Dungeon_TeamProject
                     Console.ResetColor();
                     Console.WriteLine();
 
-                    player.EnemyDamage(m.Atk);
-                    Console.WriteLine();
 
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                    if (player.Job == JobType.전사)
+                    {
+                        Random random = new Random();
+                        int block = random.Next(1, 3);
+                        if (block == 1)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"당신은 [Lv.{m.Level}][{m.Name}]의 공격을 막았습니다!");
+                        }
+                        else
+                        {
+                            player.EnemyDamage(m.Atk); 
+                            Console.WriteLine();
+                            Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                        }
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                    }
                     Console.ResetColor();
                     Console.WriteLine();
                     Thread.Sleep(300);

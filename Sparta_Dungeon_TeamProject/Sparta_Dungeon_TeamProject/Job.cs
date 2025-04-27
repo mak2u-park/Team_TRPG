@@ -47,8 +47,8 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
         public int ExpToLevelUp => 100;
-        public int Atk => 20;
-        public int Acc => 75;
+        public int Atk => 10;
+        public int Acc => 65;
         public int Cri => 40;
         public int CriDmg => 200;
         public int Def => 8;
@@ -124,7 +124,7 @@ namespace Sparta_Dungeon_TeamProject
             "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
         public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
         public int ExpToLevelUp => 130;
-        public int Atk => 14;
+        public int Atk => 5;
         public int Acc => 85;
         public int Cri => 10;
         public int CriDmg => 160;

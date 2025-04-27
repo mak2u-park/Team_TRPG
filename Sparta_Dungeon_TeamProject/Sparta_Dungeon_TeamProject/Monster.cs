@@ -19,7 +19,7 @@ namespace Sparta_Dungeon_TeamProject
         // 몬스터 기본 스탯
         public int Level { get; protected set; }
         public int Atk { get; protected set; }
-        public int Def { get; protected set; }
+        public int Def { get; set; }
         public int Hp { get; set; }
         public int Dodge { get; protected set; }
 
