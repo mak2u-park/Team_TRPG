@@ -52,7 +52,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "높은 생존력";
 
         public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.전사]);
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.전사]);
     }
 
     public class Mage : IJob
@@ -76,7 +76,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "높은 마나 풀";
 
         public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.마법사]);
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.마법사]);
     }
 
     public class Scientist : IJob
@@ -98,7 +98,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "다재다능한 스킬셋";
 
         public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.과학자]);
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.과학자]);
     }
 
     public class Smith : IJob
@@ -120,7 +120,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "장비 강화 전문가";
 
         public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.대장장이]);
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.대장장이]);
     }
 
     public class Medium : IJob
@@ -143,6 +143,6 @@ namespace Sparta_Dungeon_TeamProject
         public string Trait => "스킬 복제 능력";
 
         public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.영매사]);
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.영매사]);
     }
 }

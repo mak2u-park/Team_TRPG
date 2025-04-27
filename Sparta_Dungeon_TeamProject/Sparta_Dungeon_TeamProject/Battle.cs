@@ -1121,7 +1121,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        private void BattleFailUI()
+        public void BattleFailUI() // Player에서 호출중이라 public해놓음. - 거기서 호출 없으면 private 추천
         {
             Console.Clear();
             Console.WriteLine();

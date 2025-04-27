@@ -7,15 +7,20 @@ using Sparta_Dungeon_TeamProject;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    /*class Blacksmith_Skill
+    public class Blacksmith_Skill
     {
+        private Player player;
+        private Inventory inventory;
+        private Village village;
+        private static Messages messages = new Messages();
+
         public static void LostFlameSkillEffect()
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.DarkBlue;
 
             // 캐릭터 대사
-            if (!Messages.Skip) // 스킵 = false 대사 출력
+            if (!messages.Skip) // 스킵 = false 대사 출력
             {
                 string[] emotionLines1 =
                 {
@@ -24,20 +29,20 @@ namespace Sparta_Dungeon_TeamProject
         "\n\n    \"한 번 더... 마지막으로 한 번만.\""
     };
 
-                Messages.PrintLinesWithSkip(emotionLines1, 30, 150);
+                messages.PrintLinesWithSkip(emotionLines1, 30, 150);
 
-                if (!Messages.Skip)
+                if (!messages.Skip)
                 {
                     // 회색 메시지 출력
                     Console.ForegroundColor = ConsoleColor.DarkGray;
                     string[] emotionLines2 =
                 {"\n\n\n    - 그리고, 타오르는 쇳물이 그 눈동자에서 피어난다.", };
 
-                    Messages.PrintLinesWithSkip(emotionLines2, 40, 100);
+                    messages.PrintLinesWithSkip(emotionLines2, 40, 100);
                     Console.ResetColor();
                 }
 
-                if (Messages.Skip) Console.Clear(); // 스킵 = true 넘어가면서 청소
+                if (messages.Skip) Console.Clear(); // 스킵 = true 넘어가면서 청소
             }
 
             Thread.Sleep(300);
@@ -53,7 +58,7 @@ namespace Sparta_Dungeon_TeamProject
             "\n\n    녹슨 망치 끝에서 다시 타오른다."
         };
 
-            Messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
+            messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
 
             // 효과 설명
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -70,35 +75,38 @@ namespace Sparta_Dungeon_TeamProject
 
 class Wizard_Skill
 {
+    private static Messages messages = new Messages();
+
     public static void Burning()
     {
         Console.Clear();
         Console.ForegroundColor = ConsoleColor.DarkCyan;
 
         // 캐릭터 대사
-        if (!Messages.Skip) // 스킵 = false 대사 출력
+        if (!messages.Skip)
         {
             string[] emotionLines1 =
             {
-        "\n\n\n\n    \"진짜야, 나도... 배운 적 있다고!\"",
-        "\n\n    \"봐봐, 이거 하나쯤은... 아직 할 수 있어.\"",
-        "\n\n    \"하긴... 뭐, 별 건 아니지만.\""
-    };
+                    "\n\n\n\n    \"진짜야, 나도... 배운 적 있다고!\"",
+                    "\n\n    \"봐봐, 이거 하나쯤은... 아직 할 수 있어.\"",
+                    "\n\n    \"하긴... 뭐, 별 건 아니지만.\""
+            };
 
-            Messages.PrintLinesWithSkip(emotionLines1, 50, 150);
+            messages.PrintLinesWithSkip(emotionLines1, 50, 150);
 
-            if (!Messages.Skip)
+            if (!messages.Skip)
             {
-                // 회색 메시지 출력
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 string[] emotionLines2 =
-            {"\n\n\n    - 허세 섞인 외침이, 짧은 순간 불꽃을 품는다.", };
+                {
+                        "\n\n\n    - 허세 섞인 외침이, 짧은 순간 불꽃을 품는다.",
+                };
 
-                Messages.PrintLinesWithSkip(emotionLines2, 40, 100);
+                messages.PrintLinesWithSkip(emotionLines2, 40, 100);
                 Console.ResetColor();
             }
 
-            if (Messages.Skip) Console.Clear(); // 스킵 = true 넘어가면서 청소
+            if (messages.Skip) Console.Clear(); // 스킵 = true 넘어가면서 청소
         }
 
         Thread.Sleep(300);
@@ -114,7 +122,7 @@ class Wizard_Skill
             "\n\n    불꽃이 스치듯 적을 태우고는, 연기만을 남긴다."
         };
 
-        Messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
+        messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
 
         // 효과 설명
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -132,29 +140,30 @@ class Wizard_Skill
         Console.ForegroundColor = ConsoleColor.DarkCyan;
 
         // 캐릭터 대사
-        if (!Messages.Skip) // 스킵 = false 대사 출력
+        if (!messages.Skip)
         {
             string[] emotionLines1 =
             {
-            "\n\n\n\n    \"마탑 들어가는데 쓴 돈이 얼만데... 이 정도는 해야지.\"",
-            "\n\n    \"기초 마법이라도, 제대로 배운 건 맞거든.\"",
-            "\n\n    \"하루쯤은, 나도 버틸 수 있어.\""
-    };
+                    "\n\n\n\n    \"마탑 들어가는데 쓴 돈이 얼만데... 이 정도는 해야지.\"",
+                    "\n\n    \"기초 마법이라도, 제대로 배운 건 맞거든.\"",
+                    "\n\n    \"하루쯤은, 나도 버틸 수 있어.\""
+                };
 
-            Messages.PrintLinesWithSkip(emotionLines1, 50, 150);
+            messages.PrintLinesWithSkip(emotionLines1, 50, 150);
 
-            if (!Messages.Skip)
+            if (!messages.Skip)
             {
-                // 회색 메시지 출력
                 Console.ForegroundColor = ConsoleColor.DarkGray;
                 string[] emotionLines2 =
-            {"\n\n\n    - 어설픈 제스처 속에서, 차가운 기운이 응집된다.", };
+                {
+                        "\n\n\n    - 어설픈 제스처 속에서, 차가운 기운이 응집된다.",
+                    };
 
-                Messages.PrintLinesWithSkip(emotionLines2, 40, 100);
+                messages.PrintLinesWithSkip(emotionLines2, 40, 100);
                 Console.ResetColor();
             }
 
-            if (Messages.Skip) Console.Clear(); // 스킵 = true 넘어가면서 청소
+            if (messages.Skip) Console.Clear();
         }
 
         Thread.Sleep(300);
@@ -170,7 +179,7 @@ class Wizard_Skill
             "\n\n    단단하진 않지만, 그 방패는 적어도 한 번은 막아낼 것이다."
         };
 
-        Messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
+        messages.PrintLinesWithSkip(skillEffectLines, 25, 60);
 
         // 효과 설명
         Console.ForegroundColor = ConsoleColor.Yellow;
@@ -179,5 +188,5 @@ class Wizard_Skill
         Console.ResetColor();
 
         Thread.Sleep(600);
-    }*/
+    }
 }

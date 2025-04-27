@@ -4,9 +4,19 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    /*public class DungeonEvent
+    public class DungeonEvent
     {
+        private Player player;
+        private Inventory inventory;
         public List<Item> eventitemlist = new List<Item>();
+
+        public DungeonEvent(Player player, Inventory inventory)
+        {
+            this.player = player;
+            this.inventory = inventory;
+        }
+
+
         Random random = new Random();
         int eventNum;
         int eventValue;
@@ -39,7 +49,7 @@ namespace Sparta_Dungeon_TeamProject
                     wanderingMage();// 떠돌이 마법사 조우
                     break;
                 case 7:
-                    if (Inventory.HasItem(Item.EventItemsDb[3]))
+                    if (inventory.HasItem(Item.EventItemsDb[3]))
                     {
                         cat();// 고양이 조우 이벤트
                     }
@@ -49,7 +59,7 @@ namespace Sparta_Dungeon_TeamProject
                     }
                     break;
                 case 8:
-                    if (Inventory.HasItem(Item.EventItemsDb[0]))
+                    if (inventory.HasItem(Item.EventItemsDb[0]))
                     {
                         smith();//검복구 이벤트
                     }
@@ -412,5 +422,5 @@ namespace Sparta_Dungeon_TeamProject
             origin: 0.15f)
         {
         }
-    }*/
+    }
 }

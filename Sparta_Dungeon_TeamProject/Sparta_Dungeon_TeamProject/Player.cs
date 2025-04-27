@@ -9,6 +9,9 @@ namespace Sparta_Dungeon_TeamProject
     public class Player
     {
         private static Player _instance;
+        private static Inventory inventory;
+        private readonly List<Item> equippedItems = new();
+
         private Player() { }
         public static Player Instance
         {
@@ -47,10 +50,6 @@ namespace Sparta_Dungeon_TeamProject
         // 총 스탯 합계
         public int FinalAtk => Atk + ExtraAtk;
         public int FinalDef => Def + ExtraDef;
-
-        // 인벤토리
-        private List<Item> inventory = new List<Item>();
-        private readonly List<Item> equippedItems = new();
 
         // 보유 스킬 목록 (초기보상스킬은 Job에서)
         public List<SkillLibrary> Skills { get; private set; } = new List<SkillLibrary>();
@@ -452,6 +451,18 @@ namespace Sparta_Dungeon_TeamProject
                 ExtraAtk += valueUp;
             else if (item.Type == 1)
                 ExtraDef += valueUp;
+        }
+
+
+        //던전 이벤트
+        public void BuyItem(Item item)
+        {
+            inventory.AddItem(item);
+        }
+
+        public bool HasItem(Item item)
+        {
+            return inventory.HasItem(item);
         }
     }
 }

@@ -83,6 +83,40 @@ namespace Sparta_Dungeon_TeamProject
             return $"{typeText} {Name}{statInfo}  |  {Desc}";
         }
 
+        // 던전이벤트용 아이템 목록
+        public static readonly List<Item> EventItemsDb = new List<Item>()
+        {
+            new Item("부러진 검", 5, 5, 0, 0, 0, "세월의 흔적이 보이는 부러진 검 입니다.", 0),
+            new Item("옛 영웅의 검", 5, 20, 0, 0, 0, "옛 영웅의 검", 0),
+            new Item("저주받은 검", 5, 15, 0, 0, 0, "기분나쁜 검 입니다.", 0),
+            new Item("물고기", 5, 0, 0, 2, 0, "아주 싱싱해보이는 물고기이다.", 0)
+        };
+
+        // 초기 보상용 직업별 아이템 목록
+        public static readonly Dictionary<JobType, Item[]> GiftItemsDb = new()
+        {
+            { JobType.전사, new[] { new Item("pp", 0, 0, 0, 0, 0, "1", 0) } },
+            { JobType.마법사, new[] { new Item("mm", 0, 0, 0, 0, 0, "3", 0) } },
+            { JobType.과학자, new[] { new Item("zz", 0, 0, 0, 0, 15, "5", 0) } },
+            { JobType.대장장이, new[] {
+                new Item("dd", 0, 5, 0, 0, 0, "7", 0),
+                new Item("ss", 1, 0, 3, 5, 0, "8", 0),
+                new Item("ee", 1, 0, 3, 5, 0, "9", 0)
+            }},
+            { JobType.영매사, new[] { new Item("bb", 3, 0, 0, 0, 0, "9", 0) } }
+        };
+
+        /*public static Item[] ShopItemsDb()
+        {
+            return new Item[]
+            {
+         new Item("철검",   0, 5, 0, 0, 0, "기본적인 철검입니다.", 100),
+         new Item("철방패", 1, 0, 5, 0, 0, "기본적인 철제 방패입니다.", 120),
+         new Item("HP 포션",2, 0, 0, 20, 0, "체력을 20 회복합니다.", 50),
+         new Item("MP 포션",2, 0, 0, 0, 20, "마나를 20 회복합니다.", 50)
+            };
+        }*/
+
         // 회복 아이템 사용
         public void UseItem(Player player)
         {

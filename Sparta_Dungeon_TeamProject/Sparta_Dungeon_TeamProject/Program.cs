@@ -90,7 +90,7 @@ namespace Sparta_Dungeon_TeamProject
             // 플레이어 생성
             player = new Player(name, job);
             itemDb = Item.ItemDb; // 아이템 DB 초기화
-            inventory = new Inventory(player, Item.GifttemDb[selectType]); // 인벤토리 초기화(템보상)
+            inventory = new Inventory(player, job.InitialItems); // 인벤토리 초기화
             shop = new Shop(player, inventory, itemDb); // 상점 초기화
 
             // 스킬 보상
