@@ -300,6 +300,28 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"    {damage}의 데미지를 받았습니다!");
             Console.WriteLine();
 
+            CheckPlayerDead();
+            
+        }
+
+        public void boarDamage(bool choice)
+        {
+            // 아무런 방향을 선택하지 않은 경우
+            if (choice)
+            {
+                // 플레이어에게 최대체력의 10%의 데미지를 입힘
+                Hp -= Hp / 10;
+            }
+            // 멧돼지의 돌진 방향을 틀린 경우
+            else
+            {
+                // 플레이어에게 최대체력의 20%의 데미지를 입힘
+                Hp -= Hp / 5;
+            }
+        }
+
+        public void CheckPlayerDead()
+        {
             if (Hp <= 0)
             {
                 Hp = 0;
