@@ -234,8 +234,11 @@ namespace Sparta_Dungeon_TeamProject
 
                 if (Job == JobType.마법사) // 마법사는 방어력 절반 무시
                 {
-                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - (target.Def / 2));
-                }       
+                    int ignoredDef = target.Def / 2; // 무시한 방어력 계산
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - ignoredDef);
+
+                    Console.WriteLine($"\n\n\n{"",10}마법사의 주문! {ignoredDef} 만큼의 방어력을 무시했습니다!");
+                }
                 else
                 {
                     finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def);
@@ -267,15 +270,25 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     if (target.Name == "카피바라" || target.Name == "후회하는 모험가" || target.Name == "대왕 카피바라" || target.Name == "검은 고양이")
                     {
-                        int originalDamage = finalAttackDamage;
+                        int originalDamage = finalAttackDamage; // 기본 공격 데미지
 
-                        finalAttackDamage = (int)(finalAttackDamage * 1.3);
+                        finalAttackDamage = (int)(finalAttackDamage * 1.3); // 30% 추가 피해 적용
 
                         int addedDamage = finalAttackDamage - originalDamage; // 추가된 피해량 계산
 
-                        Console.WriteLine($"\n\n\n{"",10}전사의 강공격! 추가 피해 {addedDamage}가 적용되었습니다!");
+                        Console.WriteLine($"\n\n\n{"",10}전사의 강공격! 기본 피해 {originalDamage} + 추가 피해 {addedDamage}의 피해를 입혔다!");
                     }
                 }
+                if (Job == JobType.연금술사) // 연금술사는 상대 체력의 비례한 데미지를 줌
+                {
+                    int HpDamage = (int)(target.CurrentHp * 0.1); // 상대 체력의 10% 추가 피해
+                    int originalDamage = finalAttackDamage; // 기본 피해
+
+                    finalAttackDamage += HpDamage; // 최종 데미지 계산
+
+                    Console.WriteLine($"\n\n\n{"",10}연금술사의 공격! 기본 피해 {originalDamage} + 추가 피해 {HpDamage}의 피해를 입혔다!");
+                }
+
                 finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1 보장
                 target.CurrentHp -= finalAttackDamage;
 
@@ -285,7 +298,7 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     Messages.CriticalMes(this);
                 }
-                Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+                Console.WriteLine($"\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
             }
             else
             {

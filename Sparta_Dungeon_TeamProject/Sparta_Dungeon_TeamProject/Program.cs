@@ -132,7 +132,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             { JobType.전사, new Warrior() },
             { JobType.마법사, new Mage() },
-            { JobType.과학자, new Scientist() },
+            { JobType.연금술사, new Scientist() },
             { JobType.대장장이, new Smith() },
             { JobType.영매사, new Medium() }
         };

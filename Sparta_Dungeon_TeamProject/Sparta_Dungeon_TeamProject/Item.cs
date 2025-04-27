@@ -45,7 +45,7 @@ namespace Sparta_Dungeon_TeamProject
             { JobType.마법사, new[] {
                 new Item("mm", 0, 0, 0, 0, "3", 0),
             }},
-            { JobType.과학자, new[] {
+            { JobType.연금술사, new[] {
                 new Item("zz", 0, 0, 0, 0,"5", 0),
             }},
             { JobType.대장장이, new[] {

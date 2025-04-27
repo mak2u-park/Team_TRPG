@@ -672,10 +672,10 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
 
 
-                    if (player.Job == JobType.전사)
+                    if (player.Job == JobType.전사) // 전사 방어 확률
                     {
                         Random random = new Random();
-                        int block = random.Next(1, 3);
+                        int block = random.Next(1, 6);
                         if (block == 1)
                         {
                             Console.WriteLine();
@@ -683,13 +683,19 @@ namespace Sparta_Dungeon_TeamProject
                         }
                         else
                         {
-                            player.EnemyDamage(m.Atk); 
+                            player.EnemyDamage(m.Atk);
                             Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
                             Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
                         }
                     }
+                    else if (player.Job == JobType.마법사) // 마법사 보호막
+                    { 
+                    }
                     else
                     {
+                        player.EnemyDamage(m.Atk);
+                        Console.WriteLine();
                         Console.ForegroundColor = ConsoleColor.DarkRed;
                         Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
                     }

@@ -313,7 +313,7 @@ namespace Sparta_Dungeon_TeamProject
     {   "\n\n\n\n\n\n\n\n    녹슨 망치가 손에서 덜컹거린다.",
         "\n\n\n\n\n\n    마지막 불꽃이 담긴 한 방이 울려 퍼진다!" }},
 
-    { JobType.과학자, new[]
+    { JobType.연금술사, new[]
     {   "\n\n\n\n\n\n\n\n    금기된 공식이 마침내 완성된다.",
         "\n\n\n\n\n\n    불안정한 빛이 공기를 찢으며 발산된다!" }},
     };
@@ -335,7 +335,7 @@ namespace Sparta_Dungeon_TeamProject
     { JobType.대장장이, new[]
     {"──  무너진 기억과 함께, 대지에 새긴 죄의 불꽃."}},
 
-    {JobType.과학자, new[]
+    {JobType.연금술사, new[]
     {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
     };
 

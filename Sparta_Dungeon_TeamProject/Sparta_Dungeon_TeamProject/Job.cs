@@ -7,7 +7,7 @@ namespace Sparta_Dungeon_TeamProject
     {
         전사 = 1,
         마법사,
-        과학자,
+        연금술사,
         대장장이,
         영매사
     }
@@ -47,7 +47,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
         public int ExpToLevelUp => 100;
-        public int Atk => 10;
+        public int Atk => 15;
         public int Acc => 65;
         public int Cri => 40;
         public int CriDmg => 200;
@@ -74,16 +74,16 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "떠돌이 마법사로서 세계를 돌아다니며," +
             "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.";
         public int ExpToLevelUp => 100;
-        public int Atk => 10;
+        public int Atk => 15;
         public int Acc => 85;
         public int Cri => 10;
         public int CriDmg => 150;
         public int Def => 3;
-        public int MaxHp => 80;
+        public int MaxHp => 85;
 
         //public int MaxMp => 120;
         public int DefaultGold => 10000;      // 구현: 직업별 시작 골드
-        public string Trait => "방어력 무시 공격.\n보스에게 가하는 피해 감소.";
+        public string Trait => "공격이 방어력을 일부 무시..";
 
         // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.마법사]);
@@ -91,27 +91,27 @@ namespace Sparta_Dungeon_TeamProject
 
     public class Scientist : IJob
     {
-        public JobType Type => JobType.과학자;
-        public string DisplayName => "불법 과학자";
-        public string Story => "마을에서 추방당한 이단 과학자로서" +
+        public JobType Type => JobType.연금술사;
+        public string DisplayName => "불법 연금술사";
+        public string Story => "마을에서 추방당한 이단 연금술사로써" +
             "\n금기된 재료들을 가지고 위험한 연구를 계속합니다.\n" +
             "\n자신만의 독특한 기술로 세상에 맞서려 합니다.\n";
         public string Description => "금기된 독성 중심의 스킬을 사용하며," +
             "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.";
         public int ExpToLevelUp => 100;
-        public int Atk => 10;
+        public int Atk => 15;
         public int Acc => 100;
         public int Cri => 15;
         public int CriDmg => 140;
         public int Def => 5;
-        public int MaxHp => 100;
+        public int MaxHp => 70;
 
         //public int MaxMp => 100;
         public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
-        public string Trait => "전투 중 체력 재생, 매우 높은 명중률.";
+        public string Trait => "매우 높은 명중률, 적의 최대체력의 비례한 데미지.";
 
         // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.과학자]);
+        public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.연금술사]);
     }
 
     public class Smith : IJob
@@ -150,7 +150,7 @@ namespace Sparta_Dungeon_TeamProject
         public string Description => "저 너머의 존재들과 소통하는 영매사는," +
             "\n      그들의 호의를 받으며, 더 많은 경험치 또한 얻습니다.";
         public int ExpToLevelUp => 105;
-        public int Atk => 9;
+        public int Atk => 10;
         public int Acc => 90;
         public int Cri => 25;
         public int CriDmg => 125;
