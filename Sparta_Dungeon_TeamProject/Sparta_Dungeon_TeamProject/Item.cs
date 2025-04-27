@@ -93,18 +93,30 @@ namespace Sparta_Dungeon_TeamProject
         };
 
         // 초기 보상용 직업별 아이템 목록
-        public static readonly Dictionary<JobType, Item[]> GiftItemsDb = new()
+        public static void InitializeGiftItemsDb()
         {
-            { JobType.전사, new[] { new Item("pp", 0, 0, 0, 0, 0, "1", 0) } },
-            { JobType.마법사, new[] { new Item("mm", 0, 0, 0, 0, 0, "3", 0) } },
-            { JobType.과학자, new[] { new Item("zz", 0, 0, 0, 0, 15, "5", 0) } },
-            { JobType.대장장이, new[] {
-                new Item("dd", 0, 5, 0, 0, 0, "7", 0),
-                new Item("ss", 1, 0, 3, 5, 0, "8", 0),
-                new Item("ee", 1, 0, 3, 5, 0, "9", 0)
-            }},
-            { JobType.영매사, new[] { new Item("bb", 3, 0, 0, 0, 0, "9", 0) } }
-        };
+            new Dictionary<JobType, Item[]>
+            {                               // 이름, 타입, 공격력, 방어력, hp, mp, 
+               { JobType.전사, new[] { new Item("각인된 단검", 0, 0, 0, 0, 0, "노쇄한 대장장이가 이름을 각인해 선물해준 검", 0) } },
+               { JobType.마법사, new[] { new Item("연습용 마법지팡이", 0, 0, 0, 0, 0, "부정확한 연습용 지팡이다", 0) } },
+               { JobType.과학자, new[] { new Item("미완성된 광선검", 0, 0, 0, 0, 15, "호신용인데 방향 제어가 안된다", 0) } },
+               { JobType.대장장이, new[] { new Item("망각의 유산(검)", 0, 40, -25, 0, 0, "7", 0),
+                   new Item("속죄의 견갑", 1, -15, 20, 0, 0, "8", 0),
+                   new Item("배신의 갑주", 1, -15, -15, 50, 0, "9", 0) } },
+               { JobType.영매사, new[] { new Item("기억의 귀걸이", 3, 0, 0, 0, 0, "잃어버린 말 대신 귀에 담긴 기억들", 0) } }
+            };
+        }
+
+        /*public static Item[] ShopItemsDb()
+        {
+            return new Item[]
+            {
+         new Item("철검",   0, 5, 0, 0, 0, "기본적인 철검입니다.", 100),
+         new Item("철방패", 1, 0, 5, 0, 0, "기본적인 철제 방패입니다.", 120),
+         new Item("HP 포션",2, 0, 0, 20, 0, "체력을 20 회복합니다.", 50),
+         new Item("MP 포션",2, 0, 0, 0, 20, "마나를 20 회복합니다.", 50)
+            };
+        }*/
 
         /*public static Item[] ShopItemsDb()
         {
