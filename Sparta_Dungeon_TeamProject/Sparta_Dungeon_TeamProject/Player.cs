@@ -7,6 +7,19 @@ namespace Sparta_Dungeon_TeamProject
     // 플레이어 클래스
     public class Player
     {
+        private static Player _instance;
+        private Player() { }
+        public static Player Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new Player();
+                }
+                return _instance;
+            }
+        }
         public string Name { get; }
         public JobType Job { get; }
         public int Level { get; private set; }
