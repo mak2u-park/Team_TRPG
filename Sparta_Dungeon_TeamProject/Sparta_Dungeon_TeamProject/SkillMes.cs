@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sparta_Dungeon_TeamProject;
-
+/*
 namespace Sparta_Dungeon_TeamProject
 {
     class Blacksmith_Skill
@@ -181,3 +181,4 @@ class Wizard_Skill
         Thread.Sleep(600);
     }
 }
+/*

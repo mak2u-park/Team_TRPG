@@ -8,10 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using static Sparta_Dungeon_TeamProject.Player;
-
+/*
 namespace Sparta_Dungeon_TeamProject
 {
-
     public class SkillManager
     {
         //===============================[게임 전체 스킬 리스트]=================================
@@ -216,3 +215,4 @@ namespace Sparta_Dungeon_TeamProject
         }
     }
 }
+    */

@@ -74,7 +74,7 @@ namespace Sparta_Dungeon_TeamProject
             var initialItems = new List<Item>(Item.GifttemDb[job.Type]);
             Inventory.Initialize(player, initialItems); // 아이템보상 인벤에 지급
 
-            // 스킬 보상
+            /* 스킬 보상
             switch (selectType)
             {
                 case JobType.전사:
@@ -92,7 +92,7 @@ namespace Sparta_Dungeon_TeamProject
                 case JobType.영매사:
                     SkillManager.FirstWhispererSkill(player);
                     break;
-            }
+            }*/
         }
 
         // B-1. 직업 선택 프롬프트 (1~5 숫자키로 정보보기)
@@ -163,15 +163,15 @@ namespace Sparta_Dungeon_TeamProject
             Console.Clear();
             Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
             Console.WriteLine($"{job.Story}\n\n");
-            Console.WriteLine($"공격력: {job.Atk}  |  방어력: {job.Def}  |  Hp: {job.MaxHp}  |  Mp: {job.MaxMp}  |  특성: {job.Trait}");
+            Console.WriteLine($"공격력: {job.Atk}  |  방어력: {job.Def}  |  Hp: {job.MaxHp}  |  특성: {job.Trait}");
 
             Console.WriteLine($"====[The Hollowed 입성 기념 보상 지급]====");
             Console.WriteLine($"골드: {job.DefaultGold} G");
             // 초기 스킬 지급 내역이 있을 때만 출력
-            if (job.InitialSkills != null && job.InitialSkills.Count > 0)
+            /*if (job.InitialSkills != null && job.InitialSkills.Count > 0)
             {
                 Console.WriteLine($"스킬: {string.Join(", ", job.InitialSkills)}");
-            }
+            }*/
             // 초기 아이템 지급 내역이 있을 때만 출력
             if (job.InitialItems != null && job.InitialItems.Count > 0)
             {

@@ -30,7 +30,7 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     IJob jobData = Program.JobDatas[job];
                     Console.WriteLine($"  └ {jobData.Description}");
-                    Console.WriteLine($"  └ 공격력: {jobData.Atk}  |  방어력: {jobData.Def}  |  HP: {jobData.MaxHp}  |  MP: {jobData.MaxMp}");
+                    Console.WriteLine($"  └ 공격력: {jobData.Atk}  |  방어력: {jobData.Def}  |  HP: {jobData.MaxHp}");
                     Console.WriteLine($"  └ 특성: {jobData.Trait}");
                     Console.WriteLine();
                 }
@@ -429,7 +429,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.SetCursorPosition(0, guideLine);
                 Program.ClearBottom(guideLine, 10);
                 Console.Write(">> ");
-                int result = Program.CheckInput(1, 6);
+                int result = Program.CheckInput(1, 3);
 
                 switch (result)
                 {
@@ -456,7 +456,7 @@ namespace Sparta_Dungeon_TeamProject
                             Console.WriteLine("\n정식을 먹고 체력이 전부 회복되었다!");
                         else Console.WriteLine("골드가 부족합니다.");
                         break;
-                    case 4:
+                   /* case 4:
                         if (player.GainMp(300, 30))
                             Console.WriteLine("\n실험약을 마시고 정신이 또렷해진다.");
                         else Console.WriteLine("골드가 부족합니다.");
@@ -470,7 +470,7 @@ namespace Sparta_Dungeon_TeamProject
                         if (player.GainMp(1200, player.MaxMp))
                             Console.WriteLine("\nMP가 완전히 회복되었습니다.");
                         else Console.WriteLine("골드가 부족합니다.");
-                        break;
+                        break;*/
                 }
                 Program.WaitForEnter();
                 DisplayRestUI();

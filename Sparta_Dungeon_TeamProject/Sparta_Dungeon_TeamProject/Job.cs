@@ -25,10 +25,12 @@ namespace Sparta_Dungeon_TeamProject
         int Cri { get; } // 치명타 확률
         int Def { get; }
         int MaxHp { get; } // 최대 체력
-        int MaxMp { get; } // 최대 마나
+
+        //int MaxMp { get; } // 최대 마나
         int DefaultGold { get; } // 초기 보상 골드
         string Trait { get; } // 직업 특성
-        List<string> InitialSkills { get; } // 초기 보상 스킬
+
+       // List<string> InitialSkills { get; } // 초기 보상 스킬
         List<Item> InitialItems { get; } // 초기 보상 아이템
     };
 
@@ -47,11 +49,11 @@ namespace Sparta_Dungeon_TeamProject
         public int Cri => 5;
         public int Def => 8;
         public int MaxHp => 150;
-        public int MaxMp => 30;
+        //public int MaxMp => 30;
         public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
-        public string Trait => "높은 생존력";
+        public string Trait => "높은 치명타 확률, 방어력";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        //public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.전사]);
     }
 
@@ -71,11 +73,12 @@ namespace Sparta_Dungeon_TeamProject
         public int Cri => 8;
         public int Def => 3;
         public int MaxHp => 80;
-        public int MaxMp => 120;
-        public int DefaultGold => 20000;      // 구현: 직업별 시작 골드
-        public string Trait => "높은 마나 풀";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        //public int MaxMp => 120;
+        public int DefaultGold => 20000;      // 구현: 직업별 시작 골드
+        public string Trait => "";
+
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.마법사]);
     }
 
@@ -93,11 +96,12 @@ namespace Sparta_Dungeon_TeamProject
         public int Cri => 7;
         public int Def => 5;
         public int MaxHp => 100;
-        public int MaxMp => 100;
+
+        //public int MaxMp => 100;
         public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
         public string Trait => "다재다능한 스킬셋";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.과학자]);
     }
 
@@ -115,11 +119,12 @@ namespace Sparta_Dungeon_TeamProject
         public int Cri => 4;
         public int Def => 10;
         public int MaxHp => 130;
-        public int MaxMp => 40;
+
+        //public int MaxMp => 40;
         public int DefaultGold => 25000;      // 구현: 직업별 시작 골드
         public string Trait => "장비 강화 전문가";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.대장장이]);
     }
 
@@ -138,11 +143,12 @@ namespace Sparta_Dungeon_TeamProject
         public int Cri => 6;
         public int Def => 4;
         public int MaxHp => 90;
-        public int MaxMp => 110;
+
+        //public int MaxMp => 110;
         public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
         public string Trait => "스킬 복제 능력";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.영매사]);
     }
 }

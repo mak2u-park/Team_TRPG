@@ -19,8 +19,9 @@ namespace Sparta_Dungeon_TeamProject
         public int Def { get; private set; }
         public int MaxHp { get; private set; }
         public int Hp { get; private set; }
-        public int MaxMp { get; private set; }
-        public int Mp { get; private set; }
+
+        //public int MaxMp { get; private set; }
+        // public int Mp { get; private set; }
         public int Gold { get; private set; }
 
         // 장비에 따라 추가되는 스탯
@@ -31,9 +32,9 @@ namespace Sparta_Dungeon_TeamProject
         public int FinalAtk => Atk + ExtraAtk;
         public int FinalDef => Def + ExtraDef;
 
-        // 보유 스킬 목록 (초기보상스킬은 Job에서)
+        /* 보유 스킬 목록 (초기보상스킬은 Job에서)
         public List<SkillLibrary> Skills { get; private set; } = new();
-
+        */
         public Player(string name, IJob job)
         {
             Name = name;
@@ -48,8 +49,8 @@ namespace Sparta_Dungeon_TeamProject
             Def = job.Def;
             MaxHp = job.MaxHp;
             Hp = MaxHp;
-            MaxMp = job.MaxMp;
-            Mp = MaxMp;
+            //MaxMp = job.MaxMp;
+            //Mp = MaxMp;
 
             Gold = job.DefaultGold;
         }
@@ -90,10 +91,10 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
             Console.WriteLine();
 
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            /*Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.WriteLine($"  마나 : {Mp}/{MaxMp}");
             Console.ResetColor();
-            Console.WriteLine();
+            Console.WriteLine();*/
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"  Gold : {Gold} G");
@@ -105,19 +106,19 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
             Console.WriteLine();
 
-            int choice = Program.CheckInput(1, 1);
+            int choice = Program.CheckInput(-1,-1);
             switch (choice)
             {
                 case -1:
                     Messages.ShowMainMenu();
                     break;
-                case 1:
+               /*case 1:
                     DisplaySkillUI();
-                    break;
+                    break;*/
             }
         }
 
-        // 2. 스킬 UI
+         /*. 스킬 UI
         public void DisplaySkillUI()
         {
             Console.Clear();
@@ -164,6 +165,7 @@ namespace Sparta_Dungeon_TeamProject
                 return Skills.Count;
             }
         }
+        */
 
         // 경험치 획득
         public void GainExp()
@@ -197,10 +199,10 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine();
 
-                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
+               /*if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
                 {
                     SkillManager.LearnSkill(this);
-                }
+                }*/
             }
         }
 
@@ -302,7 +304,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 마나 회복
-        public bool GainMp(int cost, int amount)
+        /*public bool GainMp(int cost, int amount)
         {
             if (Gold >= cost && Mp < MaxMp)
             {
@@ -312,7 +314,7 @@ namespace Sparta_Dungeon_TeamProject
                 return true;
             }
             return false;
-        }
+        }*/
 
         // 인벤토리 아이템 목록 출력
         private readonly List<Item> _equippedItems = new();

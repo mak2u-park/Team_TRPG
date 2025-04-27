@@ -95,7 +95,7 @@ namespace Sparta_Dungeon_TeamProject
             if (AtkBonus != 0) parts.Add($"공격력 +{AtkBonus}");
             if (DefBonus != 0) parts.Add($"방어력 +{DefBonus}");
             if (HpBonus != 0) parts.Add($"체력 +{HpBonus}");
-            if (MpBonus != 0) parts.Add($"마나 +{MpBonus}");
+            //if (MpBonus != 0) parts.Add($"마나 +{MpBonus}");
 
             string statInfo = parts.Any()
                 ? " (" + string.Join(" ", parts) + ")"
@@ -110,7 +110,7 @@ namespace Sparta_Dungeon_TeamProject
             if (Type != 2) return;
 
             player.Heal(0, HpBonus);
-            player.GainMp(0, MpBonus);
+            //player.GainMp(0, MpBonus);
             Inventory.RemoveItem(this);
         }
     }

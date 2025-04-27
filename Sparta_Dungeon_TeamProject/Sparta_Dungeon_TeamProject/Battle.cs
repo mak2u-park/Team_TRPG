@@ -231,7 +231,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",7}▶ 현재 턴 수 : {BattleTurn}");
             Console.WriteLine();
             Console.WriteLine($"{"",7}▶ 현재 HP : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"{"",7}▶ 현재 MP : {player.Mp}/{player.MaxMp}");
+            //Console.WriteLine($"{"",7}▶ 현재 MP : {player.Mp}/{player.MaxMp}");
             Console.ResetColor();
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -517,7 +517,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",7}▶ 현재 턴 수 : {BattleTurn,3}");
             Console.WriteLine();
             Console.WriteLine($"{"",7}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
-            Console.WriteLine($"{"",7}▶ 현재 MP : {player.Mp,3}/{player.MaxMp,-3}");
+            //Console.WriteLine($"{"",7}▶ 현재 MP : {player.Mp,3}/{player.MaxMp,-3}");
             Console.ResetColor();
             Console.WriteLine();
             Console.ResetColor();
@@ -812,7 +812,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}▶ 생존자 : Lv.{player.Level} [{player.Name}]");
             Console.WriteLine($"{"",10}체력    : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"{"",10}마나    : {player.Mp}/{player.MaxMp}");
+            //Console.WriteLine($"{"",10}마나    : {player.Mp}/{player.MaxMp}");
             Console.WriteLine($"{"",10}경험치  : {player.Exp}/{player.MaxExp}");
             Console.ResetColor();
             Console.WriteLine();
@@ -887,7 +887,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",7}▶ 마지막 위치 : Chapter. {Chapter + 1} - {Stage % 3 + 1}");
             Console.WriteLine($"{"",7}▶ Lv.{player.Level:D2} [{player.Name}]");
             Console.WriteLine($"{"",10}체력 : {player.Hp}/{player.MaxHp}");
-            Console.WriteLine($"{"",10}마나  : {player.Mp}/{player.MaxMp}");
+            //Console.WriteLine($"{"",10}마나  : {player.Mp}/{player.MaxMp}");
             Console.ResetColor();
             Console.WriteLine();
 
