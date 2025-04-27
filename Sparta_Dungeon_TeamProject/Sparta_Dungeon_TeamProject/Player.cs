@@ -119,17 +119,6 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
-
-            int choice = Program.CheckInput(-1,-1);
-            switch (choice)
-            {
-                case -1:
-                    Messages.ShowMainMenu();
-                    break;
-               /*case 1:
-                    DisplaySkillUI();
-                    break;*/
-            }
         }
 
          /*. 스킬 UI
@@ -270,8 +259,26 @@ namespace Sparta_Dungeon_TeamProject
             Console.Clear();
         }
 
-        private static Random rand = new Random();
+        public void SplitAttack(Monster target) // 영매사 유령 공격
+        {
+            int SplitDamage = Level * 3;
 
+            SplitDamage = Math.Max(1, SplitDamage); // 최소 데미지 1 보장
+
+            if (target.CurrentHp - SplitDamage <= 0)
+            {
+                SplitDamage = target.CurrentHp - 1;
+                if (SplitDamage < 0) SplitDamage = 0; // 혹시 체력이 1 이하였던 경우를 방지
+            }
+
+            Console.WriteLine();
+            Console.WriteLine($"\n\n\n{"",10}의문의 영혼이 [Lv.{target.Level}][{target.Name}] 에게 {SplitDamage}만큼 피해를 주었다!");
+            Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
+            Program.WaitForEnter();
+            Console.Clear();
+        }
+
+        private static Random rand = new Random();
 
         public bool IsHit(Monster target)
         {
@@ -426,10 +433,10 @@ namespace Sparta_Dungeon_TeamProject
             {
                 Heal(item.Price, item.HpBonus);
             }
-            if (item.Type == 2 && item.MpBonus > 0) // 소모품
+           /* if (item.Type == 2 && item.MpBonus > 0) // 소모품
             {
                 Heal(item.Price, item.MpBonus);
-            }
+            }*/
 
             Inventory.RemoveItem(item);
         }
@@ -492,7 +499,14 @@ namespace Sparta_Dungeon_TeamProject
         // 아이템 강화 # Inventory.cs 에서 호출을 위해 분리
         public int GetUpgradeCost(Item item)
         {
-            return item.TotalValue < 20 ? 100 : 200;
+            if (Job == JobType.대장장이)
+            {
+                return item.TotalValue < 20 ? 75 : 150;
+            }
+            else
+            {
+                return item.TotalValue < 20 ? 100 : 200;
+            }
         }
         public int GetUpgradeValue(Item item)
         {

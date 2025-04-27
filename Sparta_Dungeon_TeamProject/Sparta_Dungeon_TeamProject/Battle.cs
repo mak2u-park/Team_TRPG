@@ -146,13 +146,11 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
-                    Console.WriteLine();
                     player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+                    Console.WriteLine("[`]. 뒤로가기");
+                    Console.WriteLine(">> ");
                     break;
+
                 case 3:
                     Console.WriteLine("\n\n\n");
                     player.DisplayPlayerInfo();
@@ -292,21 +290,18 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
             Console.WriteLine($"{"",7}▶ 1. 일반 공격");
-            Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
-            Console.WriteLine($"{"",7}▶ 3. 상태 보기");
+            Console.WriteLine($"{"",7}▶ 2. 상태 보기");
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
             Console.WriteLine();
 
-            switch (CheckInput(1, 3))
+            switch (CheckInput(1, 2))
             {
                 case 1:
                     PlayerAttack(); break; // 플레이어 공격 불러오기 
                 case 2:
-                    break; //스킬창 불러오기
-                case 3:
                     Console.WriteLine();
                     Console.WriteLine();
                     Console.WriteLine();
@@ -945,15 +940,7 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = true;
                 return;
             }
-            // 공격 실행
-            else
-            {
-                Console.Clear();
-                Console.WriteLine();
-                player.PlayerAttack(target, 1);
-            }
-
-            if (target.CurrentHp <= 0)
+            else if (target.CurrentHp <= 0)
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
@@ -970,8 +957,16 @@ namespace Sparta_Dungeon_TeamProject
                     BattleSuccessUI();
                     return;
                 }
-
-                
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine();
+                player.PlayerAttack(target, 1);
+                if (player.Job == JobType.영매사)
+                {
+                    player.SplitAttack(target);
+                }
             }
 
             Playerturn = false; // 몬스터에게 턴 넘김

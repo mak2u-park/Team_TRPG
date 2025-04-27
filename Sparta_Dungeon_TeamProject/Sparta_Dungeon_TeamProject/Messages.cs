@@ -59,6 +59,15 @@ namespace Sparta_Dungeon_TeamProject
             {
                 case 1:
                     player.DisplayPlayerInfo();
+                    int choice = Program.CheckInput(1, 1);
+                    switch (choice)
+                    {
+                        case -1:
+                            ShowMainMenu();
+                            break;
+                    }
+                    Console.WriteLine("[`]. 뒤로가기");
+                    Console.WriteLine(">> ");
                     break;
                 case 2:
                     Inventory.DisplayInventoryUI();
@@ -456,21 +465,21 @@ namespace Sparta_Dungeon_TeamProject
                             Console.WriteLine("\n정식을 먹고 체력이 전부 회복되었다!");
                         else Console.WriteLine("골드가 부족합니다.");
                         break;
-                   /* case 4:
-                        if (player.GainMp(300, 30))
-                            Console.WriteLine("\n실험약을 마시고 정신이 또렷해진다.");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 5:
-                        if (player.GainMp(700, 80))
-                            Console.WriteLine("\n강화형 약물이 효과를 발휘했다!");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 6:
-                        if (player.GainMp(1200, player.MaxMp))
-                            Console.WriteLine("\nMP가 완전히 회복되었습니다.");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;*/
+                        /* case 4:
+                             if (player.GainMp(300, 30))
+                                 Console.WriteLine("\n실험약을 마시고 정신이 또렷해진다.");
+                             else Console.WriteLine("골드가 부족합니다.");
+                             break;
+                         case 5:
+                             if (player.GainMp(700, 80))
+                                 Console.WriteLine("\n강화형 약물이 효과를 발휘했다!");
+                             else Console.WriteLine("골드가 부족합니다.");
+                             break;
+                         case 6:
+                             if (player.GainMp(1200, player.MaxMp))
+                                 Console.WriteLine("\nMP가 완전히 회복되었습니다.");
+                             else Console.WriteLine("골드가 부족합니다.");
+                             break;*/
                 }
                 Program.WaitForEnter();
                 DisplayRestUI();

@@ -49,8 +49,8 @@ namespace Sparta_Dungeon_TeamProject
         public int ExpToLevelUp => 100;
         public int Atk => 20;
         public int Acc => 75;
-        public int Cri => 30;
-        public int CriDmg => 175;
+        public int Cri => 40;
+        public int CriDmg => 200;
         public int Def => 8;
         public int MaxHp => 150;
 
@@ -147,19 +147,19 @@ namespace Sparta_Dungeon_TeamProject
             "\n그녀의 특별한 능력으로 죽은 이들의 이야기를" +
             "\n세상에 들려줄 수는 있습니다.\n" +
             "\n그녀가 풀어내는 이야기들은 잔혹하지만 어딘가 애잔합니다.";
-        public string Description => "저 너머의 존재들과 대화하는 영매사는," +
+        public string Description => "저 너머의 존재들과 소통하는 영매사는," +
             "\n      그들의 호의를 받으며, 더 많은 경험치 또한 얻습니다.";
         public int ExpToLevelUp => 105;
         public int Atk => 9;
         public int Acc => 90;
         public int Cri => 25;
-        public int CriDmg => 130;
+        public int CriDmg => 125;
         public int Def => 4;
         public int MaxHp => 90;
 
         //public int MaxMp => 110;
         public int DefaultGold => 10000;      // 구현: 직업별 시작 골드
-        public string Trait => "추가 경험치 획득, ";
+        public string Trait => "추가 경험치 획득, 영혼들이 당신을 돕습니다.\n 회복 효율이 감소합니다.";
 
         // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.영매사]);
