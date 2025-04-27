@@ -11,8 +11,8 @@ namespace Sparta_Dungeon_TeamProject
     internal class Village
     {
         bool showTitle = false;
-        Player player = Player.Instance;
-        Inventory inventory = Inventory.Instance;
+        private Player player;
+        private Inventory inventory;
         Inn inn;
         Shop shop;
         VillageBS BlackSmithShop;

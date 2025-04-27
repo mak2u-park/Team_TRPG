@@ -11,6 +11,7 @@ namespace Sparta_Dungeon_TeamProject
         private Player player;
         private Inventory inventory;
         private Shop shop;
+        private Village village;
         private Item[] itemDb = Array.Empty<Item>();
 
         private Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
@@ -43,8 +44,8 @@ namespace Sparta_Dungeon_TeamProject
         {
             DisplayIntro(); // 인트로 UI
             SetData(); // 플레이어 / 아이템 / 스킬 초기 세팅
-            
-            Messages.ShowMainMenu(); // 메인 메뉴 UI
+
+            village.MainScene();// 메인 메뉴 UI
         }
 
         // A. 인트로UI

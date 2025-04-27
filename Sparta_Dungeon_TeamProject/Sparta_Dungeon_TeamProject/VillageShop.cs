@@ -8,7 +8,7 @@ namespace Sparta_Dungeon_TeamProject
 {
     public class Shop
     {
-        Player player = Player.Instance;
+        private Player player;
         private List<Item> shopitems; // 구매용
         private Inventory inventory;
         private Item[] itemDb;
@@ -23,8 +23,6 @@ namespace Sparta_Dungeon_TeamProject
         // 상점
         public void DisplayShopUI()
         {
-            ItemSet();
-            
             while (true)
             {
                 Console.Clear();
@@ -86,7 +84,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("구매하실 아이템 번호를 입력하세요.");
                 Console.Write(">>");
 
-                int result = Utils.CheckInput(1, ItemDb.Count);
+                int result = Utils.CheckInput(1, itemDb.Length);
 
                 switch (result)
                 {
@@ -96,7 +94,7 @@ namespace Sparta_Dungeon_TeamProject
 
                     default:
                         int itemIdx = result - 1;
-                        Item targetItem = ItemDb[itemIdx];
+                        Item targetItem = itemDb[itemIdx];
                         BuyStatus(targetItem);
                         break;
                 }

@@ -12,7 +12,7 @@ namespace Sparta_Dungeon_TeamProject
         
         public class Inn
         {
-            Player player = Player.Instance;
+            private Player player;
 
             public void DisplayInnUI()
             {
