@@ -187,7 +187,7 @@ namespace Sparta_Dungeon_TeamProject
         public void PeacePlease() // 3 - 그녀의 전투 철학
         {
             Console.WriteLine("꼭 싸워야 하는 건 아니니까.");
-            Program.BattleSuccessUI();
+            //Program.BattleSuccessUI();
         }
 
         //===============================[영매사 스킬 사용]=================================

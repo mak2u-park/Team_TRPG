@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public class DungeonEvent
+    /*public class DungeonEvent
     {
         public List<Item> eventitemlist = new List<Item>();
         Random random = new Random();
@@ -412,5 +412,5 @@ namespace Sparta_Dungeon_TeamProject
             origin: 0.15f)
         {
         }
-    }
+    }*/
 }
