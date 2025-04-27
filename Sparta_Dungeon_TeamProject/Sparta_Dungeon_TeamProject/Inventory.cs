@@ -10,7 +10,7 @@ namespace Sparta_Dungeon_TeamProject
     // 인벤토리 전용 UI
     public class Inventory
     {
-        private Player player;
+        private Player player; // 싱글톤 패턴으로 Player 인스턴스에 접근
         private List<Item> items = new();
         private List<Item> equippedItems = new(); // 장착된 아이템 목록
         private Dictionary<string, bool> firstVisitFlags;
@@ -60,7 +60,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine("==아이템 목록==");
 
-            ItemExt.PrintInventory(items, player); 
+            ItemExt.PrintInventory(items, player);
 
             Console.WriteLine();
             Console.WriteLine("[1] 장착 관리");

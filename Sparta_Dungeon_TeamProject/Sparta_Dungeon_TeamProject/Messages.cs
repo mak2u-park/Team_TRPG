@@ -334,7 +334,7 @@ namespace Sparta_Dungeon_TeamProject
             Thread.Sleep(700);
             Sparta_Dungeon_TeamProject.Program.Playerturn = false;
             return;
-        }
+        }*/
         
-    }*/
+    }
 }
