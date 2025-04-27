@@ -15,7 +15,9 @@ namespace Sparta_Dungeon_TeamProject
 
         // 기본 스탯 및 최대 Hp/Mp
         public int Atk { get; private set; }
+        public int Acc { get; private set; }
         public int Cri { get; private set; }
+        public int CriDmg { get; private set; }
         public int Def { get; private set; }
         public int MaxHp { get; private set; }
         public int Hp { get; private set; }
@@ -45,7 +47,9 @@ namespace Sparta_Dungeon_TeamProject
             // 직업별 기본 스탯 초기화
             MaxExp = job.ExpToLevelUp; // 첫 레벨업 경험치 - 모두통일도 가능. 수정 어렵지 않음.
             Atk = job.Atk;
+            Acc = job.Acc;
             Cri = job.Cri;
+            CriDmg = job.CriDmg;
             Def = job.Def;
             MaxHp = job.MaxHp;
             Hp = MaxHp;
@@ -76,19 +80,29 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
             Console.WriteLine();
 
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine($"  체력 : {Hp}/{MaxHp}");
+            Console.ResetColor();
+            Console.WriteLine();
+
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("  공격력 : ");
             Console.WriteLine($"{Atk}{(ExtraAtk == 0 ? "" : $" (+{ExtraAtk})")}");
             Console.WriteLine();
 
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("  방어력 : ");
             Console.WriteLine($"{Def}{(ExtraDef == 0 ? "" : $" (+{ExtraDef})")}");
             Console.ResetColor();
             Console.WriteLine();
 
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine($"  체력 : {Hp}/{MaxHp}");
-            Console.ResetColor();
+            Console.Write($"  명중률 :{Acc}%");
+            Console.WriteLine();
+
+            Console.Write($"  치명타 확률 :{Cri}%");
+            Console.WriteLine();
+
+            Console.Write($"  치명타 피해 :{CriDmg}%");
             Console.WriteLine();
 
             /*Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -97,7 +111,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();*/
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"  Gold : {Gold} G");
+            Console.WriteLine($"\n  Gold : {Gold} G");
             Console.ResetColor();
             Console.WriteLine();
 
@@ -213,31 +227,57 @@ namespace Sparta_Dungeon_TeamProject
             GainExp();
         }
 
-        public void PlayerAttack(Monster target, double power)
+
+        public void PlayerAttack(Monster target, double power) // 플레이어 공격
         {
-            bool isCritical = IsCritical();
-            double multiplier = DamageSpread();
-
-            double attackDamage = isCritical ? FinalAtk * power * 1.5 : FinalAtk * power;
-            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
-            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
-
-            target.CurrentHp -= finalAttackDamage;
-
-            Console.Clear();
-            Console.WriteLine();
-
-            if (this.IsCritical())
+            if (IsHit(target))
             {
-                Messages.CriticalMes(this);
+                bool isCritical = IsCritical();
+                double multiplier = DamageSpread();
+
+                double attackDamage = isCritical ? FinalAtk * power * (CriDmg / 100.0) : FinalAtk * power;
+                int finalAttackDamage;
+
+                if (Job == JobType.마법사) // 마법사는 방어력 절반 무시
+                {
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - (target.Def / 2.0));
+                }
+                else
+                {
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def);
+                }
+
+                finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1 보장
+                target.CurrentHp -= finalAttackDamage;
+
+                Console.Clear();
+                Console.WriteLine();
+
+                if (isCritical)
+                {
+                    Messages.CriticalMes(this);
+                }
+                Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
             }
-            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+            else
+            {
+                Console.Clear();
+                Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 공격이 빗나갔다!");
+            }
+
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
             Program.WaitForEnter();
             Console.Clear();
         }
 
         private static Random rand = new Random();
+
+
+        public bool IsHit(Monster target)
+        {
+            int hit = Acc - target.Dodge;
+            return rand.Next(0, 100) <= hit;
+        }
 
         public bool IsCritical() // 플레이어 치명타
         {

@@ -710,14 +710,7 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = true;
                 return;
             }
-            // 몬스터가 회피했을 때
-            if (BattleManager.MonEvasion(target) == true)
-            {
-                BattleManager.MonEvasionMes(target);
-                Playerturn = false;
-                return;
-            }
-            // 몬스터가 회피하지 못했을 경우
+            // 공격 실행
             else
             {
                 Console.Clear();
@@ -993,27 +986,4 @@ namespace Sparta_Dungeon_TeamProject
                 }).ToList();
         }
     }
-
-    public static class BattleManager
-    {
-        public static Random rand = new Random();
-
-        public static bool MonEvasion(Monster target)
-        {
-            return rand.Next(0, 100) < target.Dodge; // 몬스터 회피 확률
-        }
-
-        public static void MonEvasionMes(Monster target) // 몬스터가 회피했다면
-        {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
-            Console.ResetColor();
-            Thread.Sleep(700);
-        }
-    }
-
 }
