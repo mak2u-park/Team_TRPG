@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 0; // 스테이지 변수
+        public static int Stage = 5; // 스테이지 변수
         public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
@@ -25,10 +25,20 @@ namespace Sparta_Dungeon_TeamProject
         public static int bossDodge;
 
         public static bool Playerturn = true; // 플레이어의 턴 여부
-        public static bool BossStage = false; // 보스스테이지 여부
+        public static bool BossStage(int stage) // 보스스테이지 여부
+        {
+            if (stage % 3 == 2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public static bool left = false;      // 맷돼지 기믹 회피 방향
         public static bool right = false;     // 맷돼지 기믹 회피 방향
-        public bool doubleAttack = false;
+        public static bool doubleAttack = false;
 
         public static List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
         public static HashSet<int> selectedOptions = new HashSet<int>() { }; // 4스테이지 보스 선택지 중복 제거용 리스트
@@ -94,7 +104,6 @@ namespace Sparta_Dungeon_TeamProject
             var m = battleMonsters[0];
             bossAtk = m.Atk;
             bossDef = m.Def;
-            BossStage = true;
 
 
             Console.Clear();
@@ -683,7 +692,7 @@ namespace Sparta_Dungeon_TeamProject
             Program.WaitForEnter();
 
             // 보스 스테이지일 경우 기믹 추가
-            if (BossStage)
+            if (BossStage(Stage))
             {
                 BossGimmick(Chapter);
             }
@@ -694,7 +703,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 보스 기믹 모음(보스 스테이지일 경우에만 실행)
-        public void BossGimmick(int chapter)
+        public static void BossGimmick(int chapter)
         {
             switch (chapter)
             {
@@ -719,7 +728,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public void BossGimmick1()
+        public static void BossGimmick1()
         {
             if (GimmickReady++ % 2 == 0)
             {
@@ -759,7 +768,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("준비되지 않은 자에게 재앙은 늘 갑작스럽습니다.");
                     Console.WriteLine("당신은 멧돼지에게 호되게 당했습니다.");
                     // 플레이어에게 최대체력의 10%의 데미지를 입힘
-                    player.boarDamage(false);
+                    player.boarDamage(true);
                     Console.WriteLine("최대체력의 10%만큼 데미지를 받았습니다.");
                     Console.WriteLine($"확인용 텍스트 - 최대체력:{player.MaxHp:F2}, 현재 체력: {player.Hp:F2}");
                     player.CheckPlayerDead();
@@ -771,7 +780,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("잘못된 확신은 때론 방심보다 잔혹합니다.");
                     Console.WriteLine("당신은 멧돼지의 돌진을 받아내는 데에는 재능이 없군요.");
                     // 플레이어에게 최대체력의 20%의 데미지를 입힘
-                    player.boarDamage(true);
+                    player.boarDamage(false);
                     Console.WriteLine("최대체력의 20%만큼 데미지를 받았습니다.");
                     Console.WriteLine($"확인용 텍스트 - 최대체력:{player.MaxHp:F2}, 현재 체력: {player.Hp:F2}");
                     player.CheckPlayerDead();
@@ -784,12 +793,13 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        public void BossGimmick2()
+        public static void BossGimmick2()
         {
             int def = bossDef;
             int atk = bossAtk;
+            int gimmickReady = GimmickReady++;
 
-            if (GimmickReady++ % 3 == 0)
+            if (gimmickReady % 3 == 0)
             {
                 // 방어력이 감소했다면 원상태로 복구, 공격력이 증가했다면 유지, 1회 공격
                 Console.WriteLine();
@@ -797,7 +807,7 @@ namespace Sparta_Dungeon_TeamProject
                 battleMonsters[0].ChangeStat(StatType.Def, def * 2); // 원래 방어력으로 복구
                 Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef:F2}(으)로 상승하였다");
             }
-            else if (GimmickReady++ % 3 == 1)
+            else if (gimmickReady % 3 == 1)
             {
                 Console.WriteLine();
                 Console.WriteLine("모험가의 후회가 짙어진다...");
@@ -808,7 +818,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine($"모험가의 방어력이 {battleMonsters[0].FinalDef:F2}(으)로 감소하였다");
                 Console.WriteLine($"모험가의 공격력이 {battleMonsters[0].FinalAtk:f2}(으)로 증가하였다");
             }
-            else if (GimmickReady++ % 3 == 2)
+            else if (gimmickReady % 3 == 2)
             {
 
                 // 방어력 감소된 상태, 이번 턴만 2회 공격
@@ -821,7 +831,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.ReadKey();
         }
 
-        public void BossGimmick3()
+        public static void BossGimmick3()
         {
             // 3스테이지 보스 대왕 카피바라는 검은 고양이 기믹에 대한 힌트를 주는 기믹으로 설계
             // 검은 고양이와의 조우시 출력되는 선택지와 유사한 행동을 하며, 긍정적, 부정적 효과를 얻음
@@ -1052,7 +1062,6 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
-            BossStage = false;
 
             switch (CheckInput(0, 1))
             {
