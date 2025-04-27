@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 5; // 스테이지 변수
+        public static int Stage = 8; // 스테이지 변수
         public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
@@ -891,6 +891,9 @@ namespace Sparta_Dungeon_TeamProject
                     target.CurrentHp = (target.CurrentHp) - (target.FinalHp / 5f);
                     break;
             }
+            Console.WriteLine();
+            Console.WriteLine($"{"",10}▶ 아무 키나 눌러 다음으로 넘어가세요.");
+            Console.ReadKey();
         }
 
         static void PlayerAttack()
