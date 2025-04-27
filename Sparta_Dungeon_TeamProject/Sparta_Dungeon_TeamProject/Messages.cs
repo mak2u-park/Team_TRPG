@@ -11,77 +11,18 @@ namespace Sparta_Dungeon_TeamProject
 {
     public class Messages
     {
-        public static bool Skip = false; // 메시지 스킵 기능
-        public static Thread inputThread; // 메시지 스킵 기능
+        public bool Skip = false; // 메시지 스킵 기능
+        public Thread inputThread; // 메시지 스킵 기능
 
-        // 직업 선택 UI
-        public static void StartSelectJob(JobType? selectedJob)
-        {
-            Console.WriteLine("[직업]을 선택하세요.");
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
-            Console.ResetColor();
-
-            foreach (JobType job in Enum.GetValues(typeof(JobType)))
-            {
-                Console.WriteLine($"{(int)job}. {job}");
-
-                if (selectedJob == job)
-                {
-                    IJob jobData = Program.JobDatas[job];
-                    Console.WriteLine($"  └ {jobData.Description}");
-                    Console.WriteLine($"  └ 공격력: {jobData.Atk}  |  방어력: {jobData.Def}  |  HP: {jobData.MaxHp}  |  MP: {jobData.MaxMp}");
-                    Console.WriteLine($"  └ 특성: {jobData.Trait}");
-                    Console.WriteLine();
-                }
-            }
-        }
+        
 
         // **메인메뉴**
-        public static void ShowMainMenu()
-        {
-            Console.Clear();
-            Console.WriteLine("스파르타 마을에 오신 여러분 환영합니다.");
-            Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.");
-            Console.WriteLine();
-            Console.WriteLine("[1] 상태 보기");
-            Console.WriteLine("[2] 인벤토리");
-            Console.WriteLine("[3] 상점");
-            Console.WriteLine("[4] 던전입장");
-            Console.WriteLine("[5] 휴식하기");
-            Console.WriteLine("[~`] 게임종료");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
+        //public void ShowMainMenu(Player player, Inventory inventory)
+        //{
+            
+        //}
 
-            int result = Program.CheckInput(1, 5);
-
-            switch (result)
-            {
-                case 1:
-                    player.DisplayPlayerInfo();
-                    break;
-                case 2:
-                    Inventory.DisplayInventoryUI();
-                    break;
-                case 3:
-                    Shop.DisplayShopUI();
-                    break;
-                case 4:
-                    DisplayDungeonUI(Chapter);
-                    break;
-                case 5:
-                    DisplayRestUI();
-                    break;
-                case -1:
-                    Console.WriteLine("게임을 종료합니다.");
-                    Thread.Sleep(1000);
-                    // `키를 눌러 종료
-                    Environment.Exit(0);
-                    break;
-            }
-        }
-
-        public static void BossDesc(int Chapter)
+        public void BossDesc(int Chapter)
         {
             switch (Chapter)
             {
@@ -184,9 +125,9 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-        public static string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
+        public string[] ChapterTitle = { "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층" };
 
-        public static void ChapterDesc(int Chapter)
+        public void ChapterDesc(int Chapter)
         {
             switch (Chapter)
             {
@@ -240,7 +181,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void CriticalMes(Player player)
+        /*public void CriticalMes(Player player)
         {
             JobType job = player.Job;
 
@@ -286,51 +227,51 @@ namespace Sparta_Dungeon_TeamProject
 
         // 직업별 크리티컬 데미지 메시지
 
-        public static Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
-{
-    { JobType.전사, new[]
-    {   "\n\n\n\n\n\n\n\n    고요한 전장의 메아리.",
-        "\n\n\n\n\n\n    녹슨 검이 다시 한 번, 적의 심장을 겨눈다!" }},
+        public Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
+        {
+        { JobType.전사, new[]
+        {   "\n\n\n\n\n\n\n\n    고요한 전장의 메아리.",
+            "\n\n\n\n\n\n    녹슨 검이 다시 한 번, 적의 심장을 겨눈다!" }},
 
-    { JobType.마법사, new[]
-    {   "\n\n\n\n    비틀린 마법진이 휘청인다.",
-        "\n\n\n\n\n\n    그 틈을 찔러, 한 줄기 마력이 폭주한다!" }},
+        { JobType.마법사, new[]
+        {   "\n\n\n\n    비틀린 마법진이 휘청인다.",
+            "\n\n\n\n\n\n    그 틈을 찔러, 한 줄기 마력이 폭주한다!" }},
 
-    { JobType.영매사, new[]
-    {   "\n\n\n\n\n\n\n\n    말을 잃은 존재의 눈이 빛난다.",
-        "\n\n\n\n\n\n    고양이의 울음 대신, 사념이 퍼져간다…" }},
+        { JobType.영매사, new[]
+        {   "\n\n\n\n\n\n\n\n    말을 잃은 존재의 눈이 빛난다.",
+            "\n\n\n\n\n\n    고양이의 울음 대신, 사념이 퍼져간다…" }},
 
-    { JobType.대장장이, new[]
-    {   "\n\n\n\n\n\n\n\n    녹슨 망치가 손에서 덜컹거린다.",
-        "\n\n\n\n\n\n    마지막 불꽃이 담긴 한 방이 울려 퍼진다!" }},
+        { JobType.대장장이, new[]
+        {   "\n\n\n\n\n\n\n\n    녹슨 망치가 손에서 덜컹거린다.",
+            "\n\n\n\n\n\n    마지막 불꽃이 담긴 한 방이 울려 퍼진다!" }},
 
-    { JobType.과학자, new[]
-    {   "\n\n\n\n\n\n\n\n    금기된 공식이 마침내 완성된다.",
-        "\n\n\n\n\n\n    불안정한 빛이 공기를 찢으며 발산된다!" }},
-    };
+        { JobType.과학자, new[]
+        {   "\n\n\n\n\n\n\n\n    금기된 공식이 마침내 완성된다.",
+            "\n\n\n\n\n\n    불안정한 빛이 공기를 찢으며 발산된다!" }},
+        };
 
 
-        public static Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
-{ 
-    // 직업별 크리티컬 데미지 마지막 메시지
+        public Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
+        { 
+        // 직업별 크리티컬 데미지 마지막 메시지
     
-    { JobType.전사, new[]
-    {"──  잊힌 전사의 일격이, 다시 역사의 피를 흐르게 했다."}},
+        { JobType.전사, new[]
+        {"──  잊힌 전사의 일격이, 다시 역사의 피를 흐르게 했다."}},
 
-    { JobType.마법사, new[]
-    {"──  허황된 주문조차 진실의 순간엔 검이 된다."}},
+        { JobType.마법사, new[]
+        {"──  허황된 주문조차 진실의 순간엔 검이 된다."}},
 
-    { JobType.영매사, new[]
-    {"──  침묵의 일격은 소리 없이, 그러나 확실히 끝을 남긴다."}},
+        { JobType.영매사, new[]
+        {"──  침묵의 일격은 소리 없이, 그러나 확실히 끝을 남긴다."}},
 
-    { JobType.대장장이, new[]
-    {"──  무너진 기억과 함께, 대지에 새긴 죄의 불꽃."}},
+        { JobType.대장장이, new[]
+        {"──  무너진 기억과 함께, 대지에 새긴 죄의 불꽃."}},
 
-    {JobType.과학자, new[]
-    {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
-    };
+        {JobType.과학자, new[]
+        {"──  이단의 실험은 성공했고, 희생은 검증되었다."} },
+        };
 
-        public static void StartSkipListener()
+        public void StartSkipListener()
         {
             Skip = false;
             inputThread = new Thread(() =>
@@ -342,7 +283,7 @@ namespace Sparta_Dungeon_TeamProject
             inputThread.Start();
         }
 
-        public static void PrintMessageWithSkip(string message, int delay = 100)
+        public void PrintMessageWithSkip(string message, int delay = 100)
         {
             foreach (char c in message)
             {
@@ -359,7 +300,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static void PrintLinesWithSkip(string[] lines, int charDelay = 30, int lineDelay = 800)
+        public void PrintLinesWithSkip(string[] lines, int charDelay = 30, int lineDelay = 800)
         {
             StartSkipListener();
 
@@ -381,7 +322,7 @@ namespace Sparta_Dungeon_TeamProject
             Skip = false; // 다음 출력을 위해 초기화
         }
 
-        public static void EvasionMess(Monster target, Program Playerturn)
+        public void EvasionMess(Monster target, Program Playerturn)
         {
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Cyan;
@@ -394,87 +335,6 @@ namespace Sparta_Dungeon_TeamProject
             Sparta_Dungeon_TeamProject.Program.Playerturn = false;
             return;
         }
-
-        //여관
-        public static void DisplayRestUI()
-        {
-            Console.Clear();
-            Console.WriteLine("** 여관 **");
-            Console.WriteLine($"보유 골드 : {player.Gold} G\n");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("여관 주인: 안녕하세요, 여관에 오신 것을 환영합니다.");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("[체력 회복 메뉴]");
-            Console.WriteLine("[1] 따뜻한 죽 한 그릇 (300G, +20 HP)");
-            Console.WriteLine("[2] 고기 듬뿍 스튜 (700G, +50 HP)");
-            Console.WriteLine("[3] 푸짐한 정식 (1200G, 전체 회복)");
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("[마나 회복 메뉴]");
-            Console.WriteLine("[4] 1세대 실험약 (300G, +30 MP)");
-            Console.WriteLine("[5] 강화형 실험약 (700G, +80 MP)");
-            Console.WriteLine("[6] 미공개 프로토타입 (1200G, 전체 회복)");
-            Console.ResetColor();
-            Console.WriteLine();
-
-            int guideLine = Console.CursorTop;
-
-            Console.WriteLine("[~`] 나가기");
-            Console.WriteLine("\n원하시는 행동을 입력해주세요.");
-
-            while (true)
-            {
-                Console.SetCursorPosition(0, guideLine);
-                Program.ClearBottom(guideLine, 10);
-                Console.Write(">> ");
-                int result = Program.CheckInput(1, 6);
-
-                switch (result)
-                {
-                    case -1:
-                        ShowMainMenu();
-                        return;
-                    case 1:
-                        if (player.Heal(300, 20))
-                        {
-                            Console.WriteLine("\n죽을 먹고 따뜻해졌다!");
-                        }
-                        else
-                        {
-                            Console.WriteLine("골드가 부족합니다.");
-                        }
-                        break;
-                    case 2:
-                        if (player.Heal(700, 50))
-                            Console.WriteLine("\n고기 듬뿍 스튜를 먹고 힘이 솟는다!");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 3:
-                        if (player.Heal(1200, player.MaxHp))
-                            Console.WriteLine("\n정식을 먹고 체력이 전부 회복되었다!");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 4:
-                        if (player.GainMp(300, 30))
-                            Console.WriteLine("\n실험약을 마시고 정신이 또렷해진다.");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 5:
-                        if (player.GainMp(700, 80))
-                            Console.WriteLine("\n강화형 약물이 효과를 발휘했다!");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                    case 6:
-                        if (player.GainMp(1200, player.MaxMp))
-                            Console.WriteLine("\nMP가 완전히 회복되었습니다.");
-                        else Console.WriteLine("골드가 부족합니다.");
-                        break;
-                }
-                Program.WaitForEnter();
-                DisplayRestUI();
-            }
-        }
-    }
+        
+    }*/
 }
