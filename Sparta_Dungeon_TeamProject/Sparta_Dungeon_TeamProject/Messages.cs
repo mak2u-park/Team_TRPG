@@ -5,22 +5,13 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using Sparta_Dungeon_TeamProject;
-using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    public class Messages
+    public partial class Messages
     {
         public bool Skip = false; // 메시지 스킵 기능
         public Thread inputThread; // 메시지 스킵 기능
-
-        
-
-        // **메인메뉴**
-        //public void ShowMainMenu(Player player, Inventory inventory)
-        //{
-            
-        //}
 
         public void BossDesc(int Chapter)
         {
@@ -181,24 +172,24 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        /*public void CriticalMes(Player player)
+        public void CriticalMes(Player player)
         {
             JobType job = player.Job;
 
-            string[] impactLines = Messages.CriticalDamageMessage.ContainsKey(job)
-                ? Messages.CriticalDamageMessage[job]
+            string[] impactLines = CriticalDamageMessage.ContainsKey(job)
+                ? CriticalDamageMessage[job]
                 : new[]
                 {
                     "\n\n\n\n    ...정적 속에", // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
                     "\n\n    강렬한 일격이 내려친다!"
                 };
-            string criticalImpact = Messages.CriticalDamageFinalMessage.ContainsKey(job)
-           ? Messages.CriticalDamageFinalMessage[job][0]
+            string criticalImpact = CriticalDamageFinalMessage.ContainsKey(job)
+           ? CriticalDamageFinalMessage[job][0]
            : "──  그대의 일격은 어둠을 가르며, 찰나의 빛이 번뜩였다!!"; // 직업 목록에 존재하지 않으면 뜨는 기본 메시지
 
             Console.ForegroundColor = ConsoleColor.Red;
-            Messages.PrintLinesWithSkip(impactLines, 30, 800); // 스킵 가능한 연출 메시지 출력
-            if (Messages.Skip)
+            PrintLinesWithSkip(impactLines, 30, 800); // 스킵 가능한 연출 메시지 출력
+            if (Skip)
             {
                 Console.Clear(); // 스킵되었을 경우 화면 정리
             }
@@ -207,7 +198,7 @@ namespace Sparta_Dungeon_TeamProject
             //흔들림 2회(화면 깜빡임)
             for (int i = 0; i < 2; i++)
             {
-                if (Messages.Skip) break;
+                if (Skip) break;
 
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -332,9 +323,9 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"{"",10}[Lv.{target.Level}][{target.Name}] (은)는 공격을 손쉽게 회피했다!");
             Console.ResetColor();
             Thread.Sleep(700);
-            Sparta_Dungeon_TeamProject.Program.Playerturn = false;
+            Playerturn = false;
             return;
-        }*/
-        
+        }
+       
     }
 }

@@ -7,7 +7,7 @@ using Sparta_Dungeon_TeamProject;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    class Blacksmith_Skill
+    /*class Blacksmith_Skill
     {
         public static void LostFlameSkillEffect()
         {
@@ -179,5 +179,5 @@ class Wizard_Skill
         Console.ResetColor();
 
         Thread.Sleep(600);
-    }
+    }*/
 }

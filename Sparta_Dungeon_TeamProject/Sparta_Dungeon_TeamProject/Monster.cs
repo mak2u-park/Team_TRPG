@@ -21,14 +21,14 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; protected set; }
         public int Def { get; protected set; }
         public int Hp { get; set; }
-        public int Dodge { get; set; }
+        public int Dodge { get; protected set; }
 
-        
+
 
         // 레벨 상승에 따른 최종 스탯 계산을 위한 float값 추가
         public float FinalAtk => Atk * (1 + Origin * Level);
-        public float FinalDef => Def* (1 + Origin* Level);
-        public float FinalHp => Hp * (1 + Origin * Level);
+        public float FinalDef => Def * (1 + Origin * Level);
+        public float FinalHp { get; protected set; }
         public float Origin { get; protected set; }
         public float CurrentHp { get; set; }
 
@@ -45,7 +45,7 @@ namespace Sparta_Dungeon_TeamProject
 
         private static Random random = new Random();
 
-        
+
 
         public Monster(
             string name,
@@ -64,6 +64,7 @@ namespace Sparta_Dungeon_TeamProject
             Atk = random.Next(minAtk, maxAtk + 1);
             Def = random.Next(minDef, maxDef + 1);
             Hp = random.Next(minHp, maxHp + 1);
+            FinalHp = Hp * (1 + Origin * Level);
             CurrentHp = FinalHp;
             Dodge = dodge;
             Gold = random.Next(minDropGold, maxDropGold + 1);
@@ -77,7 +78,7 @@ namespace Sparta_Dungeon_TeamProject
             최종 공격력, 방어력, 체력은 레벨과 origin(태생)에 따라 영향을 받으며 좋은 태생을 가지고 있을수록
             레벨이 높을때 더 높은 최종 스탯을 갖는다.
             */
-            
+
         }
         public enum StatType
         {
@@ -87,7 +88,8 @@ namespace Sparta_Dungeon_TeamProject
             Hp,
             FinalAtk,
             FinalDef,
-            FinalHp
+            FinalHp,
+            Dodge
         }
 
         public void ChangeStat(StatType stat, int value)
@@ -105,6 +107,9 @@ namespace Sparta_Dungeon_TeamProject
                     break;
                 case StatType.Hp:
                     Hp = value;
+                    break;
+                case StatType.Dodge:
+                    Dodge = value;
                     break;
                 default:
                     throw new ArgumentException("존재하지 않는 스탯입니다.");
@@ -487,7 +492,7 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
                     minHp: 10, maxHp: 30,
-                    dodge: 1,
+                    dodge: 100,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -498,7 +503,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-     }
- }
+    }
+}
 
 
