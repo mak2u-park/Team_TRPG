@@ -226,17 +226,6 @@ namespace Sparta_Dungeon_TeamProject
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
                     PlayerTurnUI();
-                    switch (Stage)
-                    {
-                        case 2:
-                            PlayerActionBoss1(); break;
-                        case 5:
-                            PlayerActionBoss2(); break;
-                        case 8:
-                            PlayerActionBoss3(); break;
-                        case 11:
-                            PlayerActionBoss4(); break;
-                    }
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
@@ -305,184 +294,177 @@ namespace Sparta_Dungeon_TeamProject
 
         private void PlayerActionNormal()
         {
-            while (true)
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine($"{"",7}▶ 1. 일반 공격");
+            //Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
+            Console.WriteLine($"{"",7}▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            int result = Utils.CheckInput(1, 3);
+
+            switch (result)
             {
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine($"{"",7}▶ 1. 일반 공격");
-                //Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
-                Console.WriteLine($"{"",7}▶ 3. 상태 보기");
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
-                Console.WriteLine();
-
-                int result = Utils.CheckInput(1, 3);
-
-                switch (result)
-                {
-                    case 1:
-                        PlayerAttack(); return; // 플레이어 공격 불러오기 
-                    case 2:
-                        Console.WriteLine("스킬은 준비중입니다.\n[Enter]");
-                        Utils.WaitForEnter();
-                        continue; //스킬창 불러오기
-                    case 3:
-                            Console.Clear();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            player.DisplayPlayerInfo();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                        return;
-                    case -1:
-                        return;
-                }
+                case 1:
+                    PlayerAttack(); return; // 플레이어 공격 불러오기 
+                case 2:
+                    Console.WriteLine("스킬은 준비중입니다.\n[Enter]");
+                    Utils.WaitForEnter();
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.Clear();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    return;
+                case -1:
+                    break;
             }
+
+
+
         }
 
         private void PlayerActionBoss1()
         {
-            while (true)
+            left = false;
+            right = false;
+
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 왼쪽 살피기");
+            Console.WriteLine("    ▶ 4. 오른쪽 살피기");
+            Console.WriteLine("    ▶ 5. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            int result = Utils.CheckInput(1, 5);
+
+            switch (result)
             {
-                left = false;
-                right = false;
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    // 왼쪽 살피기
+                    left = true;
+                    Playerturn = false;
+                    Console.WriteLine("당신은 왼쪽을 주의깊게 살핍니다");
+                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                    Utils.WaitForEnter();
+                    // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                    break;
+                case 4:
+                    // 오른쪽 살피기
+                    right = true;
+                    Playerturn = false;
+                    Console.WriteLine("당신은 오른쪽을 주의깊게 살핍니다");
+                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                    Utils.WaitForEnter();
+                    // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                    break;
+                case 5:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("[~`] 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                    break;
+                case -1:
+                    return;
 
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("    ▶ 1. 일반 공격");
-                Console.WriteLine("    ▶ 2. 스킬 선택");
-                Console.WriteLine("    ▶ 3. 왼쪽 살피기");
-                Console.WriteLine("    ▶ 4. 오른쪽 살피기");
-                Console.WriteLine("    ▶ 5. 상태 보기");
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.WriteLine();
 
-                int result = Utils.CheckInput(1, 5);
-
-                switch (result)
-                {
-                    case 1:
-                        PlayerAttack(); break; // 플레이어 공격 불러오기 
-                    case 2:
-                        break; //스킬창 불러오기
-                    case 3:
-                        // 왼쪽 살피기
-                        left = true;
-                        Playerturn = false;
-                        Console.WriteLine("당신은 왼쪽을 주의깊게 살핍니다");
-                        Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                        Utils.WaitForEnter();
-                        // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
-                        break;
-                    case 4:
-                        // 오른쪽 살피기
-                        right = true;
-                        Playerturn = false;
-                        Console.WriteLine("당신은 오른쪽을 주의깊게 살핍니다");
-                        Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                        Utils.WaitForEnter();
-                        // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
-                        break;
-                    case 5:
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        player.DisplayPlayerInfo();
-                        Console.WriteLine();
-                        Console.WriteLine("[~`] 나가기");
-                        Console.WriteLine();
-                        Console.WriteLine("원하시는 행동을 입력해주세요.");
-                        break;
-                    case -1:
-                        return;
-                }
             }
         }
         private void PlayerActionBoss2()
         {
-            while (true)
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            int result = Utils.CheckInput(1, 3);
+
+            switch (result)
             {
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("    ▶ 1. 일반 공격");
-                Console.WriteLine("    ▶ 2. 스킬 선택");
-                Console.WriteLine("    ▶ 3. 상태 보기");
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.WriteLine();
-
-                int result = Utils.CheckInput(1, 3);
-
-                switch (result)
-                {
-                    case 1:
-                        PlayerAttack(); break; // 플레이어 공격 불러오기 
-                    case 2:
-                        break; //스킬창 불러오기
-                    case 3:
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        player.DisplayPlayerInfo();
-                        Console.WriteLine();
-                        Console.WriteLine("[~`] 나가기");
-                        Console.WriteLine();
-                        Console.WriteLine("원하시는 행동을 입력해주세요.");
-                        break;
-                    case -1:
-                        return;
-                }
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("[~`] 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                    break;
+                case -1:
+                    return;
             }
         }
         private void PlayerActionBoss3()
         {
-            while (true)
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("    ▶ 1. 일반 공격");
+            Console.WriteLine("    ▶ 2. 스킬 선택");
+            Console.WriteLine("    ▶ 3. 상태 보기");
+            Console.WriteLine();
+            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.WriteLine();
+
+            int result = Utils.CheckInput(1, 3);
+            switch (result)
             {
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("    ▶ 1. 일반 공격");
-                Console.WriteLine("    ▶ 2. 스킬 선택");
-                Console.WriteLine("    ▶ 3. 상태 보기");
-                Console.WriteLine();
-                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-                Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
-                Console.WriteLine();
+                case 1:
+                    PlayerAttack(); break; // 플레이어 공격 불러오기 
+                case 2:
+                    break; //스킬창 불러오기
+                case 3:
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    player.DisplayPlayerInfo();
+                    Console.WriteLine();
+                    Console.WriteLine("[~`] 나가기");
+                    Console.WriteLine();
+                    Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-                int result = Utils.CheckInput(1, 3);
-                switch (result)
-                {
-                    case 1:
-                        PlayerAttack(); break; // 플레이어 공격 불러오기 
-                    case 2:
-                        break; //스킬창 불러오기
-                    case 3:
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        Console.WriteLine();
-                        player.DisplayPlayerInfo();
-                        Console.WriteLine();
-                        Console.WriteLine("[~`] 나가기");
-                        Console.WriteLine();
-                        Console.WriteLine("원하시는 행동을 입력해주세요.");
-
-                        if(result == 0) PlayerTurnUI();
-                        continue;
-                }
+                    if (result == 0) PlayerTurnUI();
+                    break;
             }
         }
         private void PlayerActionBoss4()
