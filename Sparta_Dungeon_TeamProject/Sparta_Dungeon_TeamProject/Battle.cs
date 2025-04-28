@@ -308,7 +308,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 Console.WriteLine();
                 Console.WriteLine($"{"",7}▶ 1. 일반 공격");
-                Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
+                //Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
                 Console.WriteLine($"{"",7}▶ 3. 상태 보기");
                 Console.WriteLine();
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -689,11 +689,34 @@ namespace Sparta_Dungeon_TeamProject
                     Console.ResetColor();
                     Console.WriteLine();
 
-                    player.EnemyDamage(m.Atk);
-                    Console.WriteLine();
 
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                    if (player.Job == JobType.전사) // 전사 방어 확률
+                    {
+                        Random random = new Random();
+                        int block = random.Next(1, 6);
+                        if (block == 1)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"당신은 [Lv.{m.Level}][{m.Name}]의 공격을 막았습니다!");
+                        }
+                        else
+                        {
+                            player.EnemyDamage(m.Atk);
+                            Console.WriteLine();
+                            Console.ForegroundColor = ConsoleColor.DarkRed;
+                            Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                        }
+                    }
+                    else if (player.Job == JobType.마법사) // 마법사 보호막
+                    { 
+                    }
+                    else
+                    {
+                        player.EnemyDamage(m.Atk);
+                        Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.WriteLine($"{"",10}▶ 현재 HP : {player.Hp,3}/{player.MaxHp,-3}");
+                    }
                     Console.ResetColor();
                     Console.WriteLine();
                     Thread.Sleep(300);
@@ -757,9 +780,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-
-        // 플레이어 공격 시 UI
-        private void PlayerAttack()
+        void PlayerAttack()
         {
             Console.Clear();
             Console.WriteLine();
@@ -808,22 +829,7 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = true;
                 return;
             }
-            // 몬스터가 회피했을 때
-            if (battleManager.MonEvasion(target) == true)
-            {
-                battleManager.MonEvasionMes(target);
-                Playerturn = false;
-                return;
-            }
-            // 몬스터가 회피하지 못했을 경우
-            else
-            {
-                Console.Clear();
-                Console.WriteLine();
-                player.PlayerAttack(target, 1);
-            }
-
-            if (target.CurrentHp <= 0)
+            else if (target.CurrentHp <= 0)
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
@@ -840,8 +846,16 @@ namespace Sparta_Dungeon_TeamProject
                     BattleSuccessUI();
                     return;
                 }
-
-
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine();
+                player.PlayerAttack(target, 1);
+                if (player.Job == JobType.영매사)
+                {
+                    player.SplitAttack(target);
+                }
             }
 
             Playerturn = false; // 몬스터에게 턴 넘김
@@ -963,6 +977,7 @@ namespace Sparta_Dungeon_TeamProject
 
         private void BossGimmick1()
         {
+
             if (GimmickReady++ % 2 == 0)
             {
                 // 첫턴은 기믹 준비 단계, 주변에서 흥분한 멧돼지의 울음소리가 들린다
@@ -1278,5 +1293,4 @@ namespace Sparta_Dungeon_TeamProject
             Thread.Sleep(700);
         }
     }
-
 }

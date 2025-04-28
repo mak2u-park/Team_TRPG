@@ -47,7 +47,7 @@ namespace Sparta_Dungeon_TeamProject
         {
             { JobType.전사, AllSkills.GetRange(0, 4) },
             { JobType.마법사, AllSkills.GetRange(4, 4) },
-            { JobType.과학자, AllSkills.GetRange(8, 4) },
+            { JobType.연금술사, AllSkills.GetRange(8, 4) },
             { JobType.대장장이, AllSkills.GetRange(12,1) },
             { JobType.영매사, AllSkills.GetRange(13, 4) }
         };

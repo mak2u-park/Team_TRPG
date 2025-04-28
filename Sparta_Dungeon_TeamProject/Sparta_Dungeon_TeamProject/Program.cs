@@ -26,11 +26,11 @@ namespace Sparta_Dungeon_TeamProject
             //{ "상태", false },
         };
 
-        private Dictionary<JobType, IJob> JobDatas = new()
+        public static Dictionary<JobType, IJob> JobDatas = new()
         {
             { JobType.전사, new Warrior() },
             { JobType.마법사, new Mage() },
-            { JobType.과학자, new Scientist() },
+            { JobType.연금술사, new Scientist() },
             { JobType.대장장이, new Smith() },
             { JobType.영매사, new Medium() }
         };
@@ -107,7 +107,7 @@ namespace Sparta_Dungeon_TeamProject
                 case JobType.마법사:
                     SkillManager.FirstWizardSkill(player);
                     break;
-                case JobType.과학자:
+                case JobType.연금술사:
                     SkillManager.FirstScientistSkill(player);
                     break;
                 case JobType.대장장이:
@@ -175,8 +175,6 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        
-
         // B-2. 이름 입력UI
         private string ReadName(IJob job)
         {
@@ -208,10 +206,10 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"====[The Hollowed 입성 기념 보상 지급]====");
             Console.WriteLine($"골드: {job.DefaultGold} G");
             // 초기 스킬 지급 내역이 있을 때만 출력
-            if (job.InitialSkills != null && job.InitialSkills.Count > 0)
-            {
-                Console.WriteLine($"스킬: {string.Join(", ", job.InitialSkills)}");
-            }
+            //if (job.InitialSkills != null && job.InitialSkills.Count > 0)
+            //{
+            //    Console.WriteLine($"스킬: {string.Join(", ", job.InitialSkills)}");
+            //}
             // 초기 아이템 지급 내역이 있을 때만 출력
             if (job.InitialItems != null && job.InitialItems.Count > 0)
             {
