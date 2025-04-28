@@ -163,13 +163,13 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Wolf() : base(
                     name: "늑대",
-                    minLevel: 1, maxLevel: 5,
-                    minAtk: 3, maxAtk: 5,
-                    minDef: 5, maxDef: 10,
+                    minLevel: 1, maxLevel: 3,
+                    minAtk: 1, maxAtk: 3,
+                    minDef: 5, maxDef: 5,
                     minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
-                    minDropExp: 50, maxDropExp: 100,
+                    dodge: 20,
+                    minDropGold: 100, maxDropGold: 300,
+                    minDropExp: 10, maxDropExp: 20,
                     isAlive: true,
                     origin: 0.1f)
                 {
@@ -186,13 +186,13 @@ namespace Sparta_Dungeon_TeamProject
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
                     minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
-                    minDropExp: 50, maxDropExp: 100,
+                    dodge: 10,
+                    minDropGold: 200, maxDropGold: 300,
+                    minDropExp: 20, maxDropExp: 30,
                     isAlive: true,
                     origin: 0.1f)
                 {
-
+                     
                 }
 
             }
@@ -205,10 +205,10 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
-                    dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
-                    minDropExp: 50, maxDropExp: 100,
+                    minHp: 10, maxHp: 20,
+                    dodge: 0,
+                    minDropGold: 100, maxDropGold: 200,
+                    minDropExp: 30, maxDropExp: 50,
                     isAlive: true,
                     origin: 0.15f)
                 {
@@ -231,12 +231,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Cavebat() : base(
                     name: "동굴 박쥐",
-                    minLevel: 1, maxLevel: 5,
-                    minAtk: 3, maxAtk: 5,
-                    minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
+                    minLevel: 5, maxLevel: 7,
+                    minAtk: 5, maxAtk: 10,
+                    minDef: 10, maxDef: 10,
+                    minHp: 30, maxHp: 30,
+                    dodge: 20,
+                    minDropGold: 500, maxDropGold: 1000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.1f)
@@ -250,12 +250,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Ghost() : base(
                     name: "유령",
-                    minLevel: 1, maxLevel: 5,
-                    minAtk: 3, maxAtk: 5,
-                    minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
-                    minDropGold: 1000, maxDropGold: 3000,
+                    minLevel: 7, maxLevel: 9,
+                    minAtk: 10, maxAtk: 15,
+                    minDef: 10, maxDef: 10,
+                    minHp: 20, maxHp: 30,
+                    dodge: 30,
+                    minDropGold: 1000, maxDropGold: 1000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.1f)
@@ -270,12 +270,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Skeleton() : base(
                     name: "해골",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 10, maxLevel: 15,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
-                    dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    minHp: 20, maxHp: 30,
+                    dodge: 10,
+                    minDropGold: 1000, maxDropGold: 1500,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
@@ -299,11 +299,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Adventurer() : base(
                     name: "잃을 게 없는 모험가",
-                    minLevel: 1, maxLevel: 5,
+                    minLevel: 10, maxLevel: 15,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
+                    minHp: 30, maxHp: 30,
+                    dodge: 10,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -318,11 +318,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public SmilingSlime() : base(
                     name: "웃는 슬라임",
-                    minLevel: 1, maxLevel: 5,
+                    minLevel: 10, maxLevel: 20,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
+                    minHp: 30, maxHp: 40,
+                    dodge: 0,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -338,11 +338,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public HeadlessSkeletion() : base(
                     name: "머리 없는 해골",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 10, maxLevel: 25,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
-                    dodge: 1,
+                    minHp: 30, maxHp: 50,
+                    dodge: 20,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -367,11 +367,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Swordsman() : base(
                     name: "기억 잃은 검사",
-                    minLevel: 1, maxLevel: 5,
+                    minLevel: 30, maxLevel: 40,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
+                    minHp: 50, maxHp: 100,
+                    dodge: 20,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -386,11 +386,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Mage() : base(
                     name: "기억 잃은 마법사",
-                    minLevel: 1, maxLevel: 5,
+                    minLevel: 30, maxLevel: 40,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
-                    dodge: 1,
+                    minHp: 30, maxHp: 50,
+                    dodge: 0,
                     minDropGold: 1000, maxDropGold: 3000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -406,11 +406,11 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Archer() : base(
                     name: "기억 잃은 궁수",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 30, maxLevel: 40,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
-                    dodge: 1,
+                    minHp: 50, maxHp: 70,
+                    dodge: 30,
                     minDropGold: 2000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
@@ -434,12 +434,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public Capybara() : base(
                     name: "카피바라",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 5, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
+                    minHp: 50, maxHp: 50,
                     dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropGold: 1000, maxDropGold: 2000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
@@ -452,12 +452,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public RegretfulAdventurer() : base(
                     name: "후회하는 모험가",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 15, maxLevel: 15,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 5000, maxHp: 5000,
+                    minHp: 100, maxHp: 100,
                     dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropGold: 2000, maxDropGold: 4000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
@@ -470,12 +470,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public GiantCapybara() : base(
                     name: "대왕 카피바라",
-                    minLevel: 3, maxLevel: 5,
+                    minLevel: 30, maxLevel: 30,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
+                    minHp: 300, maxHp: 300,
                     dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    minDropGold: 4000, maxDropGold: 5000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
@@ -488,12 +488,12 @@ namespace Sparta_Dungeon_TeamProject
             {
                 public BlackCat() : base(
                     name: "검은 고양이",
-                    minLevel: 3, maxLevel: 5,
-                    minAtk: 5, maxAtk: 10,
-                    minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 30,
-                    dodge: 1,
-                    minDropGold: 2000, maxDropGold: 5000,
+                    minLevel: 50, maxLevel: 50,
+                    minAtk: 10, maxAtk: 10,
+                    minDef: 50, maxDef: 50,
+                    minHp: 1000, maxHp: 1000,
+                    dodge: 100,
+                    minDropGold: 5000, maxDropGold: 10000,
                     minDropExp: 50, maxDropExp: 100,
                     isAlive: true,
                     origin: 0.15f)
