@@ -312,7 +312,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
                 Console.WriteLine();
                 Console.WriteLine($"{"",7}▶ 1. 일반 공격");
-                //Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
+                Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
                 Console.WriteLine($"{"",7}▶ 3. 상태 보기");
                 Console.WriteLine();
                 Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -320,7 +320,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
                 Console.WriteLine();
 
-                int result = Utils.CheckInput(1, 3);
+                int result = Utils.CheckInput(1, 4);
 
                 switch (result)
                 {
@@ -331,12 +331,15 @@ namespace Sparta_Dungeon_TeamProject
                         Utils.WaitForEnter();
                         continue; //스킬창 불러오기
                     case 3:
-                            Console.Clear();
-                            Console.WriteLine();
-                            Console.WriteLine();
-                            player.DisplayPlayerInfo();
-                            Console.WriteLine();
-                            Console.WriteLine();
+                        Console.Clear();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        player.DisplayPlayerInfo();
+                        Console.WriteLine();
+                        Console.WriteLine("[~`] 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.\n>>");
+                        Console.WriteLine();
                         return;
                     case -1:
                         return;
@@ -481,7 +484,7 @@ namespace Sparta_Dungeon_TeamProject
                         Console.WriteLine();
                         Console.WriteLine("원하시는 행동을 입력해주세요.");
 
-                        if(result == 0) PlayerTurnUI();
+                        if (result == 0) PlayerTurnUI();
                         continue;
                 }
             }
@@ -712,7 +715,7 @@ namespace Sparta_Dungeon_TeamProject
                         }
                     }
                     else if (player.Job == JobType.마법사) // 마법사 보호막
-                    { 
+                    {
                     }
                     else
                     {
@@ -833,7 +836,18 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = true;
                 return;
             }
-            else if (target.CurrentHp <= 0)
+            else
+            {
+                Console.Clear();
+                Console.WriteLine();
+                player.PlayerAttack(target, 1);
+                if (player.Job == JobType.영매사)
+                {
+                    player.SpiritAttack(target);
+                }
+            }
+
+            if (target.CurrentHp <= 0)
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
@@ -849,16 +863,6 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     BattleSuccessUI();
                     return;
-                }
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine();
-                player.PlayerAttack(target, 1);
-                if (player.Job == JobType.영매사)
-                {
-                    player.SplitAttack(target);
                 }
             }
 
