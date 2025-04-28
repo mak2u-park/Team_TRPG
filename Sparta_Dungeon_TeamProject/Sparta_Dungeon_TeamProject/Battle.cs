@@ -16,7 +16,7 @@ namespace Sparta_Dungeon_TeamProject
 
         public static int KillMon = 0; // 몬스터 처치 횟수 값
         public static int BattleTurn = 1; // 전투 턴 변수
-        public static int Stage = 0; // 스테이지 변수
+        public static int Stage = 11; // 스테이지 변수
         public static int Chapter => Stage / 3; // 읽기 전용 프로퍼티
         public static int GimmickReady = 0; // 보스 기믹 컨트롤용 변수
 
@@ -76,22 +76,21 @@ namespace Sparta_Dungeon_TeamProject
 
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}┃         1. 앞으로 나아가기            ┃");
-            Console.WriteLine($"{"",3}┃         0. 마을로 돌아가기            ┃");
+            Console.WriteLine($"{"",3}┃         `. 마을로 돌아가기            ┃");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
 
             Console.WriteLine();
             Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
 
-            int result = CheckInput(0, 1);
+            int result = CheckInput(-1, 1);
             switch (result)
             {
-                case 0:
+                case -1:
                     Messages.ShowMainMenu();
                     break;
                 case 1:
                     Battle(Stage);
-
                     break;
             }
 
@@ -514,6 +513,7 @@ namespace Sparta_Dungeon_TeamProject
             if (selectedOptions.Contains(n))
             {
                 Console.Clear();
+                Console.WriteLine();
                 Console.WriteLine("한번 선택한 행동은 반복할 수 없습니다.");
                 PlayerActionBoss4();
                 return;
@@ -841,7 +841,8 @@ namespace Sparta_Dungeon_TeamProject
 
                 // 방어력 감소된 상태, 이번 턴만 2회 공격
                 Console.WriteLine();
-                Console.WriteLine("2회 공격.");
+                Console.WriteLine("모험가의 후회가 이번 공격을 강화합니다.");
+                Console.WriteLine("모험가의 공격이 2번 적중합니다.");
                 doubleAttack = true;
             }
             Console.WriteLine();
@@ -866,7 +867,8 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     Console.WriteLine("대왕 카피바라가 마른 풀에 불을 붙입니다");
                     Console.WriteLine("은은한 빛이 방 안을 따뜻하게 감싸자 대왕 카피바라가 더욱 단단해집니다.");
-                    battleMonsters[0].ChangeStat(StatType.Def, def * 2);
+                    battleMonsters[0].ChangeStat(StatType.Def, 100);
+                    Console.WriteLine($"카피바라의 방어력이 {target.Def}이 되었습니다.");
                     break;
                 case 1:
                     // 가방 던지기(긍정) 암시
@@ -874,6 +876,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("대왕 카피바라가 등에 붙어 있던 이끼 뭉치를 휙 던집니다");
                     Console.WriteLine("카피바라의 몸이 가벼워져 움직임이 더욱 빨라집니다.");
                     battleMonsters[0].ChangeStat(StatType.Dodge, 50);
+                    Console.WriteLine($"카피바라의 회피가 {target.Dodge}이 되었습니다.");
                     break;
                 case 2:
                     // 고양이 자세 취하기(긍정) 암시
@@ -882,6 +885,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("자세히 보니 고양이 자세를 따라하는 듯 합니다...");
                     Console.WriteLine("카피바라의 체력이 온전히 회복되었다.");
                     target.CurrentHp = target.FinalHp;
+                    Console.WriteLine($"카피바라의 체력이 {target.CurrentHp}로 회복되었습니다.");
                     break;
                 case 3:
                     // 바닥에 물 엎지르기(부정) 암시
@@ -892,6 +896,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("이상할 정도로 무방비해보입니다...");
                     Console.WriteLine("대왕 카피바라의 방어력이 대폭 감소했습니다.");
                     battleMonsters[0].ChangeStat(StatType.Def, 1);
+                    Console.WriteLine($"카피바라의 방어력이 {target.Def}이 되었습니다.");
                     break;
                 case 4:
                     // 갑자기 바닥에 눕기(부정) 암시
@@ -900,6 +905,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("진흙에 몸을 비비느라 당신에게 신경쓸 겨를이 없는 것 같습니다.");
                     Console.WriteLine("몸에 진흙이 가득 묻어 대왕 카피바라의 움직임이 둔해진듯 합니다");
                     battleMonsters[0].ChangeStat(StatType.Dodge, 0);
+                    Console.WriteLine($"카피바라의 회피가 {target.Dodge}이 되었습니다.");
                     break;
                 case 5:
                     // 전시된 접시 깨기(부정) 암시
@@ -907,6 +913,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine("대왕 카피바라가 주변에 있는 돌을 들어 바닥에 내려칩니다.");
                     Console.WriteLine("돌맹이가 튀어 대왕 카피바라에게 약간의 피해를 입혔습니다.");
                     target.CurrentHp = (target.CurrentHp) - (target.FinalHp / 5f);
+                    Console.WriteLine($"카피바라가 {target.FinalHp/5f}만큼 피해를 입었습니다");
                     break;
             }
             Console.WriteLine();
