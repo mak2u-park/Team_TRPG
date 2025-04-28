@@ -32,20 +32,40 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("인벤토리");
-                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
-                Console.WriteLine("==아이템 목록==");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━<< 인벤토리 >>━━━━━━━━━━━━━━━━━━━━━━┓");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("  보유 중인 아이템을 관리할 수 있습니다.");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  == 아이템 목록 ==");
+                Console.ResetColor();
+                Console.WriteLine();
 
                 ItemExt.PrintInventory(inventory.GetInventoryItems(), player);
 
                 Console.WriteLine();
-                Console.WriteLine("[1] 장착 관리");
-                Console.WriteLine("[2] 속죄의 대장간");
-                Console.WriteLine("[3] 아이템 사용");
-                Console.WriteLine("[~`] 나가기");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("  [1] 장착 관리");
+                Console.WriteLine("  [2] 속죄의 대장간");
+                Console.WriteLine("  [3] 아이템 사용");
+                Console.WriteLine("  [~`] 나가기");
+                Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.Write(">>");
 
                 int result = Utils.CheckInput(1, 3);
 
@@ -72,18 +92,36 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("[인벤토리 - 장착관리]");
-                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
                 Console.WriteLine();
-                Console.WriteLine("==아이템 목록==");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┏━━━━━━━━━━━━━━━━━━━━━━<< 인벤토리 - 장착 관리 >>━━━━━━━━━━━━━━━━━━━━━━┓");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("  장착 가능한 아이템을 관리할 수 있습니다.");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  == 장착 가능한 아이템 목록 ==");
+                Console.ResetColor();
+                Console.WriteLine();    
 
                 // 무기, 방어구, 장신구
                 var equippableItems = inventory.GetInventoryItems().Where(x => x.Type == 0 || x.Type == 1 || x.Type == 3).ToList();
                 ItemExt.PrintInventory(equippableItems, player);
 
                 Console.WriteLine();
-                Console.WriteLine("[~`] 나가기");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("  [~`] 나가기");
+                Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine("장착/해제할 아이템 번호를 입력하세요");
                 Console.Write(">>");
@@ -118,7 +156,9 @@ namespace Sparta_Dungeon_TeamProject
             // 고정 UI
             Console.Clear();
             Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine("[속죄의 대장간]");
+            Console.WriteLine();
 
             if (!firstVisitFlags["강화"]) // 첫 방문
             {

@@ -693,7 +693,7 @@ namespace Sparta_Dungeon_TeamProject
                         }
                     }
                     else if (player.Job == JobType.마법사) // 마법사 보호막
-                    { 
+                    {
                     }
                     else
                     {
@@ -814,7 +814,18 @@ namespace Sparta_Dungeon_TeamProject
                 Playerturn = true;
                 return;
             }
-            else if (target.CurrentHp <= 0)
+            else
+            {
+                Console.Clear();
+                Console.WriteLine();
+                player.PlayerAttack(target, 1);
+                if (player.Job == JobType.영매사)
+                {
+                    player.SpiritAttack(target);
+                }
+            }
+
+            if (target.CurrentHp <= 0)
             {
                 KillMon++; // 몬스터 처치 수 증가
                 target.IsAlive = false;
@@ -830,16 +841,6 @@ namespace Sparta_Dungeon_TeamProject
                 {
                     BattleSuccessUI();
                     return;
-                }
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine();
-                player.PlayerAttack(target, 1);
-                if (player.Job == JobType.영매사)
-                {
-                    player.SplitAttack(target);
                 }
             }
 
