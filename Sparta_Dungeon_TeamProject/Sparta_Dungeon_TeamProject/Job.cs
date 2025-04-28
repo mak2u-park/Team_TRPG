@@ -21,10 +21,10 @@ namespace Sparta_Dungeon_TeamProject
 
         // 기본 스탯
         int ExpToLevelUp { get; }
-        int Atk { get; }
+        int Atk { get; } // 공격력
         int Acc { get; } // 명중률
         int Cri { get; } // 치명타 확률
-        int CriDmg { get; }
+        int CriDmg { get; } // 치명타 피해
         int Def { get; }
         int MaxHp { get; } // 최대 체력
         int MaxMp { get; } // 최대 마나
