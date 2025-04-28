@@ -44,7 +44,7 @@ namespace Sparta_Dungeon_TeamProject
             "\n은퇴 후, 전장을 떠나 산지 벌써 10년이 지난 지금," +
             "\n아직도 세상은 어지러운 상황...전사가 부족합니다.\n" +
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
-        public string Description => "잃어버린 전투 감각으로 데미지를" +
+        public string Description => "" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
         public int ExpToLevelUp => 100;
         public int Atk => 15;
@@ -56,7 +56,7 @@ namespace Sparta_Dungeon_TeamProject
 
         //public int MaxMp => 30;
         public int DefaultGold => 10000;      // 구현: 직업별 시작 골드
-        public string Trait => "높은 치명타 확률, 낮은 명중률.";
+        public string Trait => "높은 치명타 확률, 보스 추가피해, 확률적으로 적의 공격을 방어함\n낮은 명중률";
 
         //public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.전사]);
@@ -83,7 +83,7 @@ namespace Sparta_Dungeon_TeamProject
 
         //public int MaxMp => 120;
         public int DefaultGold => 10000;      // 구현: 직업별 시작 골드
-        public string Trait => "공격이 방어력을 일부 무시..";
+        public string Trait => "공격이 방어력을 일부 무시, 보호막.";
 
         // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GifttemDb[JobType.마법사]);

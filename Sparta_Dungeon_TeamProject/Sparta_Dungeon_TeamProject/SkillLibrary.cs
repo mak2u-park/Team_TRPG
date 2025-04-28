@@ -4,8 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-/*
-namespace Sparta_Dungeon_TeamProject
+
+/*namespace Sparta_Dungeon_TeamProject
 {
     public class SkillLibrary
     {
@@ -25,5 +25,5 @@ namespace Sparta_Dungeon_TeamProject
             Cool = cool;
         }
     }
-}
-*/
+}*/
+
