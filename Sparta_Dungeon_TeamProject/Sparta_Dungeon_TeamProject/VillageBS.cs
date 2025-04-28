@@ -7,95 +7,108 @@ using System.Threading.Tasks;
 
 namespace Sparta_Dungeon_TeamProject
 {
-    internal class VillageBS
+    public class VillageBS
     {
         private Player player;
         private Inventory inventory;
-        private Dictionary<string, bool> firstVisitFlags;
-
-        public VillageBS(Inventory inventory, Player player)
+        private Dictionary<string, bool> firstVisitFlags = new()
         {
-            this.inventory = inventory;
+            { "강화", false },
+            { "상점", false },
+            { "여관", false },
+            { "던전", false },
+            { "휴식", false }
+        };
+
+        public VillageBS(Player player, Inventory inventory)
+        {
             this.player = player;
+            this.inventory = inventory;
         }
 
         // 인벤토리 UI
         public void DisplayInventoryUI()
         {
-            Console.Clear();
-            Console.WriteLine("인벤토리");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
-            Console.WriteLine();
-            Console.WriteLine("==아이템 목록==");
-
-            ItemExt.PrintInventory(inventory.GetInventoryItems(), player);
-
-            Console.WriteLine();
-            Console.WriteLine("[1] 장착 관리");
-            Console.WriteLine("[2] 속죄의 대장간");
-            Console.WriteLine("[3] 아이템 사용");
-            Console.WriteLine("[~`] 나가기");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-
-            int result = Utils.CheckInput(1, 3);
-
-            switch (result)
+            while (true)
             {
-                case -1:
-                    return;
-                case 1:
-                    DisplayEquipUI();
-                    break;
-                case 2:
-                    UpgradeItemUI();
-                    break;
-                case 3:
-                    UseItemUI();
-                    break;
+                Console.Clear();
+                Console.WriteLine("인벤토리");
+                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+                Console.WriteLine();
+                Console.WriteLine("==아이템 목록==");
+
+                ItemExt.PrintInventory(inventory.GetInventoryItems(), player);
+
+                Console.WriteLine();
+                Console.WriteLine("[1] 장착 관리");
+                Console.WriteLine("[2] 속죄의 대장간");
+                Console.WriteLine("[3] 아이템 사용");
+                Console.WriteLine("[~`] 나가기");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                int result = Utils.CheckInput(1, 3);
+
+                switch (result)
+                {
+                    case -1:
+                        return;
+                    case 1:
+                        DisplayEquipUI();
+                        break;
+                    case 2:
+                        UpgradeItemUI();
+                        break;
+                    case 3:
+                        UseItemUI();
+                        break;
+                }
             }
         }
 
         // 장착관리 UI
         public void DisplayEquipUI()
         {
-            Console.Clear();
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("[인벤토리 - 장착관리]");
-            Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
-            Console.WriteLine();
-            Console.WriteLine("==아이템 목록==");
-
-            // 무기, 방어구, 장신구
-            var equippableItems = inventory.GetInventoryItems().Where(x => x.Type == 0 || x.Type == 1 || x.Type == 3).ToList();
-            ItemExt.PrintInventory(equippableItems, player);
-
-            Console.WriteLine();
-            Console.WriteLine("[~`] 나가기");
-            Console.WriteLine();
-            Console.WriteLine("장착/해제할 아이템 번호를 입력하세요");
-            Console.Write(">>");
-
-            int result = Utils.CheckInput(1, equippableItems.Count);
-
-            switch (result)
+            while (true)
             {
-                case -1:
-                    return;
-                default:
-                    var targetItem = equippableItems[result - 1];
-                    if (player.IsEquipped(targetItem))
-                    {
-                        equippableItems.Remove(targetItem);
-                        player.UnequipItem(targetItem);
-                    }
-                    else if (targetItem.Type == 0 || targetItem.Type == 1 || targetItem.Type == 3)
-                    {
-                        equippableItems.Add(targetItem);
-                        player.EquipItem(targetItem);
-                    }
-                    DisplayEquipUI();
-                    break;
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("[인벤토리 - 장착관리]");
+                Console.WriteLine("보유 중인 아이템을 관리할 수 있습니다.");
+                Console.WriteLine();
+                Console.WriteLine("==아이템 목록==");
+
+                // 무기, 방어구, 장신구
+                var equippableItems = inventory.GetInventoryItems().Where(x => x.Type == 0 || x.Type == 1 || x.Type == 3).ToList();
+                ItemExt.PrintInventory(equippableItems, player);
+
+                Console.WriteLine();
+                Console.WriteLine("[~`] 나가기");
+                Console.WriteLine();
+                Console.WriteLine("장착/해제할 아이템 번호를 입력하세요");
+                Console.Write(">>");
+
+                int result = Utils.CheckInput(1, equippableItems.Count);
+
+                switch (result)
+                {
+                    case -1:
+                        return;
+                    default:
+                        var targetItem = equippableItems[result - 1];
+                        if (player.IsEquipped(targetItem))
+                        {
+                            equippableItems.Remove(targetItem);
+                            player.UnequipItem(targetItem);
+                        }
+                        else if (targetItem.Type == 0 || targetItem.Type == 1 || targetItem.Type == 3)
+                        {
+                            equippableItems.Add(targetItem);
+                            player.EquipItem(targetItem);
+                        }
+                        DisplayEquipUI();
+                        break;
+                }
             }
         }
 
@@ -168,7 +181,7 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine($"비용은 {cost} G 면, 충분하네");
             Console.WriteLine($"잘 되면 능력치가 {valueUp}만큼 올라가고, \n망하면… 뭐, 나도 먹고 살아야하지 않겠나.");
             Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ResetColor();
             Console.WriteLine("[1] 강화해주세요!");
             Console.WriteLine("[2] 음... 이거 말고, 다른 거 고를게요.");
             Console.WriteLine("[~`] 다음에 다시 올게요.");
@@ -203,62 +216,65 @@ namespace Sparta_Dungeon_TeamProject
                 else
                 {
                     Console.WriteLine($"현재 골드: {player.Gold} G");
-                    Console.WriteLine("아이고, 골드가 부족한데? 준비 좀 더 하고 오게.");
+                    Console.WriteLine("아이고, 골드가 부족한데?");
                 }
                 Console.WriteLine("Loding...");
-                Thread.Sleep(500);
-                return;
+                Thread.Sleep(300);
+                Console.ResetColor();
             }
             else if (input == 2) // 뒤로가기 
             {
                 Console.WriteLine("대장장이: 고민이 많구만~! 그럼 이건 돌려주겠네");
                 Console.WriteLine("Loding...");
-                Thread.Sleep(500);
-                return;
+                Thread.Sleep(300);
+                Console.ResetColor();
             }
             else if (input == -1) // 나가기
             {
                 Console.WriteLine("대장장이: 그래, 다음에 또 봅세!");
                 Console.WriteLine("Loding...");
-                Thread.Sleep(500);
+                Thread.Sleep(300);
+                Console.ResetColor();
                 return;
             }
+            UpgradeItemUI(); // 재귀 호출 -어차피 여기 ui에서 나가면 retrun됨- 인벤으로 나가면 스택 클린됨.
         }
 
 
         // 아이템 사용 UI - 소모품만 type 2
         public void UseItemUI()
         {
-            Console.Clear();
-            Console.WriteLine("[인벤토리 - 아이템 사용]");
-            Console.WriteLine("사용 가능한 소모품 목록입니다.");
-            Console.WriteLine();
-
-            var usableItems = inventory.GetInventoryItems().Where(x => x.Type == 2).ToList();
-            ItemExt.PrintInventory(usableItems, player);
-
-            Console.WriteLine();
-            Console.WriteLine("[~`] 나가기");
-            Console.WriteLine();
-            Console.WriteLine("사용할 아이템 번호를 입력하세요.");
-            Console.Write(">> ");
-
-            int result = Utils.CheckInput(1, usableItems.Count);
-
-            if (result == -1)
+            while (true)
             {
-                return;
+                Console.Clear();
+                Console.WriteLine("[인벤토리 - 아이템 사용]");
+                Console.WriteLine("사용 가능한 소모품 목록입니다.");
+                Console.WriteLine();
+
+                var usableItems = inventory.GetInventoryItems().Where(x => x.Type == 2).ToList();
+                ItemExt.PrintInventory(usableItems, player);
+
+                Console.WriteLine();
+                Console.WriteLine("[~`] 나가기");
+                Console.WriteLine();
+                Console.WriteLine("사용할 아이템 번호를 입력하세요.");
+                Console.Write(">> ");
+
+                int result = Utils.CheckInput(1, usableItems.Count);
+
+                if (result == -1)
+                {
+                    return;
+                }
+
+                Item targetItem = usableItems[result - 1];
+                targetItem.UseItem(player);
+                inventory.RemoveItem(targetItem);
+
+                Console.WriteLine($"{targetItem.Name}을(를) 사용했습니다!");
+                Thread.Sleep(800);
+                continue;
             }
-
-            Item targetItem = usableItems[result - 1];
-            targetItem.UseItem(player);
-            inventory.RemoveItem(targetItem);
-
-            Console.WriteLine($"{targetItem.Name}을(를) 사용했습니다!");
-            Thread.Sleep(800);
-            return;
         }
-
     }
-
 }

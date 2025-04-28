@@ -22,9 +22,17 @@ namespace Sparta_Dungeon_TeamProject
         private List<Monster> monsters = new List<Monster>(); // 몬스터 리스트
         private List<Monster> bossMonsters = new List<Monster>(); // 보스 몬스터 리스트
         private List<Monster> normalMonsters = new List<Monster>(); // 일반 몬스터 리스트
-        
+
         public List<Monster> battleMonsters = new List<Monster>(); // 전투용 몬스터 리스트
         public HashSet<int> selectedOptions = new HashSet<int>() { }; // 4스테이지 보스 선택지 중복 제거용 리스트
+        public Battles() { } // 빈 파라미터 생성자
+        public Battles(Player player, Inventory inventory, Village village)
+        {
+            this.player = player;
+            this.inventory = inventory;
+            this.village = village;
+        }
+
 
         public int KillMon = 0; // 몬스터 처치 횟수 값
         public int BattleTurn = 1; // 전투 턴 변수
@@ -53,36 +61,36 @@ namespace Sparta_Dungeon_TeamProject
 
         // 던전 입장 스크립트
 
-        public void DisplayDungeonUI(int Chapter)
+        public void DisplayDungeonUI()
         {
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine($"{"",10}Chapter. {Chapter + 1}");
+            Console.WriteLine($"{"",10}Chapter. {player.Chapter + 1}");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}                                                ");
-            Console.WriteLine($"{"",10}Chapter. {Chapter + 1} - Stage {Stage % 3 + 1}");
+            Console.WriteLine($"{"",10}Chapter. {player.Chapter + 1} - Stage {player.Stage % 3 + 1}");
             Console.WriteLine($"{"",3}                                                ");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",10}<< 던전 입장 - {messages.ChapterTitle[Chapter]} >>");
+            Console.WriteLine($"{"",10}<< 던전 입장 - {Messages.ChapterTitle[player.Chapter]} >>");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
 
             // 최종 보스 만날 시 붉은 글씨 출력
-            if (Chapter == 3)
+            if (player.Chapter == 3)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
 
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}┃         1. 앞으로 나아가기            ┃");
-            Console.WriteLine($"{"",3}┃         0. 마을로 돌아가기            ┃");
+            Console.WriteLine($"{"",3}┃         ~. 마을로 돌아가기            ┃");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
 
@@ -92,89 +100,77 @@ namespace Sparta_Dungeon_TeamProject
             int result = Utils.CheckInput(0, 1);
             switch (result)
             {
+                case -1:
+                    Stage = 0;
+                    return;
                 case 0:
-                    village.MainScene();
-                    break;
+                    Stage = 0;
+                    return;
                 case 1:
-                    Battle(Stage);
-
+                    player.Stage++;
+                    Battle(player.Stage);
                     break;
             }
-
         }
 
         // 보스 등장 스크립트 (3번째 스테이지마다 등장 예정)
         private void EnterBossUI()
         {
-            battleMonsters = monsterSpawner.SpawnMonsters(Stage);
-            var m = battleMonsters[0];
-            bossAtk = m.Atk;
-            bossDef = m.Def;
-            BossStage = true;
-
-
-            Console.Clear();
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",12}Chapter. {Chapter + 1} - {Stage % 3 + 1}");
-            Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-            Console.ResetColor();
-            Console.WriteLine();
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{"",10}>> 보스 등장: {messages.ChapterTitle[Chapter]} <<");
-            Console.ResetColor();
-            Console.WriteLine();
-
-            messages.BossDesc(Chapter);
-            Console.WriteLine();
-
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{"",7}[Lv.{m.Level}] ▶▶ {m.Name} ◀◀");
-            Console.ResetColor();
-            Console.WriteLine(GetMonsterStatus(m));
-            Console.WriteLine();
-
-            Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",3}┃         1. 앞으로 나아가기            ┃");
-            Console.WriteLine($"{"",3}┃         2. 상태보기                   ┃");
-            Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-            Console.WriteLine();
-            Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
-
-            int result = Utils.CheckInput(1, 2);
-            switch (result)
+            while (true)
             {
-                case 1:
-                    BossBattlechap(Chapter);
-                    break;
-                case 2:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
-                    break;
-                case 3:
-                    Console.WriteLine("\n\n\n");
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+                battleMonsters = monsterSpawner.SpawnMonsters(Stage);
+                var m = battleMonsters[0];
+                bossAtk = m.Atk;
+                bossDef = m.Def;
+                BossStage = true;
 
-                    switch (Utils.CheckInput(0, 0))
-                    {
-                        case 0:
-                            EnterBossUI();
-                            break;
-                    }
-                    break;
+
+                Console.Clear();
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+                Console.WriteLine($"{"",12}Chapter. {Chapter + 1} - {Stage % 3 + 1}");
+                Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{"",10}>> 보스 등장: {Messages.ChapterTitle[Chapter]} <<");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                messages.BossDesc(Chapter);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"{"",7}[Lv.{m.Level}] ▶▶ {m.Name} ◀◀");
+                Console.ResetColor();
+                Console.WriteLine(GetMonsterStatus(m));
+                Console.WriteLine();
+
+                Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
+                Console.WriteLine($"{"",3}┃         1. 앞으로 나아가기            ┃");
+                Console.WriteLine($"{"",3}┃         2. 상태보기                   ┃");
+                Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.WriteLine();
+                Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+
+                int result = Utils.CheckInput(1, 2);
+                switch (result)
+                {
+                    case -1:
+                        return;
+                    case 1:
+                        BossBattlechap(Chapter);
+                        break;
+                    case 2:
+                        player.DisplayPlayerInfo(); //상태보기
+                        Console.WriteLine();
+                        Console.WriteLine("[~`] 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.\n>>");
+                        break;
+                }
             }
         }
         public void Battle(int stage)
@@ -188,7 +184,8 @@ namespace Sparta_Dungeon_TeamProject
             {
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
-                    PlayerTurnUI();
+                    PlayerTurnUI(); // 화면 출력
+                    PlayerActionNormal(); // 입력처리
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
@@ -226,6 +223,17 @@ namespace Sparta_Dungeon_TeamProject
                 if (Playerturn) // 만약 플레이어의 턴이라면
                 {
                     PlayerTurnUI();
+                    switch (Stage)
+                    {
+                        case 2:
+                            PlayerActionBoss1(); break;
+                        case 5:
+                            PlayerActionBoss2(); break;
+                        case 8:
+                            PlayerActionBoss3(); break;
+                        case 11:
+                            PlayerActionBoss4(); break;
+                    }
                 }
 
                 else // 만약 플레이어의 턴이 아니라면
@@ -288,193 +296,190 @@ namespace Sparta_Dungeon_TeamProject
                     PlayerActionBoss4();
                     break;
                 default:
-                    PlayerActionNormal();
                     break;
             }
         }
 
         private void PlayerActionNormal()
         {
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine($"{"",7}▶ 1. 일반 공격");
-            Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
-            Console.WriteLine($"{"",7}▶ 3. 상태 보기");
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
-            Console.WriteLine();
-
-            switch (Utils.CheckInput(1, 3))
+            while (true)
             {
-                case 1:
-                    PlayerAttack(); break; // 플레이어 공격 불러오기 
-                case 2:
-                    break; //스킬창 불러오기
-                case 3:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine($"{"",7}▶ 1. 일반 공격");
+                Console.WriteLine($"{"",7}▶ 2. 스킬 선택");
+                Console.WriteLine($"{"",7}▶ 3. 상태 보기");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine($"{"",7}원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
 
-                    switch (Utils.CheckInput(0, 0))
-                    {
-                        case 0:
-                            PlayerTurnUI(); break;
+                int result = Utils.CheckInput(1, 3);
 
-                    }
-                    break;
+                switch (result)
+                {
+                    case 1:
+                        PlayerAttack(); return; // 플레이어 공격 불러오기 
+                    case 2:
+                        Console.WriteLine("스킬은 준비중입니다.\n[Enter]");
+                        Utils.WaitForEnter();
+                        continue; //스킬창 불러오기
+                    case 3:
+                            Console.Clear();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                            player.DisplayPlayerInfo();
+                            Console.WriteLine();
+                            Console.WriteLine();
+                        return;
+                    case -1:
+                        return;
+                }
             }
         }
 
         private void PlayerActionBoss1()
         {
-            left = false;
-            right = false;
-
-
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("    ▶ 1. 일반 공격");
-            Console.WriteLine("    ▶ 2. 스킬 선택");
-            Console.WriteLine("    ▶ 3. 왼쪽 살피기");
-            Console.WriteLine("    ▶ 4. 오른쪽 살피기");
-            Console.WriteLine("    ▶ 5. 상태 보기");
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.WriteLine();
-
-            switch (Utils.CheckInput(1, 5))
+            while (true)
             {
-                case 1:
-                    PlayerAttack(); break; // 플레이어 공격 불러오기 
-                case 2:
-                    break; //스킬창 불러오기
-                case 3:
-                    // 왼쪽 살피기
-                    left = true;
-                    Playerturn = false;
-                    Console.WriteLine("당신은 왼쪽을 주의깊게 살핍니다");
-                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                    Utils.WaitForEnter();
-                    // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
-                    break;
-                case 4:
-                    // 오른쪽 살피기
-                    right = true;
-                    Playerturn = false;
-                    Console.WriteLine("당신은 오른쪽을 주의깊게 살핍니다");
-                    Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
-                    Utils.WaitForEnter();
-                    // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
-                    break;
-                case 5:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                left = false;
+                right = false;
 
-                    switch (Utils.CheckInput(0, 0))
-                    {
-                        case 0:
-                            PlayerTurnUI(); break;
-                    }
-                    break;
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("    ▶ 1. 일반 공격");
+                Console.WriteLine("    ▶ 2. 스킬 선택");
+                Console.WriteLine("    ▶ 3. 왼쪽 살피기");
+                Console.WriteLine("    ▶ 4. 오른쪽 살피기");
+                Console.WriteLine("    ▶ 5. 상태 보기");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
+
+                int result = Utils.CheckInput(1, 5);
+
+                switch (result)
+                {
+                    case 1:
+                        PlayerAttack(); break; // 플레이어 공격 불러오기 
+                    case 2:
+                        break; //스킬창 불러오기
+                    case 3:
+                        // 왼쪽 살피기
+                        left = true;
+                        Playerturn = false;
+                        Console.WriteLine("당신은 왼쪽을 주의깊게 살핍니다");
+                        Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                        Utils.WaitForEnter();
+                        // 멧돼지가 왼쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                        break;
+                    case 4:
+                        // 오른쪽 살피기
+                        right = true;
+                        Playerturn = false;
+                        Console.WriteLine("당신은 오른쪽을 주의깊게 살핍니다");
+                        Console.WriteLine($"{"",10}▶ 엔터를 눌러 다음으로 넘어가세요.");
+                        Utils.WaitForEnter();
+                        // 멧돼지가 오른쪽에서 올 경우 피하고 대신 보스가 최대체력 비례 데미지를 입음
+                        break;
+                    case 5:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        player.DisplayPlayerInfo();
+                        Console.WriteLine();
+                        Console.WriteLine("[~`] 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine("원하시는 행동을 입력해주세요.");
+                        break;
+                    case -1:
+                        return;
+                }
             }
         }
         private void PlayerActionBoss2()
         {
-
-
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("    ▶ 1. 일반 공격");
-            Console.WriteLine("    ▶ 2. 스킬 선택");
-            Console.WriteLine("    ▶ 3. 상태 보기");
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.WriteLine();
-
-            switch (Utils.CheckInput(1, 3))
+            while (true)
             {
-                case 1:
-                    PlayerAttack(); break; // 플레이어 공격 불러오기 
-                case 2:
-                    break; //스킬창 불러오기
-                case 3:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("    ▶ 1. 일반 공격");
+                Console.WriteLine("    ▶ 2. 스킬 선택");
+                Console.WriteLine("    ▶ 3. 상태 보기");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
 
-                    switch (Utils.CheckInput(0, 0))
-                    {
-                        case 0:
-                            PlayerTurnUI(); break;
-                    }
-                    break;
+                int result = Utils.CheckInput(1, 3);
+
+                switch (result)
+                {
+                    case 1:
+                        PlayerAttack(); break; // 플레이어 공격 불러오기 
+                    case 2:
+                        break; //스킬창 불러오기
+                    case 3:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        player.DisplayPlayerInfo();
+                        Console.WriteLine();
+                        Console.WriteLine("[~`] 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine("원하시는 행동을 입력해주세요.");
+                        break;
+                    case -1:
+                        return;
+                }
             }
         }
         private void PlayerActionBoss3()
         {
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("    ▶ 1. 일반 공격");
-            Console.WriteLine("    ▶ 2. 스킬 선택");
-            Console.WriteLine("    ▶ 3. 상태 보기");
-            Console.WriteLine();
-            Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-            Console.WriteLine();
-            Console.WriteLine("원하시는 행동을 입력해주세요.");
-            Console.WriteLine();
-
-            switch (Utils.CheckInput(1, 3))
+            while (true)
             {
-                case 1:
-                    PlayerAttack(); break; // 플레이어 공격 불러오기 
-                case 2:
-                    break; //스킬창 불러오기
-                case 3:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    player.DisplayPlayerInfo();
-                    Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
-                    Console.WriteLine();
-                    Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("    ▶ 1. 일반 공격");
+                Console.WriteLine("    ▶ 2. 스킬 선택");
+                Console.WriteLine("    ▶ 3. 상태 보기");
+                Console.WriteLine();
+                Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+                Console.WriteLine();
+                Console.WriteLine("원하시는 행동을 입력해주세요.");
+                Console.WriteLine();
 
-                    switch (Utils.CheckInput(0, 0))
-                    {
-                        case 0:
-                            PlayerTurnUI(); break;
-                    }
-                    break;
+                int result = Utils.CheckInput(1, 3);
+                switch (result)
+                {
+                    case 1:
+                        PlayerAttack(); break; // 플레이어 공격 불러오기 
+                    case 2:
+                        break; //스킬창 불러오기
+                    case 3:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        player.DisplayPlayerInfo();
+                        Console.WriteLine();
+                        Console.WriteLine("[~`] 나가기");
+                        Console.WriteLine();
+                        Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                        if(result == 0) PlayerTurnUI();
+                        continue;
+                }
             }
         }
         private void PlayerActionBoss4()
@@ -628,7 +633,7 @@ namespace Sparta_Dungeon_TeamProject
                     Console.WriteLine();
                     player.DisplayPlayerInfo();
                     Console.WriteLine();
-                    Console.WriteLine("0. 나가기");
+                    Console.WriteLine("[~`] 나가기");
                     Console.WriteLine();
                     Console.WriteLine("원하시는 행동을 입력해주세요.");
 
@@ -911,7 +916,7 @@ namespace Sparta_Dungeon_TeamProject
             // 선택지
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}┃         1. 앞으로 나아가기            ┃");
-            Console.WriteLine($"{"",3}┃         0. 마을로 돌아가기            ┃");
+            Console.WriteLine($"{"",3}┃         ~. 마을로 돌아가기            ┃");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
 
@@ -923,30 +928,30 @@ namespace Sparta_Dungeon_TeamProject
 
             BossStage = false;
 
-            switch (Utils.CheckInput(0, 1))
+            switch (Utils.CheckInput(1, 1))
             {
-                case 0:
+                case -1:
                     Stage = 0; // 마을로 복귀하면서 스테이지 값 초기화
-                    village.MainScene();
-                    break;
+                    village.MainScene(player); // 마을 메인 메뉴로 이동
+                    return;
                 case 1:
-                    HandleNextStage(++Stage); // 다음 층으로 이동하면서 스테이지 값 +1
+                    HandleNextStage(); // 다음 층으로 이동하면서 스테이지 값 +1
                     break;
             }
 
         }
 
         // 다음스테이지가 보스스테이지인지 구분하는 메서드
-        private void HandleNextStage(int stage)
+        private void HandleNextStage()
         {
             int num = Stage % 3;
             switch (num)
             {
                 case 0:
-                    DisplayDungeonUI(Chapter);
+                    DisplayDungeonUI();
                     break;
                 case 1:
-                    Battle(Stage);
+                    Battle(player.Stage);
                     break;
                 case 2:
                     EnterBossUI();
@@ -1254,7 +1259,7 @@ namespace Sparta_Dungeon_TeamProject
 
     public class BattleManager
     {
-        public Random rand = new Random();
+        private static readonly Random rand = new Random();
 
         public bool MonEvasion(Monster target)
         {

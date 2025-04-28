@@ -8,11 +8,12 @@ namespace Sparta_Dungeon_TeamProject
     public partial class Program // battle.cs
     {
         // 초기화
-        private Player player;
-        private Inventory inventory;
-        private Shop shop;
-        private Village village;
-        private Item[] itemDb = Array.Empty<Item>();
+        public static Player player;
+        public static Inventory inventory;
+        public static Shop shop;
+        public static Village village;
+        public static Battles battles;
+        public static Item[] itemDb = Array.Empty<Item>();
 
         private Dictionary<string, bool> firstVisitFlags = new() // 첫 방문 여부 플래그
         {  //튜토리얼로 사용도 가능
@@ -45,7 +46,11 @@ namespace Sparta_Dungeon_TeamProject
             DisplayIntro(); // 인트로 UI
             SetData(); // 플레이어 / 아이템 / 스킬 초기 세팅
 
-            village.MainScene();// 메인 메뉴 UI
+            // 순서 중요
+            battles = new Battles(player, inventory, village);
+            village = new Village(player, inventory, battles);
+            
+            village.MainScene(player);// 메인 메뉴 UI
         }
 
         // A. 인트로UI
@@ -140,32 +145,32 @@ namespace Sparta_Dungeon_TeamProject
         // B-1. 직업 선택 프롬프트 (1~5 숫자키로 정보보기)
         private JobType Prompt()
         {
-            JobType? current = null; // 처음에 아무것도 선택 X
+            JobType? myjob = null; // 처음에 아무것도 선택 X
 
             while (true)
             {
                 Console.Clear();
-                StartSelectJob(current);
+                StartSelectJob(myjob);
 
                 var keyInfo = Console.ReadKey(true);
 
                 if (keyInfo.Key >= ConsoleKey.D1 && keyInfo.Key <= ConsoleKey.D5)
                 {
-                    current = (JobType)(keyInfo.Key - ConsoleKey.D0);
+                    myjob = (JobType)(keyInfo.Key - ConsoleKey.D0);
                 }
                 else if (keyInfo.Key >= ConsoleKey.NumPad1 && keyInfo.Key <= ConsoleKey.NumPad5)
                 {
-                    current = (JobType)(keyInfo.Key - ConsoleKey.NumPad0);
+                    myjob = (JobType)(keyInfo.Key - ConsoleKey.NumPad0);
                 }
 
                 // 선택 직업 간략한 정보 출력
-                if (current.HasValue)
+                if (myjob.HasValue)
                 {
-                    Console.SetCursorPosition(0, (int)current - 1);
+                    Console.SetCursorPosition(0, (int)myjob - 1);
                 }
-                if (keyInfo.Key == ConsoleKey.Enter && current.HasValue)
+                if (keyInfo.Key == ConsoleKey.Enter && myjob.HasValue)
                 {
-                    return current.Value;
+                    return myjob.Value;
                 }
             }
         }

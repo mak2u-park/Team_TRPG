@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Numerics;
 using static Sparta_Dungeon_TeamProject.Program;
 
 namespace Sparta_Dungeon_TeamProject
@@ -11,8 +12,9 @@ namespace Sparta_Dungeon_TeamProject
         private static Player _instance;
         private static Inventory inventory;
         private readonly List<Item> equippedItems = new();
+        private static Messages messages = new Messages();
 
-        private Player() { }
+        public Player() { }
         public static Player Instance
         {
             get
@@ -24,7 +26,6 @@ namespace Sparta_Dungeon_TeamProject
                 return _instance;
             }
         }
-        Messages messages = new Messages();
         Battles battles = new Battles();
 
         public string Name { get; private set; }
@@ -50,6 +51,9 @@ namespace Sparta_Dungeon_TeamProject
         // 총 스탯 합계
         public int FinalAtk => Atk + ExtraAtk;
         public int FinalDef => Def + ExtraDef;
+
+        public int Chapter { get; set; } = 0;
+        public int Stage { get; set; } = 0;
 
         // 보유 스킬 목록 (초기보상스킬은 Job에서)
         public List<SkillLibrary> Skills { get; private set; } = new List<SkillLibrary>();
@@ -343,13 +347,15 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
+            Console.WriteLine("\n[1] 스킬 관리");
+            Console.WriteLine("[~`] 나가기");
+            Console.Write("\n원하시는 행동을 입력해주세요\n>>");
 
             int choice = Utils.CheckInput(1, 1);
             switch (choice)
             {
                 case -1:
                     return;
-                    break;
                 case 1:
                     DisplaySkillUI();
                     break;
@@ -366,14 +372,13 @@ namespace Sparta_Dungeon_TeamProject
 
             Console.WriteLine("\n[1] 스킬 장착하기");
             Console.WriteLine("[~`] 나가기");
-            Console.Write("\n원하시는 행동을 입력해주세요 >> ");
+            Console.Write("\n원하시는 행동을 입력해주세요\n>> ");
 
             int choice = Utils.CheckInput(1, 1);
             switch (choice)
             {
                 case -1:
                     return;
-                    break;
                 case 1:
                     Console.Clear();
                     Console.WriteLine("스킬 사용 준비중입니다.");

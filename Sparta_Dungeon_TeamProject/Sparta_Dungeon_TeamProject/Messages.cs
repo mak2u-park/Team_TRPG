@@ -115,7 +115,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-        public string[] ChapterTitle = new string[]
+        public static string[] ChapterTitle = new string[]
         {
             "어두운 숲", "깊은 동굴", "던전 상층", "던전 하층"
         };
@@ -220,7 +220,7 @@ namespace Sparta_Dungeon_TeamProject
 
         // 직업별 크리티컬 데미지 메시지
 
-        public Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
+        public static readonly Dictionary<JobType, string[]> CriticalDamageMessage = new Dictionary<JobType, string[]>
         {
         { JobType.전사, new[]
         {   "\n\n\n\n\n\n\n\n    고요한 전장의 메아리.",
@@ -244,7 +244,7 @@ namespace Sparta_Dungeon_TeamProject
         };
 
 
-        public Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
+        public static readonly Dictionary<JobType, string[]> CriticalDamageFinalMessage = new Dictionary<JobType, string[]>
         { 
         // 직업별 크리티컬 데미지 마지막 메시지
     

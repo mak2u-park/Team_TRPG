@@ -11,16 +11,23 @@ namespace Sparta_Dungeon_TeamProject
     public class Inventory
     {
         private Player player; // 싱글톤 패턴으로 Player 인스턴스에 접근
-        private Inventory inventory = new Inventory();
+        private static Inventory inventory;
         private List<Item> items = new();
         private List<Item> equippedItems = new(); // 장착된 아이템 목록
         private Dictionary<string, bool> firstVisitFlags;
 
         // 기본 생성자 초기화
-        public Inventory()
+        private Inventory() { }
+        public static Inventory Instance
         {
-            this.player = player;
-            this.items = new List<Item>();
+            get
+            {
+                if (inventory == null)
+                {
+                    inventory = new Inventory();
+                }
+                return inventory;
+            }
         }
 
         //program 에서 받을 생성자 추가

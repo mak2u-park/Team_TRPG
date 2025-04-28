@@ -34,7 +34,7 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine("[아이템 목록]");
 
-                ItemExt.PrintShop(itemDb.ToList(), player, inventory); // 리스트 출력
+                ItemExt.PrintShop(Item.ShopItemsDb, player, inventory); // 리스트 출력
 
                 Console.WriteLine();
                 Console.WriteLine("[1] 아이템 구매");
