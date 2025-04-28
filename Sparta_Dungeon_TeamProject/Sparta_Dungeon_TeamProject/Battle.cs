@@ -113,7 +113,6 @@ namespace Sparta_Dungeon_TeamProject
                     Stage = 0;
                     return;
                 case 1:
-                    player.Stage++;
                     Battle(player.Stage);
                     break;
             }
@@ -951,6 +950,7 @@ namespace Sparta_Dungeon_TeamProject
                     village.MainScene(player); // 마을 메인 메뉴로 이동
                     return;
                 case 1:
+                    ++Stage;
                     HandleNextStage(); // 다음 층으로 이동하면서 스테이지 값 +1
                     break;
             }
