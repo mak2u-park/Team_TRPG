@@ -71,25 +71,25 @@ namespace Sparta_Dungeon_TeamProject
         {
             Console.Clear();
             Console.WriteLine();
-            Console.WriteLine($"{"",10}Chapter. {player.Chapter + 1}");
+            Console.WriteLine($"{"",10}Chapter. {Chapter + 1}");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
             Console.WriteLine($"{"",3}                                                ");
-            Console.WriteLine($"{"",10}Chapter. {player.Chapter + 1} - Stage {player.Stage % 3 + 1}");
+            Console.WriteLine($"{"",10}Chapter. {Chapter + 1} - Stage {Stage % 3 + 1}");
             Console.WriteLine($"{"",3}                                                ");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine($"{"",3}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓");
-            Console.WriteLine($"{"",10}<< 던전 입장 - {Messages.ChapterTitle[player.Chapter]} >>");
+            Console.WriteLine($"{"",10}<< 던전 입장 - {Messages.ChapterTitle[Chapter]} >>");
             Console.WriteLine($"{"",3}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
 
             // 최종 보스 만날 시 붉은 글씨 출력
-            if (player.Chapter == 3)
+            if (Chapter == 3)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
             }
@@ -113,7 +113,7 @@ namespace Sparta_Dungeon_TeamProject
                     Stage = 0;
                     return;
                 case 1:
-                    Battle(player.Stage);
+                    Battle(Stage);
                     break;
             }
         }
@@ -950,7 +950,7 @@ namespace Sparta_Dungeon_TeamProject
                     DisplayDungeonUI();
                     break;
                 case 1:
-                    Battle(player.Stage);
+                    Battle(Stage);
                     break;
                 case 2:
                     EnterBossUI();
@@ -1256,7 +1256,7 @@ namespace Sparta_Dungeon_TeamProject
             Type enumType = ChapterMonsterEnums[chapter];  // 스테이지에 따라 소환되는 몬스터의 Enum
             Array allowedTypes = Enum.GetValues(enumType); // 정해진 Enum에 포함된 모든 몬스터가 들어가있는 배열
 
-            int monsterCount = Math.Min(1 + Stage / 2, 5);
+            int monsterCount = Math.Min(1 + Stage / 2, 2);
 
             return Enumerable.Range(0, monsterCount)
                 .Select(_ =>
