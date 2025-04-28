@@ -26,22 +26,46 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("상점");
-                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{player.Gold} G");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┏━━━━━━━━━━━━━━━━<< 상점 >>━━━━━━━━━━━━━━━━┓");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("[아이템 목록]");
 
-                ItemExt.PrintShop(Item.ShopItemsDb, player, inventory); // 리스트 출력
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  필요한 아이템을 얻을 수 있는 상점입니다.");
+                Console.ResetColor();
+                Console.WriteLine();
 
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"  [보유 골드] {player.Gold} G");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("[1] 아이템 구매");
-                Console.WriteLine("[2] 아이템 판매");
-                Console.WriteLine("[~`] 나가기");
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("  [아이템 목록]");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("원하시는 행동을 입력해주세요.");
+
+                // 아이템 리스트 출력
+                ItemExt.PrintShop(Item.ShopItemsDb, player, inventory);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  [1] 아이템 구매");
+                Console.WriteLine("  [2] 아이템 판매");
+                Console.WriteLine("  [~`] 나가기");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("  원하시는 행동을 입력해주세요.");
+                Console.ResetColor();
+                Console.Write("\n  >> ");
+
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
 
                 int result = Utils.CheckInput(1, 2);
 
@@ -68,21 +92,45 @@ namespace Sparta_Dungeon_TeamProject
             {
 
                 Console.Clear();
-                Console.WriteLine("상점 - 아이템 구매");
-                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
                 Console.WriteLine();
-                Console.WriteLine("[보유 골드]");
-                Console.WriteLine($"{player.Gold} G");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┏━━━━━━━━━━━━━━<< 상점 - 아이템 구매 >>━━━━━━━━━━━━━━┓");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("[아이템 목록]");
 
-                ItemExt.PrintShop(itemDb.ToList(), player, inventory); // 리스트 출력
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  필요한 아이템을 얻을 수 있는 상점입니다.");
+                Console.ResetColor();
+                Console.WriteLine();
 
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"  [보유 골드] {player.Gold} G");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("[~`] 나가기");
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("  [아이템 목록]");
+                Console.ResetColor();
                 Console.WriteLine();
-                Console.WriteLine("구매하실 아이템 번호를 입력하세요.");
-                Console.Write(">>");
+
+                // 아이템 리스트 출력
+                ItemExt.PrintShop(itemDb.ToList(), player, inventory);
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  [~`] 나가기");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("  구매하실 아이템 번호를 입력하세요.");
+                Console.ResetColor();
+
+                Console.Write("\n  >> ");
+
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
 
                 int result = Utils.CheckInput(1, itemDb.Length);
 

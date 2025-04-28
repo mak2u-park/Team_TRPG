@@ -60,24 +60,24 @@ namespace Sparta_Dungeon_TeamProject
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
-            Console.WriteLine("The Hollowed");
+            Console.WriteLine($"{"",14}The Hollowed");
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("한때 무언가를 간절히 바랐던 이들이");
-            Console.WriteLine("스스로를 비워내며, 이 도시에 도착합니다.");
+            Console.WriteLine($"{"",3}한때 무언가를 간절히 바랐던 이들이");
+            Console.WriteLine($"{"",3}스스로를 비워내며, 이 도시에 도착합니다.");
             Console.WriteLine();
-            Console.WriteLine("잊고 싶은 기억, 치유되지 않은 상처,");
-            Console.WriteLine("돌이킬 수 없는 후회, 아니면... 그저 호기심.");
+            Console.WriteLine($"{"",3}잊고 싶은 기억, 치유되지 않은 상처,");
+            Console.WriteLine($"{"",3}돌이킬 수 없는 후회, 아니면... 그저 호기심.");
             Console.WriteLine();
-            Console.WriteLine("그리고 누군가는 진실을 마주하기 위해,");
-            Console.WriteLine("던전 깊은 곳을 향해 나아갑니다.");
+            Console.WriteLine($"{"",3}그리고 누군가는 진실을 마주하기 위해,");
+            Console.WriteLine($"{"",3}던전 깊은 곳을 향해 나아갑니다.");
             Console.WriteLine();
             Console.WriteLine("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine("Enter를 눌러, 여정을 시작하세요.");
+            Console.WriteLine($"{"",3}Enter를 눌러, 여정을 시작하세요.");
             Console.ResetColor();
 
             Utils.WaitForEnter();
@@ -122,9 +122,9 @@ namespace Sparta_Dungeon_TeamProject
         // B-1. 직업 선택 UI
         public void StartSelectJob(JobType? selectedJob)
         {
-            Console.WriteLine("[직업]을 선택하세요.");
+            Console.WriteLine($"\n{"",3}[직업]을 선택하세요.\n");
             Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.WriteLine("방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
+            Console.WriteLine($"{"",3}방법: 숫자(1-5)를 눌러 상세를 보고, Enter로 확정하세요.\n");
             Console.ResetColor();
 
             foreach (JobType job in Enum.GetValues(typeof(JobType)))
@@ -183,13 +183,13 @@ namespace Sparta_Dungeon_TeamProject
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine($"직업이 [{job.DisplayName}]로 정해졌습니다.");
-                Console.WriteLine($"[{job.DisplayName}]의 이름을 정해주세요.");
-                Console.Write("이름: ");
+                Console.WriteLine($"\n{"",3}당신의 운명은 [{job.DisplayName}](으)로 정해졌습니다.\n");
+                Console.WriteLine($"{"",3}[{job.DisplayName}]의 이름을 정해주세요.\n");
+                Console.Write($"{"",3}이름: ");
                 string input = Console.ReadLine()!;
                 if (string.IsNullOrWhiteSpace(input))
                 {
-                    Console.WriteLine("올바른 이름을 입력해주세요.");
+                    Console.WriteLine($"{"",3}올바른 이름을 입력해주세요.");
                     Thread.Sleep(500);
                     continue;
                 }
@@ -201,7 +201,7 @@ namespace Sparta_Dungeon_TeamProject
         private void DisplayStory(string name, IJob job)
         {
             Console.Clear();
-            Console.WriteLine($"[{name}]님의 직업은 [{job.DisplayName}]입니다.\n\n");
+            Console.WriteLine($"[{name}]님의 운명은 [{job.DisplayName}]입니다.\n\n");
             Console.WriteLine($"{job.Story}\n\n");
             Console.WriteLine($"공격력: {job.Atk}  |  방어력: {job.Def}  |  Hp: {job.MaxHp}  |  Mp: {job.MaxMp}  |  특성: {job.Trait}");
 
