@@ -52,8 +52,10 @@ namespace Sparta_Dungeon_TeamProject
         public int ExtraDef { get; private set; }
 
         // ÃÑ ½ºÅÈ ÇÕ°è
-        public int FinalAtk => Atk + ExtraAtk;
-        public int FinalDef => Def + ExtraDef;
+        public int FinalAtk => Atk + inventory.GetTotalAtkBonus();
+        public int FinalDef => Def + inventory.GetTotalDefBonus();
+        public int FinalMaxHp => MaxHp + inventory.GetTotalHpBonus();
+        public int FinalMaxMp => MaxMp + inventory.GetTotalMpBonus();
 
         public int Chapter { get; set; } = 0;
         public int Stage { get; set; } = 0;
