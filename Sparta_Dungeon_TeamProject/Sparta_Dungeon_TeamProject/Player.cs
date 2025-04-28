@@ -230,9 +230,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-
-
-        // 전투 기능-일반 공격
+        // 플레이어 공격
         public void PlayerAttack(Monster target, double power)
         {
             if (IsHit(target))
@@ -258,7 +256,7 @@ namespace Sparta_Dungeon_TeamProject
                 if (Job == JobType.대장장이) // 대장장이의 공격이 명중할 때마다 적의 방어력 감소
                 {
                     Random random = new Random();
-                    int armorBreak = random.Next(0, 6); // 0 ~ 5
+                    int armorBreak = random.Next(0, 4); // 0 ~ 3 까지 감소
 
                     if (armorBreak > 0)
                     {
@@ -277,22 +275,22 @@ namespace Sparta_Dungeon_TeamProject
                     }
                 }
 
-                if (Job == JobType.전사) // 전사는 보스 몬스터에게 추가피해
+                if (Job == JobType.전사) // 전사 특성
                 {
                     if (target.Name == "카피바라" || target.Name == "후회하는 모험가" || target.Name == "대왕 카피바라" || target.Name == "검은 고양이")
                     {
                         int originalDamage = finalAttackDamage; // 기본 공격 데미지
 
-                        finalAttackDamage = (int)(finalAttackDamage * 1.3); // 30% 추가 피해 적용
+                        finalAttackDamage = (int)(finalAttackDamage * 1.3); // 보스에게 30% 추가 피해
 
                         int addedDamage = finalAttackDamage - originalDamage; // 추가된 피해량 계산
 
                         Console.WriteLine($"\n\n\n{"",10}전사의 강공격! 기본 피해 {originalDamage} + 추가 피해 {addedDamage}의 피해를 입혔다!");
                     }
                 }
-                if (Job == JobType.연금술사) // 연금술사는 상대 체력의 비례한 데미지를 줌
+                if (Job == JobType.연금술사) // 연금술사 특성
                 {
-                    int HpDamage = (int)(target.CurrentHp * 0.1); // 상대 체력의 10% 추가 피해
+                    int HpDamage = (int)(target.CurrentHp * 0.2); // 현재 체력의 20% 추가 피해
                     int originalDamage = finalAttackDamage; // 기본 피해
 
                     finalAttackDamage += HpDamage; // 최종 데미지 계산
@@ -322,31 +320,32 @@ namespace Sparta_Dungeon_TeamProject
             Console.Clear();
         }
 
-        public void SplitAttack(Monster target) // 영매사 유령 공격
+        // 영매사 유령 공격
+        public void SpiritAttack(Monster target)
         {
             Random random = new Random();
-            int SplitCount = random.Next(1, 4); // 1 ~ 3명의 유령 소환
+            int SpiritCount = random.Next(1, 4); // 1 ~ 3명의 유령 소환
 
-            Console.WriteLine($"\n\n\n{"",10}{SplitCount}명의 영혼이 당신을 돕습니다.");
+            Console.WriteLine($"\n\n\n{"",10}{SpiritCount}명의 영혼이 당신을 돕습니다.");
 
             int totalDamage = 0; // 전체 누적 데미지
 
-            for (int i = 0; i < SplitCount; i++)
+            for (int i = 0; i < SpiritCount; i++)
             {
-                int SplitDamage = Level * 2;
+                int SpiritDamage = Level * 1;
 
-                if (target.CurrentHp - SplitDamage <= 0)
+                if (target.CurrentHp - SpiritDamage <= 0)
                 {
-                    SplitDamage = (int)target.CurrentHp - 1;
-                    if (SplitDamage < 0) SplitDamage = 0; // 체력이 1 이하면 0 데미지
+                    SpiritDamage = (int)target.CurrentHp - 1;
+                    if (SpiritDamage < 0) SpiritDamage = 0; // 체력이 1 이하면 0 데미지
                 }
 
-                target.CurrentHp -= SplitDamage;
-                totalDamage += SplitDamage; // 누적
+                target.CurrentHp -= SpiritDamage;
+                totalDamage += SpiritDamage; // 누적
                 if (target.CurrentHp <= 1) break; // 체력 1 이하면 추가 공격 금지
             }
 
-            Console.WriteLine($"\n{"",10}의문의 영혼 {SplitCount}명이 [Lv.{target.Level}][{target.Name}] 에게 총 {totalDamage}만큼 피해를 주었다!");
+            Console.WriteLine($"\n{"",10}의문의 영혼 {SpiritCount}명이 [Lv.{target.Level}][{target.Name}] 에게 총 {totalDamage}만큼 피해를 주었다!");
 
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
             Utils.WaitForEnter();
