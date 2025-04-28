@@ -9,7 +9,33 @@ using System.Threading.Tasks;
 
 namespace Sparta_Dungeon_TeamProject
 {
+    public enum MonsterTypeChap1
+    {
+        Wolf,
+        Goblin,
+        Orc
+    }
 
+    public enum MonsterTypeChap2
+    {
+        Cavebat,
+        Ghost,
+        Skeleton
+    }
+
+    public enum MonsterTypeChap3
+    {
+        Adventurer,
+        SmilingSlime,
+        HeadlessSkeletion
+    }
+
+    public enum MonsterTypeChap4
+    {
+        Swordsman,
+        Mage,
+        Archer
+    }
 
     public class Monster
     {
@@ -23,11 +49,11 @@ namespace Sparta_Dungeon_TeamProject
         public int Hp { get; set; }
         public int Dodge { get; protected set; }
 
-        
+
 
         // 레벨 상승에 따른 최종 스탯 계산을 위한 float값 추가
         public float FinalAtk => Atk * (1 + Origin * Level);
-        public float FinalDef => Def* (1 + Origin* Level);
+        public float FinalDef => Def * (1 + Origin * Level);
         public float FinalHp { get; protected set; }
         public float Origin { get; protected set; }
         public float CurrentHp { get; set; }
@@ -45,7 +71,7 @@ namespace Sparta_Dungeon_TeamProject
 
         private static Random random = new Random();
 
-        
+
 
         public Monster(
             string name,
@@ -116,7 +142,7 @@ namespace Sparta_Dungeon_TeamProject
             }
         }
 
-        public static class MonsterFactory
+        public class MonsterFactory
         {
             // 문자열로 몬스터 이름을 받아 해당 몬스터 객체 생성
             public static Monster CreateMonster(string monsterName)
@@ -185,14 +211,14 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 1, maxLevel: 5,
                     minAtk: 3, maxAtk: 5,
                     minDef: 5, maxDef: 10,
-                    minHp: 10, maxHp: 15,
+                    minHp: 10, maxHp: 10,
                     dodge: 10,
                     minDropGold: 200, maxDropGold: 300,
                     minDropExp: 20, maxDropExp: 30,
                     isAlive: true,
                     origin: 0.1f)
                 {
-                     
+
                 }
 
             }
@@ -204,8 +230,8 @@ namespace Sparta_Dungeon_TeamProject
                     name: "오크",
                     minLevel: 3, maxLevel: 5,
                     minAtk: 5, maxAtk: 10,
-                    minDef: 10, maxDef: 20,
-                    minHp: 10, maxHp: 20,
+                    minDef: 9, maxDef: 9,
+                    minHp: 10, maxHp: 10,
                     dodge: 0,
                     minDropGold: 100, maxDropGold: 200,
                     minDropExp: 30, maxDropExp: 50,
@@ -234,7 +260,7 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 5, maxLevel: 7,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 10,
-                    minHp: 30, maxHp: 30,
+                    minHp: 10, maxHp: 20,
                     dodge: 20,
                     minDropGold: 500, maxDropGold: 1000,
                     minDropExp: 50, maxDropExp: 100,
@@ -251,9 +277,9 @@ namespace Sparta_Dungeon_TeamProject
                 public Ghost() : base(
                     name: "유령",
                     minLevel: 7, maxLevel: 9,
-                    minAtk: 10, maxAtk: 15,
+                    minAtk: 10, maxAtk: 10,
                     minDef: 10, maxDef: 10,
-                    minHp: 20, maxHp: 30,
+                    minHp: 15, maxHp: 20,
                     dodge: 30,
                     minDropGold: 1000, maxDropGold: 1000,
                     minDropExp: 50, maxDropExp: 100,
@@ -273,7 +299,7 @@ namespace Sparta_Dungeon_TeamProject
                     minLevel: 10, maxLevel: 15,
                     minAtk: 5, maxAtk: 10,
                     minDef: 10, maxDef: 20,
-                    minHp: 20, maxHp: 30,
+                    minHp: 10, maxHp: 25,
                     dodge: 10,
                     minDropGold: 1000, maxDropGold: 1500,
                     minDropExp: 50, maxDropExp: 100,
@@ -407,7 +433,7 @@ namespace Sparta_Dungeon_TeamProject
                 public Archer() : base(
                     name: "기억 잃은 궁수",
                     minLevel: 30, maxLevel: 40,
-                    minAtk: 5, maxAtk: 10,
+                    minAtk: 5, maxAtk: 5,
                     minDef: 10, maxDef: 20,
                     minHp: 50, maxHp: 70,
                     dodge: 30,
@@ -503,7 +529,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-     }
- }
+    }
+}
 
 
