@@ -134,7 +134,7 @@ namespace Sparta_Dungeon_TeamProject
                 MaxExp = JobDatas[Job].ExpToLevelUp;
                 MaxExp += 25;
                 Level++;
-                Hp = MaxHp + 5; // 레벨업 시 체력 증가
+                Hp = MaxHp; // 레벨업 시 체력 증가
                 ExtraAtk += 1;
                 ExtraDef += 1;
 
