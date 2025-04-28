@@ -51,6 +51,12 @@ namespace Sparta_Dungeon_TeamProject
                 ItemExt.PrintShop(Item.ShopItemsDb, player, inventory);
                 Console.WriteLine();
 
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+
+                Console.WriteLine();
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("  [1] 아이템 구매");
                 Console.WriteLine("  [2] 아이템 판매");
@@ -62,10 +68,6 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine("  원하시는 행동을 입력해주세요.");
                 Console.ResetColor();
                 Console.Write("\n  >> ");
-
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-                Console.ResetColor();
 
                 int result = Utils.CheckInput(1, 2);
 
@@ -84,7 +86,7 @@ namespace Sparta_Dungeon_TeamProject
             }
 
         }
-        
+
         // 아이템-구매
         private void DisplayBuyUI()
         {
@@ -117,6 +119,11 @@ namespace Sparta_Dungeon_TeamProject
                 ItemExt.PrintShop(itemDb.ToList(), player, inventory);
                 Console.WriteLine();
 
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+                Console.WriteLine();
+
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine("  [~`] 나가기");
                 Console.ResetColor();
@@ -127,10 +134,6 @@ namespace Sparta_Dungeon_TeamProject
                 Console.ResetColor();
 
                 Console.Write("\n  >> ");
-
-                Console.ForegroundColor = ConsoleColor.DarkGray;
-                Console.WriteLine("\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
-                Console.ResetColor();
 
                 int result = Utils.CheckInput(1, itemDb.Length);
 
@@ -153,13 +156,17 @@ namespace Sparta_Dungeon_TeamProject
         {
             if (targetItem.Type != 2 && inventory.HasItem(targetItem))
             {
-                Console.WriteLine("이미 구매한 아이템입니다.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  이미 구매한 아이템입니다.");
+                Console.ResetColor();
                 Utils.WaitForEnter();
                 return;
             }
             else if (player.Gold < targetItem.Price)
             {
-                Console.WriteLine("골드가 부족합니다!");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  골드가 부족합니다!");
+                Console.ResetColor();
                 Utils.WaitForEnter();
                 return;
             }
@@ -167,7 +174,10 @@ namespace Sparta_Dungeon_TeamProject
             {
                 player.Gold -= targetItem.Price;
                 inventory.AddItem(targetItem);
-                Console.WriteLine($"{targetItem.Name}을(를) 구매했습니다!");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  {targetItem.Name}을(를) 구매했습니다!");
+                Console.ResetColor();
                 Utils.WaitForEnter();
             }
         }
@@ -180,23 +190,54 @@ namespace Sparta_Dungeon_TeamProject
                 List<Item> items = inventory.GetInventoryItems();
 
                 Console.Clear();
-                Console.WriteLine("**상점 - 아이템 판매**");
-                Console.WriteLine("필요한 아이템을 얻을 수 있는 상점입니다.");
-                Console.WriteLine($"\n[보유 골드]\n{player.Gold} G\n");
-                Console.WriteLine("[아이템 목록]");
+                Console.WriteLine();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┏━━━━━━━━━━━━━━<< 상점 - 아이템 판매 >>━━━━━━━━━━━━━━┓");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  필요 없는 아이템을 판매할 수 있는 곳입니다.");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine($"  [보유 골드] {player.Gold} G");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("  [보유 아이템 목록]");
+                Console.ResetColor();
+                Console.WriteLine();
 
                 ItemExt.PrintInventory(items, player);
+                Console.WriteLine();
 
                 if (items.Count == 0)
                 {
-                    Console.WriteLine("\n판매 가능한 아이템이 없습니다. [Enter]");
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine("  판매 가능한 아이템이 없습니다. [Enter]");
+                    Console.ResetColor();
                     Utils.WaitForEnter();
                     return;
                 }
 
-                Console.WriteLine("\n[~`] 나가기");
-                Console.WriteLine("판매하실 아이템 번호를 입력하세요");
-                Console.Write(">>");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine("  [~`] 나가기");
+                Console.ResetColor();
+                Console.WriteLine();
+
+                Console.ForegroundColor = ConsoleColor.DarkCyan;
+                Console.WriteLine("  판매하실 아이템 번호를 입력하세요.");
+                Console.ResetColor();
+                Console.Write("\n  >> ");
+
                 int result = Utils.CheckInput(0, items.Count);
 
                 if (result == -1)
@@ -210,10 +251,13 @@ namespace Sparta_Dungeon_TeamProject
                 player.Gold += sellPrice;
                 inventory.RemoveItem(targetItem);
 
-                Console.WriteLine($"{targetItem.Name}을(를) {sellPrice} G에 판매했습니다. [Enter]");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  {targetItem.Name}을(를) {sellPrice} G에 판매했습니다. [Enter]");
+                Console.ResetColor();
                 Utils.WaitForEnter();
                 return;
             }
         }
     }
 }
+

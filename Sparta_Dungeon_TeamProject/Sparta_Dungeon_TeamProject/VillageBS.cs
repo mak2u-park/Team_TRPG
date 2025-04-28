@@ -156,7 +156,9 @@ namespace Sparta_Dungeon_TeamProject
             // 고정 UI
             Console.Clear();
             Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine("[속죄의 대장간]");
+            Console.WriteLine();
 
             if (!firstVisitFlags["강화"]) // 첫 방문
             {
