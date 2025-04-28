@@ -7,7 +7,7 @@ namespace Sparta_Dungeon_TeamProject
     {
         전사 = 1,
         마법사,
-        과학자,
+        연금술사,
         대장장이,
         영매사
     }
@@ -21,14 +21,17 @@ namespace Sparta_Dungeon_TeamProject
 
         // 기본 스탯
         int ExpToLevelUp { get; }
-        int Atk { get; }
+        int Atk { get; } // 공격력
+        int Acc { get; } // 명중률
         int Cri { get; } // 치명타 확률
+        int CriDmg { get; } // 치명타 피해
         int Def { get; }
         int MaxHp { get; } // 최대 체력
         int MaxMp { get; } // 최대 마나
         int DefaultGold { get; } // 초기 보상 골드
         string Trait { get; } // 직업 특성
-        List<string> InitialSkills { get; } // 초기 보상 스킬
+
+       // List<string> InitialSkills { get; } // 초기 보상 스킬
         List<Item> InitialItems { get; } // 초기 보상 아이템
     };
 
@@ -42,16 +45,18 @@ namespace Sparta_Dungeon_TeamProject
             "\n결국 다시 전장으로 갈 수 밖에 없습니다.";
         public string Description => "잃어버린 전투 감각으로 데미지를" +
             "\n       랜덤하게 입히는 트릭형 전사입니다.";
-        public int ExpToLevelUp => 120;
-        public int Atk => 12;
-        public int Cri => 5;
-        public int Def => 8;
+        public int ExpToLevelUp => 100;
+        public int Atk => 15;
+        public int Acc => 65;
+        public int Cri => 40;
+        public int CriDmg => 200;
+        public int Def => 5;
         public int MaxHp => 150;
         public int MaxMp => 30;
-        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
-        public string Trait => "높은 생존력";
+        public int DefaultGold => 1000;      // 구현: 직업별 시작 골드
+        public string Trait => "높은 치명타 확률, 낮은 명중률, 가드 확률 보유, 보스 상대 추가 피해.";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        //public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.전사]);
     }
 
@@ -68,37 +73,41 @@ namespace Sparta_Dungeon_TeamProject
             "\n       스킬 위주의 전투를 펼치는 마법 중심의 직업입니다.";
         public int ExpToLevelUp => 100;
         public int Atk => 18;
-        public int Cri => 8;
-        public int Def => 3;
+        public int Acc => 85;
+        public int Cri => 10;
+        public int CriDmg => 150;
+        public int Def => 2;
         public int MaxHp => 80;
         public int MaxMp => 120;
-        public int DefaultGold => 20000;      // 구현: 직업별 시작 골드
-        public string Trait => "높은 마나 풀";
+        public int DefaultGold => 1000;      // 구현: 직업별 시작 골드
+        public string Trait => "적의 방어력 일부 무시, 낮은 방어력.";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        //public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.마법사]);
     }
 
     public class Scientist : IJob
     {
-        public JobType Type => JobType.과학자;
-        public string DisplayName => "불법 과학자";
-        public string Story => "마을에서 추방당한 이단 과학자로서" +
+        public JobType Type => JobType.연금술사;
+        public string DisplayName => "불법 연금술사";
+        public string Story => "마을에서 추방당한 이단 연금술사로써" +
             "\n금기된 재료들을 가지고 위험한 연구를 계속합니다.\n" +
             "\n자신만의 독특한 기술로 세상에 맞서려 합니다.\n";
         public string Description => "금기된 독성 중심의 스킬을 사용하며," +
             "\n       상대적으로 마나 소모가 잦고 체력 소모가 적습니다.";
-        public int ExpToLevelUp => 110;
-        public int Atk => 10;
-        public int Cri => 7;
-        public int Def => 5;
-        public int MaxHp => 100;
+        public int ExpToLevelUp => 100;
+        public int Atk => 18;
+        public int Acc => 100;
+        public int Cri => 15;
+        public int CriDmg => 140;
+        public int Def => 3;
+        public int MaxHp => 70;
         public int MaxMp => 100;
-        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
-        public string Trait => "다재다능한 스킬셋";
+        public int DefaultGold => 1000;      // 구현: 직업별 시작 골드
+        public string Trait => "매우 높은 명중률, 낮은 체력, 적의 체력에 비례한 추가 피해.";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
-        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.과학자]);
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.연금술사]);
     }
 
     public class Smith : IJob
@@ -110,16 +119,18 @@ namespace Sparta_Dungeon_TeamProject
             "\n제자의 비극 이후 제련을 멈췄지만" +
             "\n그의 무기에는 상처와 함께 이야기가 남아있습니다.\n";
         public string Description => "약한 능력치를 극복하는 강력한 장비 기반의 직업입니다.";
-        public int ExpToLevelUp => 130;
-        public int Atk => 14;
-        public int Cri => 4;
-        public int Def => 10;
-        public int MaxHp => 130;
+        public int ExpToLevelUp => 100;
+        public int Atk => 3;
+        public int Acc => 85;
+        public int Cri => 10;
+        public int CriDmg => 160;
+        public int Def => 3;
+        public int MaxHp => 90;
         public int MaxMp => 40;
-        public int DefaultGold => 25000;      // 구현: 직업별 시작 골드
-        public string Trait => "장비 강화 전문가";
+        public int DefaultGold => 1000;      // 구현: 직업별 시작 골드
+        public string Trait => "강화 비용 감소, 적의 방어력을 감소, 전용 장비 지급, 낮은 능력치.";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        // public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.대장장이]);
     }
 
@@ -131,18 +142,20 @@ namespace Sparta_Dungeon_TeamProject
             "\n그녀의 특별한 능력으로 죽은 이들의 이야기를" +
             "\n세상에 들려줄 수는 있습니다.\n" +
             "\n그녀가 풀어내는 이야기들은 잔혹하지만 어딘가 애잔합니다.";
-        public string Description => "저 너머의 존재들과 대화하는 영매사는," +
+        public string Description => "저 너머의 존재들과 소통하는 영매사는," +
             "\n      그들의 호의를 받으며, 더 많은 경험치 또한 얻습니다.";
-        public int ExpToLevelUp => 105;
-        public int Atk => 9;
-        public int Cri => 6;
-        public int Def => 4;
+        public int ExpToLevelUp => 75;
+        public int Atk => 10;
+        public int Acc => 90;
+        public int Cri => 25;
+        public int CriDmg => 125;
+        public int Def => 3;
         public int MaxHp => 90;
         public int MaxMp => 110;
-        public int DefaultGold => 15000;      // 구현: 직업별 시작 골드
-        public string Trait => "스킬 복제 능력";
+        public int DefaultGold => 1000;      // 구현: 직업별 시작 골드
+        public string Trait => "추가 경험치 획득, 영혼들이 당신을 돕습니다, 회복 효율이 감소합니다.";
 
-        public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
+        //public List<string> InitialSkills => new List<string>() { $"스킬1", $"스킬2" };
         public List<Item> InitialItems => new List<Item>(Item.GiftItemsDb[JobType.영매사]);
     }
 }

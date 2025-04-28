@@ -38,6 +38,9 @@ namespace Sparta_Dungeon_TeamProject
         public int Atk { get; private set; }
         public int Cri { get; private set; }
         public int Def { get; private set; }
+        public int Acc { get; private set; }
+        public int CriDmg { get; private set; } // 치명타 피해
+
         public int MaxHp { get; private set; }
         public int Hp { get; private set; }
         public int MaxMp { get; private set; }
@@ -70,7 +73,9 @@ namespace Sparta_Dungeon_TeamProject
             // 직업별 기본 스탯 초기화
             MaxExp = job.ExpToLevelUp; // 첫 레벨업 경험치 - 모두통일도 가능. 수정 어렵지 않음.
             Atk = job.Atk;
+            Acc = job.Acc;
             Cri = job.Cri;
+            CriDmg = job.CriDmg;
             Def = job.Def;
             MaxHp = job.MaxHp;
             Hp = MaxHp;
@@ -124,9 +129,14 @@ namespace Sparta_Dungeon_TeamProject
         {
             while (Exp >= MaxExp) // 레벨업
             {
+
                 Exp -= MaxExp;
-                MaxExp += 50;
+                MaxExp = JobDatas[Job].ExpToLevelUp;
+                MaxExp += 25;
                 Level++;
+                Hp = MaxHp; // 레벨업 시 체력 증가
+                ExtraAtk += 1;
+                ExtraDef += 1;
 
                 Console.Clear();
                 Console.WriteLine();
@@ -151,10 +161,10 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine();
                 Console.WriteLine();
 
-                if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
+               /*if (Level % 5 == 0) // 5레벨마다 새로운 스킬 획득
                 {
                     SkillManager.LearnSkill(this);
-                }
+                }*/
             }
         }
 
@@ -175,19 +185,35 @@ namespace Sparta_Dungeon_TeamProject
                 Gold -= cost;
             }
 
-            int newHp = Hp + amount;
+            //int newHp = Hp + amount;
+            int healAmount = amount;
 
-            if (newHp <= 0)
+            if (Job == JobType.영매사) // 영매사는 회복량 절반
             {
-                newHp = 10;
-            }
-            else if (newHp > MaxHp)
-            {
-                newHp = MaxHp;
+                healAmount /= 2;
             }
 
-            Hp = newHp;
+            Hp += healAmount;
+            if (Hp <= 0)
+            {
+                Hp = 10;
+            }
+            else if (Hp > MaxHp)
+            {
+                Hp = MaxHp;
+            }
             return true;
+            //if (newHp <= 0)
+            //{
+            //    newHp = 10;
+            //}
+            //else if (newHp > MaxHp)
+            //{
+            //    newHp = MaxHp;
+            //}
+
+            //Hp = newHp;
+            //return true;
         }
 
         // 마나 회복 (여관, 포션, 이벤트 등)
@@ -204,33 +230,132 @@ namespace Sparta_Dungeon_TeamProject
         }
 
 
-
-
-        // 전투 기능-일반 공격
+        // 플레이어 공격
         public void PlayerAttack(Monster target, double power)
         {
-            bool isCritical = IsCritical();
-            double multiplier = DamageSpread();
-
-            double attackDamage = isCritical ? FinalAtk * power * 1.5 : FinalAtk * power;
-            int finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def); // 몬스터 방어력만큼 최종 데미지 감소
-            finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1
-
-            target.CurrentHp -= finalAttackDamage;
-
-            Console.Clear();
-            Console.WriteLine();
-
-            if (this.IsCritical())
+            if (IsHit(target))
             {
-                messages.CriticalMes(this);
+                bool isCritical = IsCritical();
+                double multiplier = DamageSpread();
+
+                double attackDamage = isCritical ? FinalAtk * power * (CriDmg / 100.0) : FinalAtk * power;
+                int finalAttackDamage;
+
+                if (Job == JobType.마법사) // 마법사는 방어력 절반 무시
+                {
+                    int ignoredDef = target.Def / 2; // 무시한 방어력 계산
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - ignoredDef);
+
+                    Console.WriteLine($"\n\n\n{"",10}마법사의 주문! {ignoredDef} 만큼의 방어력을 무시했습니다!");
+                }
+                else
+                {
+                    finalAttackDamage = (int)Math.Ceiling(attackDamage * multiplier - target.Def);
+                }
+
+                if (Job == JobType.대장장이) // 대장장이의 공격이 명중할 때마다 적의 방어력 감소
+                {
+                    Random random = new Random();
+                    int armorBreak = random.Next(0, 4); // 0 ~ 3 까지 감소
+
+                    if (armorBreak > 0)
+                    {
+                        int beforeDef = target.Def;
+                        target.Def -= armorBreak;
+
+                        if (target.Def < 0)
+                        {
+                            target.Def = 0; // 방어력은 0 밑으로 떨어지지 않게
+                        }
+
+                        int decreasedAmount = beforeDef - target.Def;
+
+                        Console.WriteLine($"\n\n\n{"",10}대장장이가 [Lv.{target.Level}][{target.Name}]에 방어력을 {armorBreak}만큼 감소 시켰습니다!");
+                        Console.WriteLine($"\n\n\n{"",10}현재  [Lv.{target.Level}][{target.Name}]의 방어력은 {target.Def}입니다!");
+                    }
+                }
+
+                if (Job == JobType.전사) // 전사 특성
+                {
+                    if (target.Name == "카피바라" || target.Name == "후회하는 모험가" || target.Name == "대왕 카피바라" || target.Name == "검은 고양이")
+                    {
+                        int originalDamage = finalAttackDamage; // 기본 공격 데미지
+
+                        finalAttackDamage = (int)(finalAttackDamage * 1.3); // 보스에게 30% 추가 피해
+
+                        int addedDamage = finalAttackDamage - originalDamage; // 추가된 피해량 계산
+
+                        Console.WriteLine($"\n\n\n{"",10}전사의 강공격! 기본 피해 {originalDamage} + 추가 피해 {addedDamage}의 피해를 입혔다!");
+                    }
+                }
+                if (Job == JobType.연금술사) // 연금술사 특성
+                {
+                    int HpDamage = (int)(target.CurrentHp * 0.2); // 현재 체력의 20% 추가 피해
+                    int originalDamage = finalAttackDamage; // 기본 피해
+
+                    finalAttackDamage += HpDamage; // 최종 데미지 계산
+
+                    Console.WriteLine($"\n\n\n{"",10}연금술사의 공격! 기본 피해 {originalDamage} + 추가 피해 {HpDamage}의 피해를 입혔다!");
+                }
+
+                finalAttackDamage = Math.Max(1, finalAttackDamage); // 최소 데미지 1 보장
+                target.CurrentHp -= finalAttackDamage;
+
+                Console.WriteLine();
+
+                if (isCritical)
+                {
+                    messages.CriticalMes(this);
+                }
+                Console.WriteLine($"\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
             }
-            Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 {finalAttackDamage}만큼 피해를 입혔다!");
+            else
+            {
+                Console.Clear();
+                Console.WriteLine($"\n\n\n{"",10}[Lv.{target.Level}][{target.Name}] 에게 공격이 빗나갔다!");
+            }
+
             Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
             Utils.WaitForEnter();
             Console.Clear();
         }
 
+        // 영매사 유령 공격
+        public void SpiritAttack(Monster target)
+        {
+            Random random = new Random();
+            int SpiritCount = random.Next(1, 4); // 1 ~ 3명의 유령 소환
+
+            Console.WriteLine($"\n\n\n{"",10}{SpiritCount}명의 영혼이 당신을 돕습니다.");
+
+            int totalDamage = 0; // 전체 누적 데미지
+
+            for (int i = 0; i < SpiritCount; i++)
+            {
+                int SpiritDamage = Level * 1;
+
+                if (target.CurrentHp - SpiritDamage <= 0)
+                {
+                    SpiritDamage = (int)target.CurrentHp - 1;
+                    if (SpiritDamage < 0) SpiritDamage = 0; // 체력이 1 이하면 0 데미지
+                }
+
+                target.CurrentHp -= SpiritDamage;
+                totalDamage += SpiritDamage; // 누적
+                if (target.CurrentHp <= 1) break; // 체력 1 이하면 추가 공격 금지
+            }
+
+            Console.WriteLine($"\n{"",10}의문의 영혼 {SpiritCount}명이 [Lv.{target.Level}][{target.Name}] 에게 총 {totalDamage}만큼 피해를 주었다!");
+
+            Console.WriteLine($"\n\n\n{"",10}▶ [Enter] 키를 눌러 다음으로 넘어가세요.");
+            Utils.WaitForEnter();
+            Console.Clear();
+        }
+        public bool IsHit(Monster target)
+        {
+            int hit = Acc - target.Dodge;
+            return rand.Next(0, 100) <= hit;
+        }
         public bool IsCritical() // 플레이어 치명타 여부
         {
             return rand.Next(0, 100) < Cri; // 치명타 확률
@@ -272,17 +397,17 @@ namespace Sparta_Dungeon_TeamProject
         {
             if (choice)
             {
-                // 멧돼지의 돌진 방향을 틀린 경우
-                Hp -= MaxHp / 5;
-                Console.WriteLine(MaxHp);
+                // 플레이어에게 최대체력의 10%의 데미지를 입힘
+                Hp -= Hp / 10;
             }
+            // 멧돼지의 돌진 방향을 틀린 경우
             else
             {
-                // 아무런 방향을 선택하지 않은 경우
-                Hp -= MaxHp / 10;
-                Console.WriteLine(MaxHp);
+                // 플레이어에게 최대체력의 20%의 데미지를 입힘
+                Hp -= Hp / 5;
             }
         }
+
 
 
         // 스탯 강화 스킬 (활용예시:   player.AtkUP(5);   // 공격력 +5)
@@ -297,7 +422,7 @@ namespace Sparta_Dungeon_TeamProject
 
 
 
-        // 1. 상태보기 UI
+        // 1. 상태보기
         public void DisplayPlayerInfo()
         {
             Console.Clear();
@@ -318,28 +443,38 @@ namespace Sparta_Dungeon_TeamProject
             Console.ResetColor();
             Console.WriteLine();
 
-            Console.ForegroundColor = ConsoleColor.DarkCyan;
-            Console.Write("  공격력 : ");
-            Console.WriteLine($"{Atk}{(ExtraAtk == 0 ? "" : $" (+{ExtraAtk})")}");
-            Console.WriteLine();
-
-            Console.Write("  방어력 : ");
-            Console.WriteLine($"{Def}{(ExtraDef == 0 ? "" : $" (+{ExtraDef})")}");
-            Console.ResetColor();
-            Console.WriteLine();
-
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine($"  체력 : {Hp}/{MaxHp}");
             Console.ResetColor();
             Console.WriteLine();
 
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.WriteLine($"  마나 : {Mp}/{MaxMp}");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("  공격력 : ");
+            Console.WriteLine($"{Atk}{(ExtraAtk == 0 ? "" : $" (+{ExtraAtk})")}");
+            Console.WriteLine();
+
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("  방어력 : ");
+            Console.WriteLine($"{Def}{(ExtraDef == 0 ? "" : $" (+{ExtraDef})")}");
             Console.ResetColor();
             Console.WriteLine();
 
+            Console.Write($"  명중률 :{Acc}%");
+            Console.WriteLine();
+
+            Console.Write($"  치명타 확률 :{Cri}%");
+            Console.WriteLine();
+
+            Console.Write($"  치명타 피해 :{CriDmg}%");
+            Console.WriteLine();
+
+            /*Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine($"  마나 : {Mp}/{MaxMp}");
+            Console.ResetColor();
+            Console.WriteLine();*/
+
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine($"  Gold : {Gold} G");
+            Console.WriteLine($"\n  Gold : {Gold} G");
             Console.ResetColor();
             Console.WriteLine();
 
@@ -347,28 +482,15 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("\n[1] 스킬 관리");
-            Console.WriteLine("[~`] 나가기");
-            Console.Write("\n원하시는 행동을 입력해주세요\n>>");
-
-            int choice = Utils.CheckInput(1, 1);
-            switch (choice)
-            {
-                case -1:
-                    return;
-                case 1:
-                    DisplaySkillUI();
-                    break;
-            }
         }
 
-        // 2. 스킬 UI
+        // 2. 스킬 UI 주석
         public void DisplaySkillUI()
         {
             Console.Clear();
             Console.WriteLine("[스킬 목록]");
 
-            ShowSkillList();
+            //ShowSkillList();
 
             Console.WriteLine("\n[1] 스킬 장착하기");
             Console.WriteLine("[~`] 나가기");
@@ -388,7 +510,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 2-1. 스킬목록 출력값
-        public void ShowSkillList()
+        /*public void ShowSkillList()
         {
             for (int i = 0; i < Skills.Count; i++)
             {
@@ -407,7 +529,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return Skills.Count;
             }
-        }
+        }*/
 
         // 강화 비용 계산 - 플레이어 정보 반영 문제로 player에서 사용
         public int UpgradeCost(Item item)
@@ -417,6 +539,17 @@ namespace Sparta_Dungeon_TeamProject
 
         // 강화 성공 시 능력치 증가량
         public int UpgradeValue(Item item)
+        {
+            if (Job == JobType.대장장이)
+            {
+                return item.TotalValue < 20 ? 75 : 150;
+            }
+            else
+            {
+                return item.TotalValue < 20 ? 100 : 200;
+            }
+        }
+        public int GetUpgradeValue(Item item)
         {
             return item.TotalValue < 20 ? 5 : 10;
         }
