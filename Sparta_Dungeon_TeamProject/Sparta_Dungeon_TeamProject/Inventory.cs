@@ -62,5 +62,25 @@ namespace Sparta_Dungeon_TeamProject
             if (equippedItems.Contains(item))
                 equippedItems.Remove(item);
         }
+
+        public int GetTotalAtkBonus()
+        {
+            return equippedItems.Sum(item => item.AtkBonus + item.TotalValue);
+        }
+
+        public int GetTotalDefBonus()
+        {
+            return equippedItems.Sum(item => item.DefBonus + item.TotalValue);
+        }
+
+        public int GetTotalHpBonus()
+        {
+            return equippedItems.Sum(item => item.HpBonus + item.TotalValue);
+        }
+
+        public int GetTotalMpBonus()
+        {
+            return equippedItems.Sum(item => item.MpBonus + item.TotalValue);
+        }
     }
 }

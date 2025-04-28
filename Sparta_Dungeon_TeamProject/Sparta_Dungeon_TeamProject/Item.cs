@@ -206,5 +206,26 @@ namespace Sparta_Dungeon_TeamProject
                 Console.WriteLine($"- {i + 1}. {item.GetSimpleInfo()}");
             }
         }
+
+        // 강화용 출력
+        public static string GetItemInfo(this Item item, bool showDetail = false)
+        {
+            if (!showDetail)
+            {
+                return $"{item.Name} | {item.Desc}";
+            }
+
+            List<string> stats = new List<string>();
+
+            if (item.AtkBonus != 0) stats.Add($"ATK +{item.AtkBonus}");
+            if (item.DefBonus != 0) stats.Add($"DEF +{item.DefBonus}");
+            if (item.HpBonus != 0) stats.Add($"HP +{item.HpBonus}");
+            if (item.MpBonus != 0) stats.Add($"MP +{item.MpBonus}");
+            if (item.TotalValue != 0) stats.Add($"강화 +{item.TotalValue}");
+
+            string statText = string.Join(", ", stats);
+
+            return $"{item.Name} | {item.Desc} | {statText}";
+        }
     }
 }
