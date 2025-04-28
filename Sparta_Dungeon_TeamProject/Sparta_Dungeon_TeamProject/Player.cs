@@ -482,6 +482,19 @@ namespace Sparta_Dungeon_TeamProject
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
             Console.WriteLine();
+
+            Console.WriteLine("  [~`] 나가기");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine("원하시는 행동을 입력해주세요.");
+            Console.Write(">>");
+
+            int result = Utils.CheckInput(-1, -1);
+            switch (result)
+            {
+                case -1:
+                    return;
+            }
         }
 
         // 2. 스킬 UI 주석
