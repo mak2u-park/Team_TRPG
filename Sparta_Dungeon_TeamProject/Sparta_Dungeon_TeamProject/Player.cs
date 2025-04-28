@@ -468,10 +468,10 @@ namespace Sparta_Dungeon_TeamProject
             Console.Write($"  치명타 피해 :{CriDmg}%");
             Console.WriteLine();
 
-            /*Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
             Console.WriteLine($"  마나 : {Mp}/{MaxMp}");
             Console.ResetColor();
-            Console.WriteLine();*/
+            Console.WriteLine();
 
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine($"\n  Gold : {Gold} G");
@@ -481,7 +481,22 @@ namespace Sparta_Dungeon_TeamProject
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛");
             Console.ResetColor();
+
             Console.WriteLine();
+            Console.WriteLine("\n[1] 스킬 관리");
+            Console.WriteLine("[~`] 나가기");
+            Console.Write("\n원하시는 행동을 입력해주세요\n>> ");
+            Console.WriteLine();
+
+            int result = Utils.CheckInput(-1, 1);
+            switch (result)
+            {
+                case -1:
+                    return;
+                case 1:
+                    DisplaySkillUI();
+                    return;
+            }
         }
 
         // 2. 스킬 UI 주석
@@ -510,7 +525,7 @@ namespace Sparta_Dungeon_TeamProject
         }
 
         // 2-1. 스킬목록 출력값
-        /*public void ShowSkillList()
+        public void ShowSkillList()
         {
             for (int i = 0; i < Skills.Count; i++)
             {
@@ -529,7 +544,7 @@ namespace Sparta_Dungeon_TeamProject
             {
                 return Skills.Count;
             }
-        }*/
+        }
 
         // 강화 비용 계산 - 플레이어 정보 반영 문제로 player에서 사용
         public int UpgradeCost(Item item)
